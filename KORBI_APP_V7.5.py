@@ -471,6 +471,112 @@ st.markdown(
         .program-grid {grid-template-columns:1fr;}
         .capability-grid {grid-template-columns:1fr;}
     }
+
+    /* =====================================================
+       V7.5 LIGHT-BACKGROUND TEXT SAFETY
+       White text is reserved for intentionally dark surfaces.
+       ===================================================== */
+
+    /* Standard light-page text */
+    [data-testid="stMain"] p,
+    [data-testid="stMain"] label,
+    [data-testid="stMain"] .stCaption,
+    [data-testid="stMain"] [data-testid="stMarkdownContainer"] {
+        color:#263746;
+    }
+
+    /* Landing / content cards */
+    .value-card,
+    .value-card *,
+    .capability-card,
+    .capability-card *,
+    .landing-panel,
+    .landing-panel *,
+    .analysis-box,
+    .analysis-box *,
+    .section-card,
+    .section-card * {
+        color:#263746 !important;
+        -webkit-text-fill-color:#263746 !important;
+        opacity:1 !important;
+    }
+
+    .value-card h3,
+    .capability-card h3,
+    .landing-panel h2,
+    .section-card .big {
+        color:#17365D !important;
+        -webkit-text-fill-color:#17365D !important;
+        font-weight:800 !important;
+    }
+
+    .value-card .num,
+    .landing-eyebrow {
+        color:#00539B !important;
+        -webkit-text-fill-color:#00539B !important;
+        font-weight:900 !important;
+    }
+
+    .value-card p,
+    .capability-card p,
+    .landing-panel p {
+        color:#263746 !important;
+        -webkit-text-fill-color:#263746 !important;
+        opacity:1 !important;
+        font-weight:600 !important;
+    }
+
+    /* Streamlit tabs on light backgrounds */
+    button[data-baseweb="tab"] {
+        background:transparent !important;
+        color:#17365D !important;
+        -webkit-text-fill-color:#17365D !important;
+        font-weight:700 !important;
+    }
+
+    button[data-baseweb="tab"] *,
+    button[data-baseweb="tab"] p,
+    button[data-baseweb="tab"] span,
+    button[data-baseweb="tab"] div {
+        color:#17365D !important;
+        -webkit-text-fill-color:#17365D !important;
+        opacity:1 !important;
+        font-weight:700 !important;
+    }
+
+    button[data-baseweb="tab"][aria-selected="true"],
+    button[data-baseweb="tab"][aria-selected="true"] * {
+        color:#00539B !important;
+        -webkit-text-fill-color:#00539B !important;
+        font-weight:850 !important;
+    }
+
+    /* Explicitly preserve white text only on dark surfaces */
+    .hero-title,
+    .hero-sub,
+    .support-value,
+    .korbi-table th,
+    .stButton > button[kind="primary"] {
+        color:#FFFFFF !important;
+        -webkit-text-fill-color:#FFFFFF !important;
+    }
+
+    .hero-body {
+        color:#D8E7F5 !important;
+        -webkit-text-fill-color:#D8E7F5 !important;
+    }
+
+    .hero-kicker,
+    .support-kicker {
+        color:#ABCAE9 !important;
+        -webkit-text-fill-color:#ABCAE9 !important;
+    }
+
+    .support-copy {
+        color:#DDEBFA !important;
+        -webkit-text-fill-color:#DDEBFA !important;
+    }
+
     </style>
     """,
     unsafe_allow_html=True,
