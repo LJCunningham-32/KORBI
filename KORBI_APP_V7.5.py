@@ -1370,6 +1370,139 @@ def program_metrics(program_name):
         "utilization": utilization,
     }
 
+def program_health(utilization):
+    """Single health rule used everywhere KORBI displays program status."""
+    util = safe_float(utilization)
+    if util > 100:
+        return "OVER BUDGET", "overbudget"
+    if util >= 95:
+        return "HIGH RISK", "highrisk"
+    if util >= 90:
+        return "CAUTION", "caution"
+    if util >= 80:
+        return "MONITOR", "monitor"
+    return "HEALTHY", "healthy"
+
+
+def _program_category_weights(program_name):
+    """
+    Simulated operating-budget mix by sport. These are planning allocations, not actual
+    Sonoma State historical category budgets. They always total 100%.
+    """
+    name = str(program_name).lower()
+
+    # Travel, Equipment/Supplies, Competition Ops, Recruiting, Facilities/Rentals,
+    # Technology/Software, Meals/Per Diem, Other Program Ops
+    default = [0.29, 0.13, 0.12, 0.06, 0.10, 0.05, 0.12, 0.13]
+
+    if "golf" in name:
+        return [0.36, 0.14, 0.12, 0.07, 0.05, 0.04, 0.12, 0.10]
+    if "basketball" in name:
+        return [0.27, 0.12, 0.15, 0.06, 0.08, 0.06, 0.13, 0.13]
+    if "soccer" in name:
+        return [0.30, 0.13, 0.12, 0.06, 0.10, 0.04, 0.12, 0.13]
+    if "baseball" in name or "softball" in name:
+        return [0.29, 0.16, 0.13, 0.06, 0.11, 0.03, 0.10, 0.12]
+    if "volleyball" in name:
+        return [0.28, 0.12, 0.15, 0.06, 0.08, 0.05, 0.13, 0.13]
+    if "track" in name or "cross country" in name or "xc" in name:
+        return [0.28, 0.11, 0.12, 0.05, 0.13, 0.03, 0.12, 0.16]
+    return default
+
+
+def _normalized_weighted_distribution(total, base_weights, spend_factors):
+    raw = [max(w * f, 0) for w, f in zip(base_weights, spend_factors)]
+    denom = sum(raw)
+    if total <= 0 or denom <= 0:
+        return [0.0 for _ in raw]
+    return [total * x / denom for x in raw]
+
+
+def program_budget_breakdown(program_name):
+    """
+    Build a connected simulated operating-budget detail for one sport. The category rows
+    reconcile exactly to program_metrics(), so the Sport Budgets page and Executive
+    Dashboard always report the same overall health and year-end position.
+    """
+    metrics = program_metrics(program_name)
+    if not metrics:
+        return pd.DataFrame()
+
+    categories = [
+        "Travel",
+        "Equipment & Supplies",
+        "Competition Operations",
+        "Recruiting",
+        "Facilities / Rentals",
+        "Technology / Software",
+        "Meals / Per Diem",
+        "Other Program Operations",
+    ]
+    weights = _program_category_weights(program_name)
+
+    annual_by_cat = [metrics["annual"] * w for w in weights]
+
+    # Q1 actuals are intentionally front-loaded toward equipment, competition setup,
+    # facilities, and travel as teams launch the year.
+    actual_factors = [1.05, 1.30, 1.18, 0.72, 1.15, 0.95, 1.00, 0.86]
+    actual_by_cat = _normalized_weighted_distribution(
+        metrics["actual"], weights, actual_factors
+    )
+
+    # Commitments are weighted toward travel, competition operations, facilities and meals.
+    committed_factors = [1.32, 0.82, 1.20, 0.68, 1.08, 0.82, 1.18, 0.72]
+    committed_by_cat = _normalized_weighted_distribution(
+        metrics["committed"], weights, committed_factors
+    )
+
+    # Remaining forecast covers the balance of expected annual activity.
+    forecast_factors = [1.08, 0.90, 1.00, 1.05, 0.92, 1.02, 1.08, 0.98]
+    forecast_by_cat = _normalized_weighted_distribution(
+        metrics["remaining_forecast"], weights, forecast_factors
+    )
+
+    rows = []
+    for i, category in enumerate(categories):
+        projected = actual_by_cat[i] + committed_by_cat[i] + forecast_by_cat[i]
+        remaining = annual_by_cat[i] - projected
+        util = (projected / annual_by_cat[i] * 100) if annual_by_cat[i] else 0.0
+        status, _ = program_health(util)
+        rows.append({
+            "Category": category,
+            "Annual Budget": annual_by_cat[i],
+            "Q1 Actual": actual_by_cat[i],
+            "Committed": committed_by_cat[i],
+            "Remaining Forecast": forecast_by_cat[i],
+            "Projected Year-End": projected,
+            "Projected Remaining": remaining,
+            "Utilization": util,
+            "Health": status,
+        })
+
+    df = pd.DataFrame(rows)
+
+    # Numerical cleanup: force category totals to equal the authoritative program totals
+    # exactly after floating-point allocation.
+    for col, target in [
+        ("Annual Budget", metrics["annual"]),
+        ("Q1 Actual", metrics["actual"]),
+        ("Committed", metrics["committed"]),
+        ("Remaining Forecast", metrics["remaining_forecast"]),
+        ("Projected Year-End", metrics["projected"]),
+        ("Projected Remaining", metrics["remaining"]),
+    ]:
+        if not df.empty:
+            df.loc[df.index[-1], col] += target - df[col].sum()
+
+    df["Utilization"] = df.apply(
+        lambda r: (safe_float(r["Projected Year-End"]) / safe_float(r["Annual Budget"]) * 100)
+        if safe_float(r["Annual Budget"]) else 0.0,
+        axis=1,
+    )
+    df["Health"] = df["Utilization"].apply(lambda x: program_health(x)[0])
+    return df
+
+
 
 def _department_source_totals():
     result = {"annual": 0.0, "actual": 0.0, "committed": 0.0, "projected": 0.0}
@@ -1727,12 +1860,20 @@ def monthly_financial_outlook(program_name=None):
         committed_only=None,
     )
 
-    actual_by_month = _scaled_distribution(
-        actual_total,
-        ledger_actual_source,
-        q1_months,
-        plan_weights,
-    )
+    # Q1 is complete in this simulation. Use a realistic executed-spend profile
+    # that reconciles exactly to the same Q1 actual total used everywhere else.
+    # Department-wide this produces: Jul $356,400; Aug $470,750; Sep $528,184
+    # when Q1 actuals total $1,355,334. Sport views use the same Q1 proportions,
+    # so every page remains tied to one connected financial model.
+    q1_actual_profile = {
+        pd.Timestamp("2027-07-01"): 356400 / 1355334,
+        pd.Timestamp("2027-08-01"): 470750 / 1355334,
+        pd.Timestamp("2027-09-01"): 528184 / 1355334,
+    }
+    actual_by_month = {
+        month: actual_total * q1_actual_profile.get(month, 0.0)
+        for month in q1_months
+    }
 
     # Open commitments at the end of Q1 belong in Oct-Jun. If a vendor invoice slipped out
     # of Q1, the obligation is carried forward instead of disappearing from the model.
@@ -1922,6 +2063,7 @@ if page == "Home":
     with launch2:
         st.button(
             "View Sport Budgets",
+            type="primary",
             width="stretch",
             on_click=go_to_page,
             args=("Sport Budgets",),
@@ -1930,6 +2072,7 @@ if page == "Home":
     with launch3:
         st.button(
             "Review Purchase Requests",
+            type="primary",
             width="stretch",
             on_click=go_to_page,
             args=("Purchase Requests",),
@@ -2137,16 +2280,7 @@ elif page == "Executive Dashboard":
                 continue
 
             util = metrics["utilization"]
-            if util > 100:
-                status, css = "OVER BUDGET", "overbudget"
-            elif util >= 95:
-                status, css = "HIGH RISK", "highrisk"
-            elif util >= 90:
-                status, css = "CAUTION", "caution"
-            elif util >= 80:
-                status, css = "MONITOR", "monitor"
-            else:
-                status, css = "HEALTHY", "healthy"
+            status, css = program_health(util)
 
             cards.append(
                 f"""<div class=\"program-card {css}\">
@@ -2297,7 +2431,7 @@ elif page == "Sport Budgets":
 
     section_title(
         "Sport Budgets",
-        "Track each program's annual budget, Q1 actual spend, committed obligations, remaining forecast, projected year-end position, financial flexibility, utilization risk, and request activity."
+        "Each program uses its own connected operating budget. Category detail, Q1 actuals, commitments, remaining forecast, projected year-end position, request activity, and Executive Dashboard health all reconcile to the same program totals."
     )
 
     if triage_df.empty or "program_name" not in triage_df.columns:
@@ -2308,6 +2442,13 @@ elif page == "Sport Budgets":
         metrics = program_metrics(selection)
 
         if metrics:
+            status, css = program_health(metrics["utilization"])
+
+            st.markdown(f"## {selection} Financial Position")
+            st.caption(
+                "This is the same financial position used to determine the program's health on the Executive Dashboard."
+            )
+
             b1, b2, b3, b4, b5, b6 = st.columns(6)
             b1.metric("Annual Budget", compact_money(metrics["annual"]))
             b2.metric("Q1 Actual", compact_money(metrics["actual"]))
@@ -2318,16 +2459,16 @@ elif page == "Sport Budgets":
 
             st.progress(
                 min(max(metrics["utilization"] / 100, 0), 1.0),
-                text=f"Projected utilization: {metrics['utilization']:.1f}%"
+                text=f"Projected utilization: {metrics['utilization']:.1f}% — {status}"
             )
 
-            if metrics["utilization"] > 100:
+            if status == "OVER BUDGET":
                 st.error("OVER BUDGET — projected expenses exceed the approved annual program budget.")
-            elif metrics["utilization"] >= 95:
+            elif status == "HIGH RISK":
                 st.error("HIGH RISK — very little year-end flexibility remains.")
-            elif metrics["utilization"] >= 90:
+            elif status == "CAUTION":
                 st.warning("CAUTION — financial flexibility is becoming limited.")
-            elif metrics["utilization"] >= 80:
+            elif status == "MONITOR":
                 st.info("MONITOR — the program remains within plan but should watch remaining flexibility.")
             else:
                 st.info("HEALTHY — the current projection remains comfortably within the annual plan.")
@@ -2336,6 +2477,48 @@ elif page == "Sport Budgets":
                 "Q1 Actual + Committed + Remaining Forecast = Projected Year-End. "
                 "Approved purchase requests immediately move into Committed until they later post as actual spend."
             )
+
+            st.markdown(f"## {selection} Operating Budget Detail")
+            st.caption(
+                "Simulated category allocations for the program operating budget. These categories reconcile exactly to the program totals above. "
+                "Shared athletics administration and department-wide costs remain in the department shared-cost budget rather than being duplicated inside team budgets."
+            )
+
+            breakdown = program_budget_breakdown(selection)
+            if breakdown.empty:
+                st.info("No program budget detail is available.")
+            else:
+                detail_view = breakdown.copy()
+                st.dataframe(
+                    accounting_table(
+                        detail_view,
+                        currency_cols=[
+                            "Annual Budget",
+                            "Q1 Actual",
+                            "Committed",
+                            "Remaining Forecast",
+                            "Projected Year-End",
+                            "Projected Remaining",
+                        ],
+                        percent_cols=["Utilization"],
+                    ),
+                    width="stretch",
+                    hide_index=True,
+                )
+
+                st.markdown("### Program Budget Reconciliation")
+                t1, t2, t3, t4 = st.columns(4)
+                t1.metric("Category Budget Total", money(breakdown["Annual Budget"].sum()))
+                t2.metric("Category Q1 Actual Total", money(breakdown["Q1 Actual"].sum()))
+                t3.metric("Category Projected Total", money(breakdown["Projected Year-End"].sum()))
+                t4.metric(
+                    "Difference to Program Budget",
+                    money_zero(metrics["annual"] - breakdown["Annual Budget"].sum()),
+                )
+                st.caption(
+                    f"{selection}'s category budget totals equal its {money(metrics['annual'])} annual program budget. "
+                    "The projected total above is the same value used on the Executive Dashboard."
+                )
 
         request_view = request_status_table(selection)
         department_requests = request_status_table()
@@ -2420,12 +2603,13 @@ elif page == "Sport Budgets":
 
         st.markdown("## Program Financial Interpretation")
         if metrics:
+            status, _ = program_health(metrics["utilization"])
             st.markdown(
-                f'<div class="neutral-note"><strong>{html.escape(selection)}</strong> currently has '
-                f'<strong>{money(metrics["remaining"])}</strong> of projected year-end financial flexibility. '
-                f'Current utilization is <strong>{metrics["utilization"]:.1f}%</strong>. '
-                'KORBI shows the impact of each request against this same program position so coaches and management '
-                'are working from one set of numbers.</div>',
+                f'<div class="neutral-note"><strong>{html.escape(selection)}</strong> is currently classified as '
+                f'<strong>{status}</strong> at <strong>{metrics["utilization"]:.1f}%</strong> projected utilization. '
+                f'Projected year-end spend is <strong>{money(metrics["projected"])}</strong> against an annual program budget of '
+                f'<strong>{money(metrics["annual"])}</strong>, leaving <strong>{money(metrics["remaining"])}</strong> of projected flexibility. '
+                'This is the exact same program position used by the Executive Dashboard and Purchase Request analysis.</div>',
                 unsafe_allow_html=True,
             )
 
