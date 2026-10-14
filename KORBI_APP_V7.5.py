@@ -1952,7 +1952,52 @@ elif page == "Purchase Requests":
 )
 
     if mode == "Awaiting Review":
-        view_df = request_master[request_master["request_status"] == "OPEN"].copy()
+    view_df = request_master[
+        request_master[
+            "request_status"
+        ]
+        == "OPEN"
+    ].copy()
+
+    if not view_df.empty:
+
+        if "percent_with_request" in view_df.columns:
+            view_df["_sort_risk"] = pd.to_numeric(
+                view_df["percent_with_request"],
+                errors="coerce"
+            ).fillna(0)
+        else:
+            view_df["_sort_risk"] = 0
+
+        if "amount" in view_df.columns:
+            view_df["_sort_amount"] = pd.to_numeric(
+                view_df["amount"],
+                errors="coerce"
+            ).fillna(0)
+        else:
+            view_df["_sort_amount"] = 0
+
+        view_df = (
+            view_df
+            .sort_values(
+                by=[
+                    "_sort_risk",
+                    "_sort_amount"
+                ],
+                ascending=[
+                    False,
+                    False
+                ]
+            )
+            .head(10)
+            .drop(
+                columns=[
+                    "_sort_risk",
+                    "_sort_amount"
+                ],
+                errors="ignore"
+            )
+        )
     elif mode == "Reviewed":
         view_df = request_master[request_master["manager_decision"].notna()].copy() if "manager_decision" in request_master.columns else request_master.iloc[0:0].copy()
     else:
