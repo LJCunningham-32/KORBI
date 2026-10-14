@@ -573,6 +573,71 @@ st.markdown(
         -webkit-text-fill-color:#D8E7F5 !important;
     }
 
+
+    /* Consistent page titles / subtitles on light backgrounds */
+    .section-title-wrap { margin: .15rem 0 1.05rem; }
+    .section-title-text {
+        color:#17365D !important;
+        -webkit-text-fill-color:#17365D !important;
+        font-size:1.75rem;
+        line-height:1.15;
+        font-weight:850;
+        margin:0 0 .35rem 0;
+    }
+    .section-subtitle-text {
+        color:#3E5265 !important;
+        -webkit-text-fill-color:#3E5265 !important;
+        font-size:.98rem;
+        line-height:1.5;
+        font-weight:600;
+        opacity:1 !important;
+    }
+
+    /* Segmented controls: white/navy inactive, Sonoma blue active */
+    [data-testid="stSegmentedControl"] button {
+        background:#FFFFFF !important;
+        border-color:#BFD1E3 !important;
+        color:#17365D !important;
+        -webkit-text-fill-color:#17365D !important;
+        font-weight:750 !important;
+    }
+    [data-testid="stSegmentedControl"] button * {
+        color:#17365D !important;
+        -webkit-text-fill-color:#17365D !important;
+        opacity:1 !important;
+        font-weight:750 !important;
+    }
+    [data-testid="stSegmentedControl"] button[aria-pressed="true"],
+    [data-testid="stSegmentedControl"] button[data-selected="true"] {
+        background:#00539B !important;
+        border-color:#00539B !important;
+        color:#FFFFFF !important;
+        -webkit-text-fill-color:#FFFFFF !important;
+    }
+    [data-testid="stSegmentedControl"] button[aria-pressed="true"] *,
+    [data-testid="stSegmentedControl"] button[data-selected="true"] * {
+        color:#FFFFFF !important;
+        -webkit-text-fill-color:#FFFFFF !important;
+        font-weight:850 !important;
+    }
+
+    /* Neutral business note: not a positive/negative status color */
+    .neutral-note {
+        background:#FFFFFF;
+        border:1px solid #D5E2F0;
+        border-left:4px solid #00539B;
+        border-radius:8px;
+        padding:12px 14px;
+        color:#263746 !important;
+        -webkit-text-fill-color:#263746 !important;
+        font-weight:600;
+        line-height:1.55;
+    }
+    .neutral-note * {
+        color:#263746 !important;
+        -webkit-text-fill-color:#263746 !important;
+    }
+
     .hero-kicker,
     .support-kicker {
         color:#ABCAE9 !important;
@@ -634,6 +699,14 @@ def money(value):
     value = safe_float(value)
     if abs(value) < 0.005:
         return "-"
+    if value < 0:
+        return f"(${abs(value):,.0f})"
+    return f"${value:,.0f}"
+
+
+def money_zero(value):
+    """Currency formatter that displays zero as $0 instead of a dash."""
+    value = safe_float(value)
     if value < 0:
         return f"(${abs(value):,.0f})"
     return f"${value:,.0f}"
@@ -716,9 +789,12 @@ def first_existing_column(df, candidates):
 
 
 def section_title(title, subtitle=None):
-    st.subheader(title)
-    if subtitle:
-        st.caption(subtitle)
+    st.markdown(
+        f'<div class="section-title-wrap"><div class="section-title-text">{html.escape(str(title))}</div>'
+        + (f'<div class="section-subtitle-text">{html.escape(str(subtitle))}</div>' if subtitle else '')
+        + '</div>',
+        unsafe_allow_html=True,
+    )
 
 
 def accounting_table(df, currency_cols=None, percent_cols=None):
@@ -1241,25 +1317,145 @@ def save_decision(row, recommendation, suggestion, decision, reviewer, notes, re
     return record
 
 
+def _base_program_metrics(program_name):
+    """Raw program-level source values before saved purchase approvals are layered in."""
+    if triage_df.empty or "program_name" not in triage_df.columns:
+        return None
+
+    rows = triage_df[triage_df["program_name"].astype(str) == str(program_name)]
+    if rows.empty:
+        return None
+
+    row = rows.iloc[0]
+    annual = safe_float(row.get("annual_budget"))
+    actual = safe_float(row.get("q1_actuals"))
+    committed = safe_float(row.get("open_pos"))
+    projected = safe_float(row.get("baseline_projected"))
+
+    # A connected model can never project less than what is already actual + committed.
+    projected = max(projected, actual + committed)
+
+    return {
+        "annual": annual,
+        "actual": actual,
+        "committed": committed,
+        "projected": projected,
+    }
+
+
+def program_metrics(program_name):
+    base = _base_program_metrics(program_name)
+    if not base:
+        return None
+
+    approved_adjustment = approved_decision_adjustments(program_name)
+    annual = base["annual"]
+    actual = base["actual"]
+    committed = base["committed"] + approved_adjustment
+    projected = max(base["projected"] + approved_adjustment, actual + committed)
+    remaining_forecast = max(projected - actual - committed, 0)
+    remaining = annual - projected
+    utilization = (projected / annual * 100) if annual else 0.0
+    unallocated = annual - actual - committed
+
+    return {
+        "annual": annual,
+        "actual": actual,
+        "committed": committed,
+        "approved_decision_adjustment": approved_adjustment,
+        "remaining_forecast": remaining_forecast,
+        "unallocated": unallocated,
+        "projected": projected,
+        "remaining": remaining,
+        "utilization": utilization,
+    }
+
+
+def _department_source_totals():
+    result = {"annual": 0.0, "actual": 0.0, "committed": 0.0, "projected": 0.0}
+    if department_df.empty:
+        return result
+
+    mapping = {
+        "annual": ["annual_budget", "budget", "annual_plan"],
+        "actual": ["q1_actual", "q1_actuals", "actual", "actuals"],
+        "committed": ["open_commitments", "open_pos", "committed", "commitments"],
+        "projected": ["projected_year_end", "baseline_projected", "projected"],
+    }
+
+    for key, candidates in mapping.items():
+        col = first_existing_column(department_df, candidates)
+        if col:
+            result[key] = pd.to_numeric(department_df[col], errors="coerce").fillna(0).sum()
+
+    return result
+
+
+def program_budget_reconciliation():
+    programs = []
+    if not triage_df.empty and "program_name" in triage_df.columns:
+        programs = sorted(triage_df["program_name"].dropna().astype(str).unique())
+
+    sport_budget = 0.0
+    for program in programs:
+        base = _base_program_metrics(program)
+        if base:
+            sport_budget += base["annual"]
+
+    source = _department_source_totals()
+    source_athletics_budget = source["annual"]
+
+    # Department annual plan is authoritative when it covers the sport budgets.
+    # If source data is incomplete, KORBI will never create a negative shared-cost bucket.
+    total_athletics_budget = max(source_athletics_budget, sport_budget)
+    shared_budget = max(total_athletics_budget - sport_budget, 0)
+    reconciliation_difference = total_athletics_budget - sport_budget - shared_budget
+
+    return {
+        "sport_budget": sport_budget,
+        "shared_budget": shared_budget,
+        "total_athletics_budget": total_athletics_budget,
+        "reconciliation_difference": reconciliation_difference,
+        "source_athletics_budget": source_athletics_budget,
+        "program_count": len(programs),
+    }
+
+
 def department_financial_summary():
-    annual = actual = committed = projected = 0.0
+    source = _department_source_totals()
+    recon = program_budget_reconciliation()
 
-    if not department_df.empty:
-        if "annual_budget" in department_df.columns:
-            annual = pd.to_numeric(department_df["annual_budget"], errors="coerce").fillna(0).sum()
-        if "q1_actual" in department_df.columns:
-            actual = pd.to_numeric(department_df["q1_actual"], errors="coerce").fillna(0).sum()
-        if "open_commitments" in department_df.columns:
-            committed = pd.to_numeric(department_df["open_commitments"], errors="coerce").fillna(0).sum()
-        if "projected_year_end" in department_df.columns:
-            projected = pd.to_numeric(department_df["projected_year_end"], errors="coerce").fillna(0).sum()
+    programs = []
+    if not triage_df.empty and "program_name" in triage_df.columns:
+        programs = sorted(triage_df["program_name"].dropna().astype(str).unique())
 
-    approved_adjustment = approved_decision_adjustments()
-    committed += approved_adjustment
-    projected += approved_adjustment
+    base_sport = {"actual": 0.0, "committed": 0.0, "projected": 0.0}
+    current_sport = {"actual": 0.0, "committed": 0.0, "projected": 0.0}
 
+    for program in programs:
+        base = _base_program_metrics(program)
+        current = program_metrics(program)
+        if base:
+            for key in base_sport:
+                base_sport[key] += base[key]
+        if current:
+            for key in current_sport:
+                current_sport[key] += current[key]
+
+    # Anything in the department source that is not assigned to a sport is treated as shared/admin cost.
+    shared_actual = max(source["actual"] - base_sport["actual"], 0)
+    shared_committed = max(source["committed"] - base_sport["committed"], 0)
+    shared_projected = max(source["projected"] - base_sport["projected"], 0)
+
+    actual = current_sport["actual"] + shared_actual
+    committed = current_sport["committed"] + shared_committed
+    projected = current_sport["projected"] + shared_projected
+    projected = max(projected, actual + committed)
+
+    annual = recon["total_athletics_budget"]
     remaining_forecast = max(projected - actual - committed, 0)
     variance = annual - projected
+    approved_adjustment = approved_decision_adjustments()
 
     return {
         "annual": annual,
@@ -1269,6 +1465,10 @@ def department_financial_summary():
         "remaining_forecast": remaining_forecast,
         "projected": projected,
         "variance": variance,
+        "shared_actual": shared_actual,
+        "shared_committed": shared_committed,
+        "shared_projected": shared_projected,
+        **recon,
     }
 
 
@@ -1388,7 +1588,6 @@ def request_status_table(program_name=None):
             return "APPROVED"
         if decision == "DENY":
             return "DENIED"
-        # Deferred items remain active and visible as open work.
         return "OPEN"
 
     def classify_type(row):
@@ -1406,148 +1605,201 @@ def request_status_table(program_name=None):
     return view
 
 
-def monthly_financial_outlook(program_name=None):
-    months = pd.date_range("2027-07-01", "2028-06-01", freq="MS")
+def _scope_financial_totals(program_name=None):
+    if program_name and program_name != "Entire Athletics":
+        metrics = program_metrics(program_name)
+        if not metrics:
+            return {"annual": 0.0, "actual": 0.0, "committed": 0.0, "remaining_forecast": 0.0, "projected": 0.0}
+        return metrics
+    return department_financial_summary()
 
-    monthly = pd.DataFrame({"month_date": months})
-    monthly["Month"] = monthly["month_date"].dt.strftime("%b %Y")
-    monthly["Actual"] = 0.0
-    monthly["Committed"] = 0.0
-    monthly["Remaining Forecast"] = 0.0
 
-    if not ledger_df.empty:
-        date_col = first_existing_column(
-            ledger_df, ["transaction_date", "posting_date", "expense_date", "date"]
+def _monthly_source_values(df, program_name, amount_candidates, date_candidates, committed_only=None):
+    values = {}
+    if df.empty:
+        return values
+
+    date_col = first_existing_column(df, date_candidates)
+    amount_col = first_existing_column(df, amount_candidates)
+    program_col = first_existing_column(df, ["program_name", "program", "sport", "team"])
+    type_col = first_existing_column(df, ["transaction_type", "type", "status"])
+
+    if not date_col or not amount_col:
+        return values
+
+    temp = df.copy()
+    if program_name and program_name != "Entire Athletics":
+        if not program_col:
+            return values
+        temp = temp[temp[program_col].astype(str) == str(program_name)].copy()
+
+    if committed_only is True and not type_col:
+        return values
+
+    temp["_date"] = pd.to_datetime(temp[date_col], errors="coerce")
+    temp["_amount"] = pd.to_numeric(temp[amount_col], errors="coerce").fillna(0)
+    temp = temp[temp["_date"].notna()].copy()
+
+    if type_col and committed_only is not None:
+        committed_mask = temp[type_col].astype(str).str.contains(
+            "PO|OPEN|COMMIT|APPROV", case=False, na=False, regex=True
         )
-        amount_col = first_existing_column(
-            ledger_df, ["amount", "transaction_amount", "expense_amount", "actual_amount"]
-        )
-        program_col = first_existing_column(
-            ledger_df, ["program_name", "program", "sport", "team"]
-        )
-        type_col = first_existing_column(
-            ledger_df, ["transaction_type", "type", "status"]
-        )
+        temp = temp[committed_mask if committed_only else ~committed_mask].copy()
 
-        if date_col and amount_col:
-            ledger = ledger_df.copy()
-
-            if (
-                program_name
-                and program_name != "Entire Athletics"
-                and program_col
-            ):
-                ledger = ledger[
-                    ledger[program_col].astype(str) == str(program_name)
-                ].copy()
-
-            ledger["_date"] = pd.to_datetime(ledger[date_col], errors="coerce")
-            ledger["_amount"] = pd.to_numeric(ledger[amount_col], errors="coerce").fillna(0)
-            ledger = ledger[ledger["_date"].notna()].copy()
-            ledger["month_date"] = ledger["_date"].dt.to_period("M").dt.to_timestamp()
-
-            if type_col:
-                committed_mask = ledger[type_col].astype(str).str.contains(
-                    "PO|OPEN|COMMIT", case=False, na=False, regex=True
-                )
-            else:
-                committed_mask = pd.Series(False, index=ledger.index)
-
-            actual_group = (
-                ledger.loc[~committed_mask]
-                .groupby("month_date")["_amount"]
-                .sum()
-                .to_dict()
-            )
-
-            committed_group = (
-                ledger.loc[committed_mask]
-                .groupby("month_date")["_amount"]
-                .sum()
-                .to_dict()
-            )
-
-            monthly["Actual"] = monthly["month_date"].map(actual_group).fillna(0)
-            monthly["Committed"] = monthly["month_date"].map(committed_group).fillna(0)
-
-    if not future_df.empty:
-        future_date_col = first_existing_column(
-            future_df, ["expense_date", "expected_date", "scheduled_date", "date", "transaction_date"]
-        )
-        future_amount_col = first_existing_column(
-            future_df, ["amount", "expected_amount", "forecast_amount", "expense_amount"]
-        )
-        future_program_col = first_existing_column(
-            future_df, ["program_name", "program", "sport", "team"]
-        )
-
-        if future_date_col and future_amount_col:
-            future = future_df.copy()
-
-            if (
-                program_name
-                and program_name != "Entire Athletics"
-                and future_program_col
-            ):
-                future = future[
-                    future[future_program_col].astype(str) == str(program_name)
-                ].copy()
-
-            future["_date"] = pd.to_datetime(future[future_date_col], errors="coerce")
-            future["_amount"] = pd.to_numeric(future[future_amount_col], errors="coerce").fillna(0)
-            future = future[future["_date"].notna()].copy()
-            future["month_date"] = future["_date"].dt.to_period("M").dt.to_timestamp()
-
-            future_group = future.groupby("month_date")["_amount"].sum().to_dict()
-            monthly["Remaining Forecast"] = monthly["month_date"].map(future_group).fillna(0)
-
-    monthly["Monthly Outlook"] = (
-        monthly["Actual"] + monthly["Committed"] + monthly["Remaining Forecast"]
-    )
-
-    simulation_month = pd.Timestamp(SIMULATION_DATE).to_period("M").to_timestamp()
-    monthly["Status"] = monthly["month_date"].apply(
-        lambda x: "EXECUTED" if x < simulation_month else ("CURRENT" if x == simulation_month else "FORECAST")
-    )
-
-    return monthly[
-        ["Month", "Status", "Actual", "Committed", "Remaining Forecast", "Monthly Outlook"]
-    ]
+    temp["month_date"] = temp["_date"].dt.to_period("M").dt.to_timestamp()
+    return temp.groupby("month_date")["_amount"].sum().to_dict()
 
 
-def program_metrics(program_name):
-    if triage_df.empty or "program_name" not in triage_df.columns:
-        return None
+def _scaled_distribution(target_total, source_by_month, allowed_months, weights):
+    result = {m: 0.0 for m in allowed_months}
+    target_total = max(safe_float(target_total), 0)
+    if target_total <= 0 or not allowed_months:
+        return result
 
-    rows = triage_df[triage_df["program_name"].astype(str) == str(program_name)]
-    if rows.empty:
-        return None
+    positive_source = {m: max(safe_float(source_by_month.get(m, 0)), 0) for m in allowed_months}
+    source_total = sum(positive_source.values())
 
-    row = rows.iloc[0]
+    if source_total > 0:
+        scale = target_total / source_total
+        for month in allowed_months:
+            result[month] = positive_source[month] * scale
+        return result
 
-    annual = safe_float(row.get("annual_budget"))
-    actual = safe_float(row.get("q1_actuals"))
-    committed = safe_float(row.get("open_pos"))
-    projected = safe_float(row.get("baseline_projected"))
-    remaining = safe_float(row.get("baseline_remaining"))
-
-    approved_adjustment = approved_decision_adjustments(program_name)
-    committed += approved_adjustment
-    projected += approved_adjustment
-    remaining = annual - projected
-    utilization = (projected / annual * 100) if annual else 0.0
-    unallocated = annual - actual - committed
+    active_weights = [max(safe_float(weights.get(m, 0)), 0) for m in allowed_months]
+    weight_total = sum(active_weights)
+    if weight_total <= 0:
+        equal = target_total / len(allowed_months)
+        return {m: equal for m in allowed_months}
 
     return {
-        "annual": annual,
-        "actual": actual,
-        "committed": committed,
-        "approved_decision_adjustment": approved_adjustment,
-        "unallocated": unallocated,
-        "projected": projected,
-        "remaining": remaining,
-        "utilization": utilization,
+        m: target_total * (max(safe_float(weights.get(m, 0)), 0) / weight_total)
+        for m in allowed_months
     }
+
+
+def monthly_financial_outlook(program_name=None):
+    """
+    Connected FY 2027-28 simulation as of Oct. 1, 2027.
+
+    Jul-Sep are completed Q1 months. Oct is the current month. Nov-Jun are forecast.
+    The monthly table always reconciles back to the exact same annual/actual/committed/
+    forecast totals used by Sport Budgets and the Executive Dashboard.
+    """
+    months = list(pd.date_range("2027-07-01", "2028-06-01", freq="MS"))
+    simulation_month = pd.Timestamp(SIMULATION_DATE).to_period("M").to_timestamp()
+    q1_months = [m for m in months if m < simulation_month]
+    future_months = [m for m in months if m >= simulation_month]
+
+    totals = _scope_financial_totals(program_name)
+    annual = safe_float(totals.get("annual"))
+    actual_total = safe_float(totals.get("actual"))
+    committed_total = safe_float(totals.get("committed"))
+    remaining_forecast_total = max(
+        safe_float(totals.get("projected")) - actual_total - committed_total,
+        0,
+    )
+
+    # Simulated monthly plan profile for a collegiate athletics fiscal year.
+    # The weights total exactly 100%, so every monthly plan reconciles to the annual budget.
+    plan_weight_values = [0.06, 0.08, 0.09, 0.09, 0.08, 0.06, 0.08, 0.10, 0.10, 0.09, 0.08, 0.09]
+    plan_weights = {m: w for m, w in zip(months, plan_weight_values)}
+    monthly_plan = {m: annual * plan_weights[m] for m in months}
+
+    ledger_actual_source = _monthly_source_values(
+        ledger_df,
+        program_name,
+        ["amount", "transaction_amount", "expense_amount", "actual_amount"],
+        ["transaction_date", "posting_date", "expense_date", "date"],
+        committed_only=False,
+    )
+    ledger_commitment_source = _monthly_source_values(
+        ledger_df,
+        program_name,
+        ["amount", "transaction_amount", "expense_amount", "actual_amount"],
+        ["transaction_date", "posting_date", "expense_date", "date"],
+        committed_only=True,
+    )
+    future_source = _monthly_source_values(
+        future_df,
+        program_name,
+        ["amount", "expected_amount", "forecast_amount", "expense_amount"],
+        ["expense_date", "expected_date", "scheduled_date", "date", "transaction_date"],
+        committed_only=None,
+    )
+
+    actual_by_month = _scaled_distribution(
+        actual_total,
+        ledger_actual_source,
+        q1_months,
+        plan_weights,
+    )
+
+    # Open commitments at the end of Q1 belong in Oct-Jun. If a vendor invoice slipped out
+    # of Q1, the obligation is carried forward instead of disappearing from the model.
+    commitment_weights = dict(plan_weights)
+    if simulation_month in commitment_weights:
+        commitment_weights[simulation_month] *= 1.45
+    committed_by_month = _scaled_distribution(
+        committed_total,
+        ledger_commitment_source,
+        future_months,
+        commitment_weights,
+    )
+
+    forecast_by_month = _scaled_distribution(
+        remaining_forecast_total,
+        future_source,
+        future_months,
+        plan_weights,
+    )
+
+    rows = []
+    for month in months:
+        actual = actual_by_month.get(month, 0.0)
+        committed = committed_by_month.get(month, 0.0)
+        forecast = forecast_by_month.get(month, 0.0)
+        projected_month_end = actual + committed + forecast
+        plan = monthly_plan.get(month, 0.0)
+        variance = plan - projected_month_end
+
+        if month < simulation_month:
+            status = "EXECUTED"
+        elif month == simulation_month:
+            status = "CURRENT"
+        else:
+            status = "FORECAST"
+
+        rows.append({
+            "Month": month.strftime("%b %Y"),
+            "Status": status,
+            "Monthly Plan": plan,
+            "Actual Posted": actual,
+            "Committed": committed,
+            "Remaining Forecast": forecast,
+            "Projected Month-End": projected_month_end,
+            "Variance to Plan": variance,
+        })
+
+    monthly = pd.DataFrame(rows)
+
+    # Floating-point cleanup: force the final month to carry tiny rounding differences so
+    # annual totals always tie exactly to the connected source totals.
+    if not monthly.empty:
+        corrections = {
+            "Monthly Plan": annual - monthly["Monthly Plan"].sum(),
+            "Actual Posted": actual_total - monthly["Actual Posted"].sum(),
+            "Committed": committed_total - monthly["Committed"].sum(),
+            "Remaining Forecast": remaining_forecast_total - monthly["Remaining Forecast"].sum(),
+        }
+        last_idx = monthly.index[-1]
+        for col, correction in corrections.items():
+            monthly.loc[last_idx, col] += correction
+        monthly["Projected Month-End"] = (
+            monthly["Actual Posted"] + monthly["Committed"] + monthly["Remaining Forecast"]
+        )
+        monthly["Variance to Plan"] = monthly["Monthly Plan"] - monthly["Projected Month-End"]
+
+    return monthly
 
 
 # ============================================================
@@ -1781,10 +2033,11 @@ elif page == "Executive Dashboard":
 
     section_title(
         "Executive Dashboard",
-        "Department-wide financial position, university support requirement, risk, and management workload."
+        "One connected financial picture for Q1 actuals, current commitments, remaining forecast, program budgets, and university support."
     )
 
     support = university_support_projection()
+    recon = program_budget_reconciliation()
 
     st.markdown("## University Support Requirement")
 
@@ -1809,67 +2062,48 @@ elif page == "Executive Dashboard":
     s4.metric("Net University Requirement", compact_money(support["required_support"]))
 
     st.caption(
-        "External / earned revenue remains separate from university support. In this simulation, each additional "
-        "dollar of outside athletics revenue reduces the modeled university requirement dollar-for-dollar if expenses "
-        "remain unchanged."
+        "External / earned revenue remains separate from university support. Each additional dollar of outside "
+        "athletics revenue reduces the modeled university requirement dollar-for-dollar if expenses remain unchanged."
     )
 
     st.markdown("## Projected Year-End Position")
 
     f1, f2, f3, f4 = st.columns(4)
-    f1.metric("Actual Posted", compact_money(support["actual"]))
-    f2.metric("Approved / Committed", compact_money(support["committed"]))
+    f1.metric("Q1 Actual Posted", compact_money(support["actual"]))
+    f2.metric("Committed Obligations", compact_money(support["committed"]))
     f3.metric("Remaining Forecast", compact_money(support["remaining_forecast"]))
     f4.metric("Projected Year-End", compact_money(support["projected"]))
 
-    if support.get("approved_decision_adjustment", 0) > 0:
-        st.caption(
-            f"Saved purchase approvals currently add {money(support['approved_decision_adjustment'])} to the "
-            "simulation's committed and projected year-end expense position."
-        )
-    else:
-        st.caption("Actual Posted + Approved / Committed + Remaining Forecast = Projected Year-End.")
+    st.caption(
+        "Projected Year-End = Q1 Actual Posted + Committed Obligations + Remaining Forecast. "
+        "When a commitment later posts as an actual, KORBI moves it between buckets rather than counting it twice."
+    )
 
     if support["variance"] >= 0:
         st.markdown(
-            f"""
-            <div style="
-                background:#DDF3E7;
-                color:#18794E;
-                border:1px solid #B7E2CB;
-                border-left:4px solid #18794E;
-                border-radius:8px;
-                padding:14px 16px;
-                margin:14px 0 22px 0;
-                font-size:15px;
-                font-weight:700;
-            ">
-                KORBI currently projects Athletics to finish
-                {money(support['variance'])} favorable to the annual plan.
-            </div>
-            """,
+            f'<div class="neutral-note">KORBI currently projects Athletics to finish '
+            f'<strong>{money(support["variance"])}</strong> favorable to the annual plan.</div>',
             unsafe_allow_html=True,
         )
     else:
         st.markdown(
-            f"""
-            <div style="
-                background:#FCE8E6;
-                color:#B42318;
-                border:1px solid #F5C2BE;
-                border-left:4px solid #B42318;
-                border-radius:8px;
-                padding:14px 16px;
-                margin:14px 0 22px 0;
-                font-size:15px;
-                font-weight:700;
-            ">
-                KORBI currently projects Athletics to finish
-                {money(abs(support['variance']))} over the annual plan.
-            </div>
-            """,
+            f'<div style="background:#FCE8E6;color:#B42318;border:1px solid #F5C2BE;border-left:4px solid #B42318;'
+            f'border-radius:8px;padding:14px 16px;margin:14px 0 22px;font-size:15px;font-weight:800;">'
+            f'KORBI currently projects Athletics to finish {money(abs(support["variance"]))} over the annual plan.</div>',
             unsafe_allow_html=True,
         )
+
+    st.markdown("## Athletics Budget Reconciliation")
+    r1, r2, r3, r4 = st.columns(4)
+    r1.metric(f"{recon['program_count']} Sport Budgets", money(recon["sport_budget"]))
+    r2.metric("Shared / Department Costs", money(recon["shared_budget"]))
+    r3.metric("Total Athletics Budget", money(recon["total_athletics_budget"]))
+    r4.metric("Reconciliation Difference", money_zero(recon["reconciliation_difference"]))
+
+    st.caption(
+        "Sport Budgets + Shared / Department Costs = Total Athletics Budget. "
+        "The reconciliation difference should remain $0."
+    )
 
     current_requests = request_status_table()
     decisions_now = current_decision_df()
@@ -1893,7 +2127,7 @@ elif page == "Executive Dashboard":
     c2.metric("Requests Reviewed", reviewed)
     c3.metric("High-Risk Requests", high_risk)
 
-    st.markdown("## Program Budget Status — All 10 Restart Sports")
+    st.markdown("## Program Budget Status — Restart Sports")
 
     cards = []
     if not triage_df.empty and "program_name" in triage_df.columns:
@@ -1915,11 +2149,11 @@ elif page == "Executive Dashboard":
                 status, css = "HEALTHY", "healthy"
 
             cards.append(
-                f'''<div class="program-card {css}">
-                    <div class="sport">{program_name}</div>
-                    <div class="status">{status}</div>
-                    <div class="detail">{util:.1f}% projected utilization | Remaining capacity: {money(metrics["remaining"])}</div>
-                </div>'''
+                f"""<div class=\"program-card {css}\">
+                    <div class=\"sport\">{program_name}</div>
+                    <div class=\"status\">{status}</div>
+                    <div class=\"detail\">{util:.1f}% projected utilization | Remaining capacity: {money(metrics['remaining'])}</div>
+                </div>"""
             )
 
     if cards:
@@ -1933,7 +2167,7 @@ elif page == "Executive Dashboard":
     st.markdown("## Department Financial Detail")
     d1, d2, d3, d4 = st.columns(4)
     d1.metric("Annual Athletics Plan", money(support["annual"]))
-    d2.metric("YTD Actual Expenditures", money(support["actual"]))
+    d2.metric("Q1 Actual Expenditures", money(support["actual"]))
     d3.metric("Projected Year-End", money(support["projected"]))
     d4.metric(
         "Projected Favorable Variance" if support["variance"] >= 0 else "Projected Unfavorable Variance",
@@ -1945,9 +2179,9 @@ elif page == "Executive Dashboard":
 
     st.markdown("## KORBI Executive Interpretation")
     st.info(
-        "KORBI keeps the department focused on four connected questions: what has posted, what has already been "
-        "committed, what is still forecasted, and how much university support will ultimately be required after "
-        "external athletics revenue is considered."
+        "The simulation is positioned on October 1, 2027, after Q1 is complete. July through September are actuals. "
+        "October forward combines outstanding commitments and the remaining forecast. A delayed vendor invoice moves "
+        "into the month it is now expected to post, so timing changes affect monthly variance without disappearing from the annual outlook."
     )
 
 
@@ -1959,57 +2193,90 @@ elif page == "Monthly Financials":
 
     section_title(
         "Monthly Financials",
-        "Executed months, current commitments, and remaining forecast through the end of FY 2027-28."
+        "Q1 actuals are complete through September 2027. October is the current month; November through June remain forecast. Every month reconciles to the same annual model used across KORBI."
     )
 
     sport_options = ["Entire Athletics"]
-
     if not triage_df.empty and "program_name" in triage_df.columns:
         sport_options += sorted(
             triage_df["program_name"].dropna().astype(str).unique().tolist()
         )
 
     scope = st.selectbox("View", sport_options)
-
     monthly_outlook = monthly_financial_outlook(scope)
+    scope_totals = _scope_financial_totals(scope)
 
     if monthly_outlook.empty:
-        st.info("No monthly transaction or forecast data is currently available.")
+        st.info("No monthly financial model is currently available.")
     else:
-        st.markdown("### FY 2027-28 Monthly Execution & Forecast")
+        st.markdown("### FY 2027-28 Monthly Plan, Execution & Forecast")
+
+        display_monthly = monthly_outlook.copy()
+        currency_columns = [
+            "Monthly Plan",
+            "Actual Posted",
+            "Committed",
+            "Remaining Forecast",
+            "Projected Month-End",
+            "Variance to Plan",
+        ]
+        for col in currency_columns:
+            display_monthly[col] = display_monthly[col].apply(money_zero)
 
         st.dataframe(
-            accounting_table(
-                monthly_outlook,
-                currency_cols=[
-                    "Actual",
-                    "Committed",
-                    "Remaining Forecast",
-                    "Monthly Outlook",
-                ],
-            ),
+            display_monthly,
             width="stretch",
             hide_index=True,
         )
 
-        executed_total = monthly_outlook.loc[
-            monthly_outlook["Status"] == "EXECUTED", "Actual"
+        q1_actual = monthly_outlook.loc[
+            monthly_outlook["Status"] == "EXECUTED", "Actual Posted"
         ].sum()
-
-        current_and_future_commitments = monthly_outlook["Committed"].sum()
-        future_total = monthly_outlook["Remaining Forecast"].sum()
-        outlook_total = monthly_outlook["Monthly Outlook"].sum()
+        commitments = monthly_outlook["Committed"].sum()
+        remaining_forecast = monthly_outlook["Remaining Forecast"].sum()
+        projected = monthly_outlook["Projected Month-End"].sum()
 
         m1, m2, m3, m4 = st.columns(4)
-        m1.metric("Executed Actuals", money(executed_total))
-        m2.metric("Open / Committed", money(current_and_future_commitments))
-        m3.metric("Future Forecast", money(future_total))
-        m4.metric("Modeled FY Outlook", money(outlook_total))
+        m1.metric("Q1 Actual Posted", money_zero(q1_actual))
+        m2.metric("Committed Obligations", money_zero(commitments))
+        m3.metric("Remaining Forecast", money_zero(remaining_forecast))
+        m4.metric("Projected FY Outlook", money_zero(projected))
 
-        st.info(
-            "As each month closes, KORBI replaces forecast assumptions with actual posted activity. "
-            "That makes the year-end view more reliable as the fiscal year progresses."
+        annual_plan = safe_float(scope_totals.get("annual"))
+        variance = annual_plan - projected
+        v1, v2, v3 = st.columns(3)
+        v1.metric("Annual Plan", money_zero(annual_plan))
+        v2.metric("Projected FY Outlook", money_zero(projected))
+        v3.metric(
+            "Projected Favorable Variance" if variance >= 0 else "Projected Unfavorable Variance",
+            money_zero(abs(variance)),
         )
+
+        st.markdown(
+            '<div class="neutral-note"><strong>How to read the monthly model:</strong> '
+            'Monthly Plan is the original planned spend. Actual Posted is what hit the ledger. '
+            'Committed is approved money still expected to post. Remaining Forecast is expected spend not yet committed. '
+            'Projected Month-End adds those three operating buckets. Variance to Plan is Monthly Plan minus Projected Month-End. '
+            'If a September invoice did not post on time, the commitment carries into October rather than disappearing.</div>',
+            unsafe_allow_html=True,
+        )
+
+        # Surface timing pressure when a favorable month is followed by an unfavorable one.
+        timing_notes = []
+        for i in range(len(monthly_outlook) - 1):
+            this_row = monthly_outlook.iloc[i]
+            next_row = monthly_outlook.iloc[i + 1]
+            if this_row["Variance to Plan"] > 1000 and next_row["Variance to Plan"] < -1000:
+                timing_notes.append(
+                    f"{this_row['Month']} is {money_zero(this_row['Variance to Plan'])} favorable while "
+                    f"{next_row['Month']} is {money_zero(abs(next_row['Variance to Plan']))} unfavorable; "
+                    "that pattern may reflect timing or a commitment rolling into the following month."
+                )
+
+        if timing_notes:
+            st.markdown("### KORBI Timing Watch")
+            for note in timing_notes[:3]:
+                st.write(f"• {note}")
 
         dataframe_download(
             monthly_outlook,
@@ -2030,7 +2297,7 @@ elif page == "Sport Budgets":
 
     section_title(
         "Sport Budgets",
-        "Program budgets, actuals, commitments, year-end forecast, and request status."
+        "Track each program's annual budget, Q1 actual spend, committed obligations, remaining forecast, projected year-end position, financial flexibility, utilization risk, and request activity."
     )
 
     if triage_df.empty or "program_name" not in triage_df.columns:
@@ -2041,12 +2308,13 @@ elif page == "Sport Budgets":
         metrics = program_metrics(selection)
 
         if metrics:
-            b1, b2, b3, b4, b5 = st.columns(5)
+            b1, b2, b3, b4, b5, b6 = st.columns(6)
             b1.metric("Annual Budget", compact_money(metrics["annual"]))
-            b2.metric("Actual Spend", compact_money(metrics["actual"]))
+            b2.metric("Q1 Actual", compact_money(metrics["actual"]))
             b3.metric("Committed", compact_money(metrics["committed"]))
-            b4.metric("Projected Year-End", compact_money(metrics["projected"]))
-            b5.metric("Projected Remaining", compact_money(metrics["remaining"]))
+            b4.metric("Remaining Forecast", compact_money(metrics["remaining_forecast"]))
+            b5.metric("Projected Year-End", compact_money(metrics["projected"]))
+            b6.metric("Projected Remaining", compact_money(metrics["remaining"]))
 
             st.progress(
                 min(max(metrics["utilization"] / 100, 0), 1.0),
@@ -2054,24 +2322,28 @@ elif page == "Sport Budgets":
             )
 
             if metrics["utilization"] > 100:
-                st.error("KORBI classifies this program as OVER BUDGET.")
+                st.error("OVER BUDGET — projected expenses exceed the approved annual program budget.")
             elif metrics["utilization"] >= 95:
-                st.error("KORBI classifies this program as HIGH RISK.")
+                st.error("HIGH RISK — very little year-end flexibility remains.")
             elif metrics["utilization"] >= 90:
-                st.warning("KORBI classifies this program as CAUTION.")
+                st.warning("CAUTION — financial flexibility is becoming limited.")
             elif metrics["utilization"] >= 80:
-                st.info("KORBI classifies this program as MONITOR.")
+                st.info("MONITOR — the program remains within plan but should watch remaining flexibility.")
             else:
-                st.success("KORBI classifies this program as HEALTHY.")
+                st.info("HEALTHY — the current projection remains comfortably within the annual plan.")
 
-            if metrics.get("approved_decision_adjustment", 0) > 0:
-                st.caption(
-                    f"Saved approvals add {money(metrics['approved_decision_adjustment'])} to this program's current "
-                    "committed and projected year-end position."
-                )
+            st.caption(
+                "Q1 Actual + Committed + Remaining Forecast = Projected Year-End. "
+                "Approved purchase requests immediately move into Committed until they later post as actual spend."
+            )
 
         request_view = request_status_table(selection)
-        st.markdown("## Request Center")
+        department_requests = request_status_table()
+
+        st.markdown(f"## Request Center — {selection}")
+        st.caption(
+            f"This view contains {selection} requests only. Department-wide requests are managed on the Purchase Requests page."
+        )
 
         if request_view.empty:
             st.info(f"No requests are currently loaded for {selection}.")
@@ -2080,12 +2352,18 @@ elif page == "Sport Budgets":
             allocated_count = int((request_view["request_type"] == "ALLOCATED").sum())
             approved_count = int((request_view["request_status"] == "APPROVED").sum())
             denied_count = int((request_view["request_status"] == "DENIED").sum())
+            department_open_count = int((department_requests["request_status"] == "OPEN").sum()) if not department_requests.empty else 0
 
             r1, r2, r3, r4 = st.columns(4)
-            r1.metric("Open Requests", open_count)
+            r1.metric(f"Open — {selection}", open_count)
             r2.metric("Allocated / Planned", allocated_count)
             r3.metric("Approved", approved_count)
             r4.metric("Denied", denied_count)
+
+            st.caption(
+                f"{selection}: {open_count} open request{'' if open_count == 1 else 's'} | "
+                f"Entire Athletics: {department_open_count} open request{'' if department_open_count == 1 else 's'}."
+            )
 
             request_columns = [
                 c for c in [
@@ -2120,8 +2398,7 @@ elif page == "Sport Budgets":
                     f"No requests are explicitly identified as allocated/planned for {selection}."
                 )
                 st.caption(
-                    "Allocated / Planned is a request type, not an approval. A planned item still follows the same "
-                    "review and purchasing controls."
+                    "Allocated / Planned is a request type, not an approval. A planned item still follows the same review and purchasing controls."
                 )
 
             with approved_tab:
@@ -2131,8 +2408,8 @@ elif page == "Sport Budgets":
                     approved_value = pd.to_numeric(approved_rows["amount"], errors="coerce").fillna(0).sum()
                     st.metric("Approved Request Value", money(approved_value))
                     st.caption(
-                        "Approved requests are treated as committed money in KORBI's live simulation even before the "
-                        "final invoice posts."
+                        "Approved requests are treated as committed money even before the vendor invoice posts. "
+                        "When the invoice becomes an actual, KORBI moves the amount out of committed rather than adding it again."
                     )
 
             with denied_tab:
@@ -2141,13 +2418,15 @@ elif page == "Sport Budgets":
                     f"No denied requests for {selection}."
                 )
 
-        st.markdown("## Coach Financial Impact")
+        st.markdown("## Program Financial Interpretation")
         if metrics:
-            st.info(
-                f"{selection} currently has {money(metrics['remaining'])} of projected year-end financial flexibility. "
-                "A new request may fit within today's budget while still reducing the program's ability to respond to "
-                "travel changes, equipment needs, or other unexpected requirements later. KORBI shows the tradeoff "
-                "without assuming what the coach may want to buy next."
+            st.markdown(
+                f'<div class="neutral-note"><strong>{html.escape(selection)}</strong> currently has '
+                f'<strong>{money(metrics["remaining"])}</strong> of projected year-end financial flexibility. '
+                f'Current utilization is <strong>{metrics["utilization"]:.1f}%</strong>. '
+                'KORBI shows the impact of each request against this same program position so coaches and management '
+                'are working from one set of numbers.</div>',
+                unsafe_allow_html=True,
             )
 
 
@@ -2273,10 +2552,19 @@ elif page == "Purchase Requests":
         st.write(f"**Projected utilization:** {pct(row.get('percent_with_request'))}")
 
     st.markdown("#### Budget Impact")
-    st.write(budget_impact(row))
+    st.markdown(
+        f'<div class="neutral-note">{html.escape(budget_impact(row))}</div>',
+        unsafe_allow_html=True,
+    )
 
     st.markdown("#### Risk")
-    st.write(risk_summary(row))
+    risk_text = risk_summary(row)
+    if safe_float(row.get("percent_with_request")) > 100:
+        st.error(risk_text)
+    elif safe_float(row.get("percent_with_request")) >= 95:
+        st.warning(risk_text)
+    else:
+        st.write(risk_text)
 
     st.markdown("---")
     st.markdown("## Management Decision")
