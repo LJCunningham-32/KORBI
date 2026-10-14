@@ -1593,44 +1593,44 @@ if page == "Home":
     st.markdown("## What KORBI Can Do for Sonoma State")
     st.caption("One operating layer for Athletics")
 
-    st.markdown(
-        textwrap.dedent(
-            """
-            <div class="capability-grid">
-                <div class="capability-card">
-                    <h3>Live Financial Picture</h3>
-                    <p>See actual spend, approved commitments, open requests, future obligations, external revenue, and projected year-end position in one place.</p>
-                </div>
-
-                <div class="capability-card">
-                    <h3>Coach Budget Visibility</h3>
-                    <p>Show each coach what has been spent, what is already committed, what remains, and how a request changes flexibility.</p>
-                </div>
-
-                <div class="capability-card">
-                    <h3>Forecast &amp; University Support</h3>
-                    <p>Continuously project year-end expenses and show how outside revenue can reduce the university support required.</p>
-                </div>
-
-                <div class="capability-card">
-                    <h3>Startup Readiness</h3>
-                    <p>Track the equipment, supplies, facilities, travel, and operating work required to have teams ready for Fall 2027.</p>
-                </div>
-
-                <div class="capability-card">
-                    <h3>Standardized Requests</h3>
-                    <p>Use the same request, review, approval, denial, and documentation process across every program.</p>
-                </div>
-
-                <div class="capability-card">
-                    <h3>Accountability</h3>
-                    <p>Keep an audit trail of requests, management decisions, financial impact, approvals, denials, and remaining obligations.</p>
-                </div>
-            </div>
-            """
+    capability_cards = [
+        (
+            "Live Financial Picture",
+            "See actual spend, approved commitments, open requests, future obligations, external revenue, and projected year-end position in one place.",
         ),
-        unsafe_allow_html=True,
-    )
+        (
+            "Coach Budget Visibility",
+            "Show each coach what has been spent, what is already committed, what remains, and how a request changes flexibility.",
+        ),
+        (
+            "Forecast & University Support",
+            "Continuously project year-end expenses and show how outside revenue can reduce the university support required.",
+        ),
+        (
+            "Startup Readiness",
+            "Track the equipment, supplies, facilities, travel, and operating work required to have teams ready for Fall 2027.",
+        ),
+        (
+            "Standardized Requests",
+            "Use the same request, review, approval, denial, and documentation process across every program.",
+        ),
+        (
+            "Accountability",
+            "Keep an audit trail of requests, management decisions, financial impact, approvals, denials, and remaining obligations.",
+        ),
+    ]
+
+    for row_start in range(0, len(capability_cards), 3):
+        cols = st.columns(3)
+        for col, (title, body) in zip(cols, capability_cards[row_start:row_start + 3]):
+            with col:
+                card_html = (
+                    '<div class="capability-card">'
+                    f'<h3>{title}</h3>'
+                    f'<p>{body}</p>'
+                    '</div>'
+                )
+                st.markdown(card_html, unsafe_allow_html=True)
 
 
 # ============================================================
