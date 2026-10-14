@@ -271,15 +271,23 @@ st.markdown(
         font-size: 1.05rem;
     }
 
-  .value-card p {
-    margin: 0;
+.value-card p {
+    margin: 0 !important;
     color: #263746 !important;
-    line-height: 1.55;
-    font-size: .9rem;
-    font-weight: 500;
+    -webkit-text-fill-color: #263746 !important;
+    line-height: 1.55 !important;
+    font-size: .9rem !important;
+    font-weight: 600 !important;
     opacity: 1 !important;
 }
 
+.value-card p *,
+.value-card div,
+.value-card span {
+    color: #263746 !important;
+    -webkit-text-fill-color: #263746 !important;
+    opacity: 1 !important;
+}
     .landing-panel {
         background: #FFFFFF;
         border: 1px solid var(--ssu-border);
