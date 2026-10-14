@@ -191,6 +191,58 @@ st.markdown(
         transform: translateX(2px);
     }
 
+    /* Premium sidebar navigation contrast */
+    [data-testid="stSidebar"] [role="radiogroup"] label,
+    [data-testid="stSidebar"] [role="radiogroup"] label * {
+        color: #F7FBFF !important;
+        -webkit-text-fill-color: #F7FBFF !important;
+        font-weight: 750 !important;
+        opacity: 1 !important;
+    }
+
+    [data-testid="stSidebar"] [role="radiogroup"] label:has(input:checked) {
+        background: linear-gradient(90deg, #0B67B2 0%, #00539B 100%) !important;
+        border: 1px solid rgba(255,255,255,.28) !important;
+        box-shadow: 0 5px 16px rgba(0,0,0,.20) !important;
+    }
+
+    [data-testid="stSidebar"] [role="radiogroup"] label:has(input:checked) * {
+        color: #FFFFFF !important;
+        -webkit-text-fill-color: #FFFFFF !important;
+        font-weight: 900 !important;
+    }
+
+    [data-testid="stSidebar"] p,
+    [data-testid="stSidebar"] label,
+    [data-testid="stSidebar"] span {
+        opacity: 1 !important;
+    }
+
+    .sidebar-brand {
+        background: rgba(255,255,255,.08);
+        border: 1px solid rgba(255,255,255,.18);
+        border-radius: 14px;
+        padding: .85rem .85rem .75rem;
+        margin: .15rem 0 .8rem;
+        box-shadow: 0 8px 22px rgba(0,0,0,.14);
+    }
+    .sidebar-brand .ssu-mark {
+        color: #FFFFFF !important;
+        -webkit-text-fill-color: #FFFFFF !important;
+        font-size: 1.05rem;
+        font-weight: 950;
+        letter-spacing: .06rem;
+    }
+    .sidebar-brand .ssu-sub {
+        color: #CFE4F7 !important;
+        -webkit-text-fill-color: #CFE4F7 !important;
+        font-size: .72rem;
+        font-weight: 800;
+        letter-spacing: .08rem;
+        text-transform: uppercase;
+        margin-top: .15rem;
+    }
+
     .korbi-header {
         background:
             linear-gradient(118deg, rgba(255,255,255,.06), transparent 28%),
@@ -1720,6 +1772,294 @@ def program_health(utilization):
     return "HEALTHY", "healthy"
 
 
+
+# ============================================================
+# SIMULATED APPROVED PURCHASE ORDERS / DENIED REQUESTS
+# ============================================================
+
+PO_TEMPLATES = {
+    "basketball": [
+        ("Travel", "Team hotel block", "Marriott / Hilton", 0.18),
+        ("Travel", "Team air / ground transportation", "Southwest / Charter Vendor", 0.15),
+        ("Meals / Per Diem", "Competition meals and per diem", "Team Travel", 0.10),
+        ("Competition Operations", "Officials and game operations", "CCAA / Officials", 0.12),
+        ("Equipment & Supplies", "Uniforms and competition equipment", "Nike / BSN Sports", 0.12),
+        ("Equipment & Supplies", "Basketballs and training equipment", "Wilson / BSN Sports", 0.07),
+        ("Technology / Software", "Video analysis and scouting platform", "Hudl / Synergy", 0.07),
+        ("Recruiting", "Recruiting travel and prospect evaluation", "Recruiting Travel", 0.07),
+        ("Facilities / Rentals", "Practice / event operations support", "Campus Operations", 0.07),
+        ("Other Program Operations", "Medical and recovery supplies", "Performance Health", 0.05),
+    ],
+    "soccer": [
+        ("Travel", "Away match hotel block", "Marriott / Hilton", 0.18),
+        ("Travel", "Team bus transportation", "Charter Bus Vendor", 0.14),
+        ("Meals / Per Diem", "Competition meals and per diem", "Team Travel", 0.11),
+        ("Competition Operations", "Officials and match operations", "CCAA / Officials", 0.11),
+        ("Equipment & Supplies", "Uniforms and training apparel", "Nike / BSN Sports", 0.10),
+        ("Equipment & Supplies", "Balls, goals, and field equipment", "Kwik Goal / BSN Sports", 0.09),
+        ("Technology / Software", "Video and athlete-performance platform", "Hudl", 0.07),
+        ("Recruiting", "Recruiting travel and events", "Recruiting Travel", 0.07),
+        ("Facilities / Rentals", "Field and event support", "Campus Operations", 0.07),
+        ("Other Program Operations", "Recovery and medical supplies", "Performance Health", 0.06),
+    ],
+    "cross country": [
+        ("Travel", "Meet hotel blocks", "Marriott / Hilton", 0.22),
+        ("Travel", "Team transportation", "Charter / Rental Vehicle", 0.18),
+        ("Meals / Per Diem", "Meet meals and per diem", "Team Travel", 0.13),
+        ("Competition Operations", "Meet entry fees", "Meet Hosts", 0.10),
+        ("Equipment & Supplies", "Competition footwear support", "Running Specialty Vendor", 0.10),
+        ("Equipment & Supplies", "Uniforms and training apparel", "Nike / BSN Sports", 0.08),
+        ("Recruiting", "Recruiting travel and events", "Recruiting Travel", 0.06),
+        ("Technology / Software", "Timing / performance software", "Timing Vendor", 0.05),
+        ("Other Program Operations", "Hydration and recovery supplies", "Performance Health", 0.04),
+        ("Other Program Operations", "Program operations contingency", "Program Operations", 0.04),
+    ],
+    "baseball": [
+        ("Travel", "Conference hotel blocks", "Marriott / Hilton", 0.17),
+        ("Travel", "Team transportation", "Charter Bus Vendor", 0.13),
+        ("Meals / Per Diem", "Road meals and per diem", "Team Travel", 0.10),
+        ("Competition Operations", "Officials and game operations", "CCAA / Officials", 0.11),
+        ("Equipment & Supplies", "Baseballs and competition equipment", "Rawlings", 0.13),
+        ("Equipment & Supplies", "Uniforms and protective equipment", "Rawlings / BSN Sports", 0.10),
+        ("Facilities / Rentals", "Field maintenance and game prep", "Field Operations", 0.09),
+        ("Technology / Software", "Video / analytics platform", "Hudl / Rapsodo", 0.06),
+        ("Recruiting", "Recruiting travel and events", "Recruiting Travel", 0.06),
+        ("Other Program Operations", "Training and medical supplies", "Performance Health", 0.05),
+    ],
+    "softball": [
+        ("Travel", "Conference hotel blocks", "Marriott / Hilton", 0.17),
+        ("Travel", "Team transportation", "Charter Bus Vendor", 0.13),
+        ("Meals / Per Diem", "Road meals and per diem", "Team Travel", 0.10),
+        ("Competition Operations", "Officials and game operations", "CCAA / Officials", 0.11),
+        ("Equipment & Supplies", "Softballs and competition equipment", "Rawlings", 0.13),
+        ("Equipment & Supplies", "Uniforms and protective equipment", "Rawlings / BSN Sports", 0.10),
+        ("Facilities / Rentals", "Field maintenance and game prep", "Field Operations", 0.09),
+        ("Technology / Software", "Video / analytics platform", "Hudl / Rapsodo", 0.06),
+        ("Recruiting", "Recruiting travel and events", "Recruiting Travel", 0.06),
+        ("Other Program Operations", "Training and medical supplies", "Performance Health", 0.05),
+    ],
+    "volleyball": [
+        ("Travel", "Away-match hotel blocks", "Marriott / Hilton", 0.18),
+        ("Travel", "Team transportation", "Charter Bus Vendor", 0.14),
+        ("Meals / Per Diem", "Road meals and per diem", "Team Travel", 0.11),
+        ("Competition Operations", "Officials and match operations", "CCAA / Officials", 0.11),
+        ("Equipment & Supplies", "Uniforms and competition apparel", "Nike / BSN Sports", 0.11),
+        ("Equipment & Supplies", "Volleyballs and training equipment", "Molten / BSN Sports", 0.09),
+        ("Technology / Software", "Video / scouting platform", "Hudl / Volleymetrics", 0.08),
+        ("Recruiting", "Recruiting travel and events", "Recruiting Travel", 0.07),
+        ("Facilities / Rentals", "Event and facility support", "Campus Operations", 0.06),
+        ("Other Program Operations", "Recovery and medical supplies", "Performance Health", 0.05),
+    ],
+    "golf": [
+        ("Travel", "Tournament hotel blocks", "Marriott / Hilton", 0.22),
+        ("Travel", "Tournament transportation", "Rental Vehicle Vendor", 0.15),
+        ("Meals / Per Diem", "Tournament meals and per diem", "Team Travel", 0.11),
+        ("Competition Operations", "Tournament entry fees", "Tournament Hosts", 0.13),
+        ("Equipment & Supplies", "Golf balls and competition supplies", "Titleist / Team Vendor", 0.10),
+        ("Equipment & Supplies", "Apparel and bags", "Team Golf Vendor", 0.08),
+        ("Facilities / Rentals", "Practice / course access", "Local Golf Facilities", 0.08),
+        ("Recruiting", "Recruiting travel and events", "Recruiting Travel", 0.05),
+        ("Technology / Software", "Tournament analytics platform", "Golfstat / Analytics Vendor", 0.04),
+        ("Other Program Operations", "Program operations contingency", "Program Operations", 0.04),
+    ],
+    "default": [
+        ("Travel", "Travel and lodging obligation", "Travel Vendor", 0.18),
+        ("Travel", "Transportation obligation", "Transportation Vendor", 0.13),
+        ("Meals / Per Diem", "Meals and per diem", "Team Travel", 0.10),
+        ("Competition Operations", "Competition operations", "Operations Vendor", 0.10),
+        ("Equipment & Supplies", "Competition equipment", "Equipment Vendor", 0.12),
+        ("Equipment & Supplies", "Uniforms and supplies", "Team Vendor", 0.10),
+        ("Technology / Software", "Program technology", "Software Vendor", 0.07),
+        ("Recruiting", "Recruiting travel", "Recruiting Travel", 0.07),
+        ("Facilities / Rentals", "Facility operations", "Campus Operations", 0.07),
+        ("Other Program Operations", "Other approved operating needs", "Program Operations", 0.06),
+    ],
+}
+
+
+def _po_template_for_program(program_name):
+    name = str(program_name).lower()
+    for key in ["cross country", "basketball", "soccer", "baseball", "softball", "volleyball", "golf"]:
+        if key in name:
+            return PO_TEMPLATES[key]
+    return PO_TEMPLATES["default"]
+
+
+def _po_months_for_program(program_name):
+    name = str(program_name).lower()
+    if "basketball" in name:
+        return ["2027-10-22", "2027-11-12", "2027-11-28", "2027-12-10", "2028-01-15", "2028-01-29", "2028-02-12", "2028-02-26", "2028-03-08", "2028-03-20"]
+    if any(k in name for k in ["soccer", "volleyball", "cross country"]):
+        return ["2027-10-12", "2027-10-20", "2027-10-28", "2027-11-05", "2027-11-12", "2027-11-19", "2027-11-26", "2028-02-15", "2028-03-15", "2028-04-15"]
+    if any(k in name for k in ["baseball", "softball"]):
+        return ["2027-11-20", "2027-12-15", "2028-01-12", "2028-01-26", "2028-02-10", "2028-02-24", "2028-03-12", "2028-04-10", "2028-05-05", "2028-05-20"]
+    if "golf" in name:
+        return ["2027-10-15", "2027-11-10", "2027-11-24", "2028-02-12", "2028-02-26", "2028-03-12", "2028-03-26", "2028-04-12", "2028-04-26", "2028-05-10"]
+    return ["2027-10-20", "2027-11-15", "2027-12-15", "2028-01-15", "2028-02-15", "2028-03-15", "2028-04-15", "2028-05-01", "2028-05-20", "2028-06-05"]
+
+
+def approved_purchase_orders_df():
+    """Build simulated open POs that reconcile to KORBI's current committed balance."""
+    rows = []
+    decisions = current_decision_df()
+    approved_decisions = pd.DataFrame()
+    if not decisions.empty and "manager_decision" in decisions.columns:
+        approved_decisions = decisions[
+            decisions["manager_decision"].astype(str).str.upper() == "APPROVE"
+        ].copy()
+
+    programs = []
+    if not triage_df.empty and "program_name" in triage_df.columns:
+        programs = sorted(triage_df["program_name"].dropna().astype(str).unique())
+
+    po_counter = 1001
+    for program in programs:
+        metrics = program_metrics(program)
+        if not metrics:
+            continue
+        total_committed = max(safe_float(metrics.get("committed")), 0.0)
+
+        live = pd.DataFrame()
+        if not approved_decisions.empty and "program_name" in approved_decisions.columns:
+            live = approved_decisions[
+                approved_decisions["program_name"].astype(str) == str(program)
+            ].copy()
+        live_total = pd.to_numeric(live.get("amount", pd.Series(dtype=float)), errors="coerce").fillna(0).sum() if not live.empty else 0.0
+        seeded_total = max(total_committed - live_total, 0.0)
+
+        template = _po_template_for_program(program)
+        dates = _po_months_for_program(program)
+        allocated = 0.0
+        for i, (category, desc, vendor, weight) in enumerate(template):
+            amount = round(seeded_total * weight, 2)
+            if i == len(template) - 1:
+                amount = round(seeded_total - allocated, 2)
+            allocated += amount
+            if amount <= 0:
+                continue
+            rows.append({
+                "PO #": f"PO-{po_counter}",
+                "Request #": f"SIM-{program[:3].upper()}-{i+1:02d}",
+                "Program": program,
+                "Vendor": vendor,
+                "Description": desc,
+                "Category": category,
+                "Approved Amount": amount,
+                "Approval Date": "2027-09-28",
+                "Expected Invoice / Delivery": dates[i % len(dates)],
+                "Expected Posting Month": pd.Timestamp(dates[i % len(dates)]).strftime("%b %Y"),
+                "PO Status": "OPEN",
+                "Amount Invoiced": 0.0,
+                "Remaining PO Balance": amount,
+                "Source": "Simulated Open PO",
+            })
+            po_counter += 1
+
+        if not live.empty:
+            for _, rec in live.iterrows():
+                amt = safe_float(rec.get("amount"))
+                if amt <= 0:
+                    continue
+                rows.append({
+                    "PO #": f"PO-{po_counter}",
+                    "Request #": str(rec.get("request_id", "")),
+                    "Program": program,
+                    "Vendor": "Pending vendor assignment",
+                    "Description": str(rec.get("description", "Approved purchase request")),
+                    "Category": str(rec.get("category_code", "Other Program Operations")),
+                    "Approved Amount": amt,
+                    "Approval Date": str(rec.get("review_date", SIMULATION_DATE))[:10],
+                    "Expected Invoice / Delivery": "2027-11-15",
+                    "Expected Posting Month": "Nov 2027",
+                    "PO Status": "OPEN",
+                    "Amount Invoiced": 0.0,
+                    "Remaining PO Balance": amt,
+                    "Source": "Live KORBI Approval",
+                })
+                po_counter += 1
+
+    # Allocate any department-level committed balance not assigned to sports.
+    dept = department_financial_summary()
+    program_committed = sum(safe_float(program_metrics(p).get("committed")) for p in programs if program_metrics(p))
+    shared_committed = max(safe_float(dept.get("committed")) - program_committed, 0.0)
+    if shared_committed > 0:
+        admin_items = [
+            ("Athletics Administration", "Department software and licenses", "Technology Vendor", .16, "2027-11-15"),
+            ("Athletics Administration", "Sports medicine shared supplies", "Performance Health", .14, "2027-11-30"),
+            ("Athletics Administration", "Game operations staffing / services", "Event Operations", .16, "2027-12-15"),
+            ("Athletics Administration", "Facilities and equipment maintenance", "Campus Facilities", .15, "2028-01-15"),
+            ("Athletics Administration", "Department travel / vehicle services", "Travel Vendor", .11, "2028-02-15"),
+            ("Athletics Administration", "Compliance / membership obligations", "NCAA / CCAA", .10, "2028-03-15"),
+            ("Athletics Administration", "Marketing and communications services", "Creative Services", .09, "2028-04-15"),
+            ("Athletics Administration", "Shared operational contingency commitments", "Department Operations", .09, "2028-05-15"),
+        ]
+        allocated = 0.0
+        for i, (program, desc, vendor, wt, date) in enumerate(admin_items):
+            amount = round(shared_committed * wt, 2)
+            if i == len(admin_items)-1:
+                amount = round(shared_committed - allocated, 2)
+            allocated += amount
+            rows.append({
+                "PO #": f"PO-{po_counter}", "Request #": f"SIM-ADM-{i+1:02d}", "Program": program,
+                "Vendor": vendor, "Description": desc, "Category": "Shared / Department Costs",
+                "Approved Amount": amount, "Approval Date": "2027-09-28", "Expected Invoice / Delivery": date,
+                "Expected Posting Month": pd.Timestamp(date).strftime("%b %Y"), "PO Status": "OPEN",
+                "Amount Invoiced": 0.0, "Remaining PO Balance": amount, "Source": "Simulated Open PO",
+            })
+            po_counter += 1
+
+    return pd.DataFrame(rows)
+
+
+DENIED_REQUEST_SEED = [
+    ("Men's Soccer", "Second portable recovery unit package", 6800, "Current-year operating flexibility is insufficient for a second recovery package."),
+    ("Women's Soccer", "Premium GPS upgrade package", 11200, "Existing tracking solution meets current competition requirements."),
+    ("Men's Basketball", "Locker room entertainment upgrade", 14500, "Nonessential enhancement does not justify reducing competition and travel capacity."),
+    ("Women's Basketball", "Additional travel apparel package", 7200, "Current apparel allocation is sufficient for the season."),
+    ("Baseball", "Premium dugout technology display", 12800, "Technology enhancement is not required for competition readiness."),
+    ("Softball", "Secondary pitching technology package", 9800, "Existing equipment remains serviceable; higher-priority travel costs retained."),
+    ("Men's Cross Country", "Optional out-of-region invitational travel", 8400, "Additional competition travel would exceed the approved travel strategy."),
+    ("Women's Cross Country", "Optional out-of-region invitational travel", 8400, "Additional competition travel would exceed the approved travel strategy."),
+    ("Women's Volleyball", "Premium practice analytics package", 7600, "Current video platform is adequate for FY 2027-28."),
+    ("Men's Golf", "Additional spring invitational", 9200, "Tournament schedule is already sufficient and travel capacity is limited."),
+]
+
+
+def denied_requests_df():
+    rows = []
+    for i, (program, desc, amount, reason) in enumerate(DENIED_REQUEST_SEED, start=1):
+        rows.append({
+            "Request #": f"DEN-{i:03d}",
+            "Program": program,
+            "Description": desc,
+            "Amount": amount,
+            "Denial Date": "2027-10-01",
+            "Reason Denied": reason,
+            "Reviewer": "Athletics Business Office",
+            "Resubmittable": "Yes - if funding or operating need changes",
+            "Future Budget Consideration": "No - unless revalidated",
+            "Source": "Simulated Denial",
+        })
+
+    decisions = current_decision_df()
+    if not decisions.empty and "manager_decision" in decisions.columns:
+        denied = decisions[decisions["manager_decision"].astype(str).str.upper() == "DENY"].copy()
+        for _, rec in denied.iterrows():
+            rows.append({
+                "Request #": str(rec.get("request_id", "")),
+                "Program": str(rec.get("program_name", "")),
+                "Description": str(rec.get("description", "")),
+                "Amount": safe_float(rec.get("amount")),
+                "Denial Date": str(rec.get("review_date", SIMULATION_DATE))[:10],
+                "Reason Denied": str(rec.get("decision_rationale", rec.get("manager_notes", ""))),
+                "Reviewer": str(rec.get("reviewed_by", "")),
+                "Resubmittable": "Yes - if conditions materially change",
+                "Future Budget Consideration": "No - move to Deferred if it should be tracked for next year",
+                "Source": "Live KORBI Decision",
+            })
+    return pd.DataFrame(rows)
+
+
 def _program_category_weights(program_name):
     """
     Simulated operating-budget mix by sport. These are planning allocations, not actual
@@ -2384,8 +2724,15 @@ if "page_nav" not in st.session_state:
     st.session_state["page_nav"] = "Home"
 
 
-st.sidebar.markdown("## KORBI")
-st.sidebar.caption("Sonoma State Athletics")
+st.sidebar.markdown(
+    """
+    <div class="sidebar-brand">
+        <div class="ssu-mark">SONOMA STATE</div>
+        <div class="ssu-sub">Seawolf Athletics · KORBI</div>
+    </div>
+    """,
+    unsafe_allow_html=True,
+)
 
 page = st.sidebar.radio(
     "Navigation",
@@ -2395,6 +2742,8 @@ page = st.sidebar.radio(
         "Monthly Financials",
         "Sport Budgets",
         "Purchase Requests",
+        "Approved / Purchase Orders",
+        "Denied Requests",
         "CSU Benchmarking",
         "Deferred & Future Needs",
         "Decision Log",
@@ -3405,6 +3754,144 @@ elif page == "Revenue & Funding":
             "korbi_revenue_funding.csv",
             "Download Revenue & Funding CSV",
         )
+
+
+# ============================================================
+# APPROVED / PURCHASE ORDERS
+# ============================================================
+
+elif page == "Approved / Purchase Orders":
+
+    section_title(
+        "Approved / Purchase Orders",
+        "Approved obligations and open purchase orders with expected invoice dates. These records reconcile to KORBI's committed balance and explain what the department has already obligated but has not yet posted as actual expense."
+    )
+
+    po_df = approved_purchase_orders_df()
+
+    if po_df.empty:
+        st.info("No approved purchase orders are currently modeled.")
+    else:
+        total_po = pd.to_numeric(po_df["Approved Amount"], errors="coerce").fillna(0).sum()
+        remaining_po = pd.to_numeric(po_df["Remaining PO Balance"], errors="coerce").fillna(0).sum()
+        dept_committed = safe_float(department_financial_summary().get("committed"))
+        reconciliation = dept_committed - remaining_po
+
+        p1, p2, p3, p4 = st.columns(4)
+        p1.metric("Open Purchase Orders", f"{len(po_df):,}")
+        p2.metric("Approved PO Value", money_zero(total_po))
+        p3.metric("Remaining PO Balance", money_zero(remaining_po))
+        p4.metric("Reconciliation Difference", money_zero(reconciliation))
+
+        st.markdown(
+            '<div class="premium-note"><strong>Financial rule:</strong> Approved purchase orders are already committed money. '
+            'When an invoice posts, the amount moves from <strong>Committed</strong> to <strong>Actual Posted</strong>; '
+            'Projected Year-End does not increase again because KORBI is moving the same obligation between buckets.</div>',
+            unsafe_allow_html=True,
+        )
+
+        f1, f2, f3 = st.columns(3)
+        with f1:
+            programs = ["All Athletics"] + sorted(po_df["Program"].dropna().astype(str).unique().tolist())
+            po_program = st.selectbox("Program / Department", programs, key="po_program_filter")
+        with f2:
+            categories = ["All Categories"] + sorted(po_df["Category"].dropna().astype(str).unique().tolist())
+            po_category = st.selectbox("Category", categories, key="po_category_filter")
+        with f3:
+            months = ["All Posting Months"] + list(dict.fromkeys(po_df["Expected Posting Month"].astype(str).tolist()))
+            po_month = st.selectbox("Expected Posting Month", months, key="po_month_filter")
+
+        view = po_df.copy()
+        if po_program != "All Athletics":
+            view = view[view["Program"].astype(str) == po_program]
+        if po_category != "All Categories":
+            view = view[view["Category"].astype(str) == po_category]
+        if po_month != "All Posting Months":
+            view = view[view["Expected Posting Month"].astype(str) == po_month]
+
+        st.markdown("## Open PO Detail")
+        detail = view.copy()
+        for c in ["Approved Amount", "Amount Invoiced", "Remaining PO Balance"]:
+            detail[c] = detail[c].apply(money_zero)
+        st.markdown(
+            '<div class="korbi-table-wrap">' +
+            detail[["PO #", "Request #", "Program", "Vendor", "Description", "Category", "Approved Amount", "Approval Date", "Expected Invoice / Delivery", "Expected Posting Month", "PO Status", "Remaining PO Balance"]]
+            .to_html(index=False, classes="korbi-table", border=0, escape=True) +
+            '</div>',
+            unsafe_allow_html=True,
+        )
+
+        st.markdown("## Program Commitment Summary")
+        summary = (
+            po_df.groupby("Program", dropna=False)
+            .agg(Open_POs=("PO #", "count"), Approved_Value=("Approved Amount", "sum"), Remaining_PO_Balance=("Remaining PO Balance", "sum"))
+            .reset_index()
+            .rename(columns={"Open_POs":"Open POs", "Approved_Value":"Approved Value", "Remaining_PO_Balance":"Remaining PO Balance"})
+        )
+        summary["Approved Value"] = summary["Approved Value"].apply(money_zero)
+        summary["Remaining PO Balance"] = summary["Remaining PO Balance"].apply(money_zero)
+        st.markdown(
+            '<div class="korbi-table-wrap">' + summary.to_html(index=False, classes="korbi-table", border=0, escape=True) + '</div>',
+            unsafe_allow_html=True,
+        )
+
+        dataframe_download(po_df, "korbi_approved_purchase_orders.csv", "Download Approved / Purchase Orders CSV")
+
+
+# ============================================================
+# DENIED REQUESTS
+# ============================================================
+
+elif page == "Denied Requests":
+
+    section_title(
+        "Denied Requests",
+        "Requests that were declined and removed from the current committed forecast. Denied items remain visible for auditability but do not consume budget unless they are resubmitted or intentionally moved to Deferred & Future Needs."
+    )
+
+    denied_df = denied_requests_df()
+    if denied_df.empty:
+        st.info("No denied requests are currently tracked.")
+    else:
+        total_denied = pd.to_numeric(denied_df["Amount"], errors="coerce").fillna(0).sum()
+        programs_affected = denied_df["Program"].dropna().astype(str).nunique()
+        live_denied = int((denied_df["Source"].astype(str) == "Live KORBI Decision").sum())
+
+        d1, d2, d3, d4 = st.columns(4)
+        d1.metric("Denied Requests", f"{len(denied_df):,}")
+        d2.metric("Denied Request Value", money_zero(total_denied))
+        d3.metric("Programs Affected", f"{programs_affected:,}")
+        d4.metric("Live Management Denials", f"{live_denied:,}")
+
+        f1, f2 = st.columns(2)
+        with f1:
+            options = ["All Athletics"] + sorted(denied_df["Program"].dropna().astype(str).unique().tolist())
+            denied_program = st.selectbox("Program / Department", options, key="denied_program_filter")
+        with f2:
+            denied_source = st.selectbox("Source", ["All Sources"] + sorted(denied_df["Source"].astype(str).unique().tolist()), key="denied_source_filter")
+
+        view = denied_df.copy()
+        if denied_program != "All Athletics":
+            view = view[view["Program"].astype(str) == denied_program]
+        if denied_source != "All Sources":
+            view = view[view["Source"].astype(str) == denied_source]
+
+        display = view.copy()
+        display["Amount"] = display["Amount"].apply(money_zero)
+        st.markdown(
+            '<div class="korbi-table-wrap">' +
+            display[["Request #", "Program", "Description", "Amount", "Denial Date", "Reason Denied", "Reviewer", "Resubmittable", "Future Budget Consideration"]]
+            .to_html(index=False, classes="korbi-table", border=0, escape=True) +
+            '</div>',
+            unsafe_allow_html=True,
+        )
+
+        st.markdown(
+            '<div class="premium-note"><strong>Planning note:</strong> If a denied need should remain visible for a future fiscal year, '
+            'change the management action to <strong>DEFER</strong> rather than DENY so KORBI carries it into Deferred & Future Needs.</div>',
+            unsafe_allow_html=True,
+        )
+        dataframe_download(denied_df, "korbi_denied_requests.csv", "Download Denied Requests CSV")
 
 
 # ============================================================
