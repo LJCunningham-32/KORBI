@@ -1,3 +1,4 @@
+import textwrap
 import csv
 from pathlib import Path
 from datetime import datetime
@@ -1417,7 +1418,7 @@ def approved_decision_adjustments(
         == "APPROVE"
     ].copy()
 
-    if (
+    if page == "Home":
         program_name
         and "program_name" in approved.columns
     ):
@@ -2382,73 +2383,80 @@ if page != "Home":
 # HOME
 # ============================================================
 
-if page == "Home":
+st.markdown(
+        textwrap.dedent(
+            """
+            <div class="hero">
+                <div class="hero-inner">
+                    <div class="hero-kicker">
+                        V7.5 Simulation Environment • Fall 2027 Restart Scenario
+                    </div>
+
+                    <div class="hero-title">
+                        KORBI
+                    </div>
+
+                    <div class="hero-sub">
+                        One operating picture for every program, every request, and every dollar.
+                    </div>
+
+                    <div class="hero-body">
+                        KORBI empowers coaches with financial context, aligns day-to-day
+                        decisions with department objectives, standardizes operating procedures,
+                        and makes the year-round impact of budget changes clear before decisions
+                        are made.
+                    </div>
+                </div>
+            </div>
+            """
+        ),
+        unsafe_allow_html=True,
+    )
 
     st.markdown(
-        """
-        <div class="hero">
-            <div class="hero-inner">
-                <div class="hero-kicker">
-                    V7.5 Simulation Environment • Fall 2027 Restart Scenario
+        textwrap.dedent(
+            """
+            <div class="value-grid">
+
+                <div class="value-card">
+                    <div class="num">EMPOWER</div>
+                    <h3>Empower Coaches</h3>
+                    <p>
+                        Give coaches visibility into spend, commitments, remaining
+                        flexibility, and the impact of new decisions.
+                    </p>
                 </div>
 
-                <div class="hero-title">
-                    KORBI
+                <div class="value-card">
+                    <div class="num">ALIGN</div>
+                    <h3>Align Business Objectives</h3>
+                    <p>
+                        Connect individual team decisions to department priorities,
+                        forecasts, and institutional support.
+                    </p>
                 </div>
 
-                <div class="hero-sub">
-                    One operating picture for every program, every request, and every dollar.
+                <div class="value-card">
+                    <div class="num">STANDARDIZE</div>
+                    <h3>Unify the Process</h3>
+                    <p>
+                        Create one repeatable operating model for purchasing, travel,
+                        equipment, approvals, and financial review.
+                    </p>
                 </div>
 
-                <div class="hero-body">
-                    KORBI empowers coaches with financial context, aligns day-to-day
-                    decisions with department objectives, standardizes operating procedures,
-                    and makes the year-round impact of budget changes clear before decisions
-                    are made.
+                <div class="value-card">
+                    <div class="num">CLARIFY</div>
+                    <h3>Clarify the Impact</h3>
+                    <p>
+                        Show what saying yes today means for the financial flexibility
+                        a program may need later in the season.
+                    </p>
                 </div>
+
             </div>
-        </div>
-
-        <div class="value-grid">
-
-            <div class="value-card">
-                <div class="num">EMPOWER</div>
-                <h3>Empower Coaches</h3>
-                <p>
-                    Give coaches visibility into spend, commitments, remaining
-                    flexibility, and the impact of new decisions.
-                </p>
-            </div>
-
-            <div class="value-card">
-                <div class="num">ALIGN</div>
-                <h3>Align Business Objectives</h3>
-                <p>
-                    Connect individual team decisions to department priorities,
-                    forecasts, and institutional support.
-                </p>
-            </div>
-
-            <div class="value-card">
-                <div class="num">STANDARDIZE</div>
-                <h3>Unify the Process</h3>
-                <p>
-                    Create one repeatable operating model for purchasing, travel,
-                    equipment, approvals, and financial review.
-                </p>
-            </div>
-
-            <div class="value-card">
-                <div class="num">CLARIFY</div>
-                <h3>Clarify the Impact</h3>
-                <p>
-                    Show what saying yes today means for the financial flexibility
-                    a program may need later in the season.
-                </p>
-            </div>
-
-        </div>
-        """,
+            """
+        ),
         unsafe_allow_html=True,
     )
 
@@ -2460,9 +2468,7 @@ if page == "Home":
             type="primary",
             width="stretch",
             on_click=go_to_page,
-            args=(
-                "Executive Dashboard",
-            ),
+            args=("Executive Dashboard",),
         )
 
     with launch2:
@@ -2470,9 +2476,7 @@ if page == "Home":
             "View Sport Budgets",
             width="stretch",
             on_click=go_to_page,
-            args=(
-                "Sport Budgets",
-            ),
+            args=("Sport Budgets",),
         )
 
     with launch3:
@@ -2480,78 +2484,80 @@ if page == "Home":
             "Review Purchase Requests",
             width="stretch",
             on_click=go_to_page,
-            args=(
-                "Purchase Requests",
-            ),
+            args=("Purchase Requests",),
         )
 
     left, right = st.columns(
-        [1.2, .8],
+        [1.2, 0.8],
         gap="large"
     )
 
     with left:
         st.markdown(
-            """
-            <div class="landing-panel">
-                <div class="landing-eyebrow">
-                    The Problem KORBI Is Designed to Solve
+            textwrap.dedent(
+                """
+                <div class="landing-panel">
+                    <div class="landing-eyebrow">
+                        The Problem KORBI Is Designed to Solve
+                    </div>
+
+                    <h2>
+                        Restart athletics with limited staff—without losing control of the budget.
+                    </h2>
+
+                    <p>
+                        Sonoma State Athletics is preparing to restart intercollegiate
+                        sports in Fall 2027 with limited staffing, significant operational
+                        work, and major startup needs.
+
+                        <br><br>
+
+                        The gym and operating environment must be rebuilt: equipment must
+                        be purchased, facilities prepared, travel and purchasing processes
+                        established, coaches supported, vendors engaged, and budgets managed
+                        carefully from day one.
+
+                        <br><br>
+
+                        The challenge is not simply getting teams back on the field. It is
+                        doing so responsibly. Every equipment purchase, travel request,
+                        vendor commitment, and operating decision affects the resources
+                        available later in the year.
+                    </p>
                 </div>
-
-                <h2>
-                    Restart athletics with limited staff—without losing control of the budget.
-                </h2>
-
-                <p>
-                    Sonoma State Athletics is preparing to restart intercollegiate
-                    sports in Fall 2027 with limited staffing, significant operational
-                    work, and major startup needs.
-
-                    <br><br>
-
-                    The gym and operating environment must be rebuilt: equipment must
-                    be purchased, facilities prepared, travel and purchasing processes
-                    established, coaches supported, vendors engaged, and budgets managed
-                    carefully from day one.
-
-                    <br><br>
-
-                    The challenge is not simply getting teams back on the field. It is
-                    doing so responsibly. Every equipment purchase, travel request,
-                    vendor commitment, and operating decision affects the resources
-                    available later in the year.
-                </p>
-            </div>
-            """,
+                """
+            ),
             unsafe_allow_html=True,
         )
 
     with right:
         st.markdown(
-            """
-            <div class="landing-panel">
-                <div class="landing-eyebrow">
-                    Operating Principle
+            textwrap.dedent(
+                """
+                <div class="landing-panel">
+                    <div class="landing-eyebrow">
+                        Operating Principle
+                    </div>
+
+                    <h2>
+                        Not the department of “no.”
+                    </h2>
+
+                    <p>
+                        KORBI gives coaches and administrators enough information to
+                        understand tradeoffs, move faster, and make informed decisions
+                        while preserving the financial flexibility needed to successfully
+                        finish the season.
+
+                        <br><br>
+
+                        <strong style="color:#17365D">
+                            Build the program. Empower the coaches. Protect the budget.
+                        </strong>
+                    </p>
                 </div>
-
-                <h2>
-                    Not the department of “no.”
-                </h2>
-
-                <p>
-                    KORBI gives coaches and administrators enough information to
-                    understand tradeoffs, move faster, and make informed decisions
-                    while preserving the financial flexibility needed to successfully
-                    finish the season.
-
-                    <br><br>
-
-                    <strong style="color:#17365D">
-                        Build the program. Empower the coaches. Protect the budget.
-                    </strong>
-                </p>
-            </div>
-            """,
+                """
+            ),
             unsafe_allow_html=True,
         )
 
@@ -2625,7 +2631,6 @@ if page == "Home":
             "Keep an audit trail of requests, management decisions, financial "
             "impact, approvals, denials, and remaining obligations."
         )
-
 
 # ============================================================
 # EXECUTIVE DASHBOARD
