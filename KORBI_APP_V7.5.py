@@ -271,23 +271,13 @@ st.markdown(
         font-size: 1.05rem;
     }
 
-.value-card p {
-    margin: 0 !important;
-    color: #263746 !important;
-    -webkit-text-fill-color: #263746 !important;
-    line-height: 1.55 !important;
-    font-size: .9rem !important;
-    font-weight: 600 !important;
-    opacity: 1 !important;
-}
+    .value-card p {
+        margin: 0;
+        color: var(--ssu-muted) !important;
+        line-height: 1.55;
+        font-size: .9rem;
+    }
 
-.value-card p *,
-.value-card div,
-.value-card span {
-    color: #263746 !important;
-    -webkit-text-fill-color: #263746 !important;
-    opacity: 1 !important;
-}
     .landing-panel {
         background: #FFFFFF;
         border: 1px solid var(--ssu-border);
@@ -295,6 +285,40 @@ st.markdown(
         padding: 1.6rem 1.75rem;
         box-shadow: 0 5px 18px rgba(7,35,63,.05);
         margin-bottom: 1rem;
+    }
+
+    .capability-grid {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 1rem 1.2rem;
+        margin: .7rem 0 1.8rem;
+    }
+
+    .capability-card {
+        background: #FFFFFF;
+        border: 1px solid var(--ssu-border);
+        border-top: 3px solid var(--ssu-blue);
+        border-radius: 10px;
+        padding: 1.05rem 1.1rem;
+        box-shadow: 0 3px 10px rgba(7,35,63,.04);
+    }
+
+    .capability-card h3 {
+        margin: 0 0 .45rem 0;
+        color: #17365D !important;
+        -webkit-text-fill-color: #17365D !important;
+        font-size: 1.05rem;
+        font-weight: 800;
+    }
+
+    .capability-card p {
+        margin: 0;
+        color: #263746 !important;
+        -webkit-text-fill-color: #263746 !important;
+        opacity: 1 !important;
+        line-height: 1.55;
+        font-size: .9rem;
+        font-weight: 600;
     }
 
     .landing-eyebrow {
@@ -443,41 +467,11 @@ st.markdown(
     .korbi-table .yes {color:#2E7D32 !important;font-weight:800;}
     .korbi-table .no {color:#9AA8B6 !important;}
 
-   @media (max-width: 900px) {
-    .program-grid {grid-template-columns:1fr;}
-}
-
-/* FINAL LANDING CARD TEXT OVERRIDE */
-.value-card,
-.value-card * {
-    color: #263746 !important;
-    -webkit-text-fill-color: #263746 !important;
-    opacity: 1 !important;
-}
-
-.value-card h3,
-.value-card h3 * {
-    color: #17365D !important;
-    -webkit-text-fill-color: #17365D !important;
-    font-weight: 700 !important;
-}
-
-.value-card .num,
-.value-card .num * {
-    color: #00539B !important;
-    -webkit-text-fill-color: #00539B !important;
-    font-weight: 900 !important;
-}
-
-.value-card p,
-.value-card p * {
-    color: #263746 !important;
-    -webkit-text-fill-color: #263746 !important;
-    font-weight: 600 !important;
-    opacity: 1 !important;
-}
-
-</style>
+    @media (max-width: 900px) {
+        .program-grid {grid-template-columns:1fr;}
+        .capability-grid {grid-template-columns:1fr;}
+    }
+    </style>
     """,
     unsafe_allow_html=True,
 )
@@ -1599,38 +1593,44 @@ if page == "Home":
     st.markdown("## What KORBI Can Do for Sonoma State")
     st.caption("One operating layer for Athletics")
 
-    c1, c2, c3 = st.columns(3, gap="large")
+    st.markdown(
+        textwrap.dedent(
+            """
+            <div class="capability-grid">
+                <div class="capability-card">
+                    <h3>Live Financial Picture</h3>
+                    <p>See actual spend, approved commitments, open requests, future obligations, external revenue, and projected year-end position in one place.</p>
+                </div>
 
-    with c1:
-        st.markdown("### Live Financial Picture")
-        st.write(
-            "See actual spend, approved commitments, open requests, future obligations, external revenue, "
-            "and projected year-end position in one place."
-        )
-        st.markdown("### Startup Readiness")
-        st.write(
-            "Track the equipment, supplies, facilities, travel, and operating work required to have teams ready for Fall 2027."
-        )
+                <div class="capability-card">
+                    <h3>Coach Budget Visibility</h3>
+                    <p>Show each coach what has been spent, what is already committed, what remains, and how a request changes flexibility.</p>
+                </div>
 
-    with c2:
-        st.markdown("### Coach Budget Visibility")
-        st.write(
-            "Show each coach what has been spent, what is already committed, what remains, and how a request changes flexibility."
-        )
-        st.markdown("### Standardized Requests")
-        st.write(
-            "Use the same request, review, approval, denial, and documentation process across every program."
-        )
+                <div class="capability-card">
+                    <h3>Forecast &amp; University Support</h3>
+                    <p>Continuously project year-end expenses and show how outside revenue can reduce the university support required.</p>
+                </div>
 
-    with c3:
-        st.markdown("### Forecast & University Support")
-        st.write(
-            "Continuously project year-end expenses and show how outside revenue can reduce the university support required."
-        )
-        st.markdown("### Accountability")
-        st.write(
-            "Keep an audit trail of requests, management decisions, financial impact, approvals, denials, and remaining obligations."
-        )
+                <div class="capability-card">
+                    <h3>Startup Readiness</h3>
+                    <p>Track the equipment, supplies, facilities, travel, and operating work required to have teams ready for Fall 2027.</p>
+                </div>
+
+                <div class="capability-card">
+                    <h3>Standardized Requests</h3>
+                    <p>Use the same request, review, approval, denial, and documentation process across every program.</p>
+                </div>
+
+                <div class="capability-card">
+                    <h3>Accountability</h3>
+                    <p>Keep an audit trail of requests, management decisions, financial impact, approvals, denials, and remaining obligations.</p>
+                </div>
+            </div>
+            """
+        ),
+        unsafe_allow_html=True,
+    )
 
 
 # ============================================================
