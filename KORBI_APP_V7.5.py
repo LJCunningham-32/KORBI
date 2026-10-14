@@ -96,6 +96,9 @@ DECISION_FIELDS = [
     "review_date",
     "decision_timestamp",
     "manager_notes",
+    "next_action",
+    "target_fiscal_year",
+    "anticipated_next_year_budget",
 ]
 
 
@@ -114,101 +117,217 @@ st.markdown(
     """
     <style>
     :root {
-        --ssu-blue: #004C97;
-        --ssu-light: #ABCAE9;
-        --ssu-navy: #17365D;
-        --ssu-bg: #F5F8FC;
-        --ssu-border: #D5E2F0;
-        --ssu-text: #26384A;
-        --ssu-muted: #64788A;
-        --good: #2E7D32;
-        --warn: #9A6B00;
-        --risk: #C75A00;
-        --bad: #B3261E;
+        --ssu-blue: #00539B;
+        --ssu-blue-deep: #003B78;
+        --ssu-navy: #102C49;
+        --ssu-navy-2: #17365D;
+        --ssu-sky: #ABCAE9;
+        --ssu-bg: #EEF4FA;
+        --ssu-card: #FFFFFF;
+        --ssu-border: #D4E1EE;
+        --ssu-text: #263746;
+        --ssu-muted: #53697D;
+        --good: #237A45;
+        --monitor: #2F6FED;
+        --warn: #A36F00;
+        --risk: #C25A11;
+        --bad: #B42318;
     }
 
-    .stApp { background: var(--ssu-bg); }
+    html, body, [class*="css"] {
+        font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    .stApp {
+        background-color: var(--ssu-bg);
+        background-image:
+            radial-gradient(circle at 88% 3%, rgba(0,83,155,.14), transparent 24rem),
+            radial-gradient(circle at 18% 36%, rgba(171,202,233,.16), transparent 30rem),
+            linear-gradient(135deg, rgba(0,83,155,.025) 25%, transparent 25%),
+            linear-gradient(225deg, rgba(23,54,93,.02) 25%, transparent 25%);
+        background-size: auto, auto, 32px 32px, 32px 32px;
+        background-attachment: fixed;
+    }
+
     .block-container {
         max-width: 1500px !important;
         padding-top: 4.5rem !important;
-        padding-bottom: 2rem !important;
-        padding-left: 1rem !important;
-        padding-right: 1rem !important;
+        padding-bottom: 3rem !important;
+        padding-left: 1.15rem !important;
+        padding-right: 1.15rem !important;
     }
 
     [data-testid="stSidebar"] {
-        background: linear-gradient(180deg, #003B78 0%, #004C97 58%, #17365D 100%);
+        background:
+            linear-gradient(180deg, rgba(255,255,255,.035), transparent 18%),
+            linear-gradient(180deg, #082847 0%, #003B78 58%, #102C49 100%);
+        border-right: 1px solid rgba(255,255,255,.12);
     }
 
-    [data-testid="stSidebar"] * { color: #FFFFFF !important; }
+    [data-testid="stSidebar"] * {
+        color: #FFFFFF !important;
+        -webkit-text-fill-color: #FFFFFF !important;
+    }
+
     [data-testid="stSidebar"] input,
     [data-testid="stSidebar"] textarea {
         color: #17365D !important;
+        -webkit-text-fill-color: #17365D !important;
         background: #FFFFFF !important;
+        border-radius: 8px !important;
     }
 
     [data-testid="stSidebar"] [role="radiogroup"] label {
-        padding: .35rem .45rem;
-        border-radius: 8px;
+        padding: .48rem .58rem;
+        border-radius: 9px;
+        margin: .12rem 0;
+        border: 1px solid transparent;
+        transition: all .16s ease;
     }
 
     [data-testid="stSidebar"] [role="radiogroup"] label:hover {
-        background: rgba(255,255,255,.14);
+        background: rgba(255,255,255,.11);
+        border-color: rgba(255,255,255,.12);
+        transform: translateX(2px);
     }
 
     .korbi-header {
-        background: linear-gradient(135deg, #004C97 0%, #17365D 100%);
-        border-bottom: 5px solid #ABCAE9;
+        background:
+            linear-gradient(118deg, rgba(255,255,255,.06), transparent 28%),
+            linear-gradient(120deg, #0B2945 0%, #004C97 58%, #17365D 100%);
+        border-bottom: 4px solid #79AEDD;
         border-radius: 0 0 18px 18px;
-        padding: 1.25rem 1.5rem 1rem;
-        margin: -.95rem -1rem 1.2rem;
-        box-shadow: 0 4px 14px rgba(0, 76, 151, .12);
+        padding: 1.35rem 1.65rem 1.15rem;
+        margin: -.95rem -1.15rem 1.35rem;
+        box-shadow: 0 10px 28px rgba(16,44,73,.16);
+        position: relative;
+        overflow: hidden;
+    }
+
+    .korbi-header::after {
+        content: "";
+        position: absolute;
+        right: -5rem;
+        top: -4rem;
+        width: 20rem;
+        height: 12rem;
+        transform: rotate(-18deg);
+        background: linear-gradient(90deg, transparent, rgba(255,255,255,.08), transparent);
+        pointer-events: none;
     }
 
     .korbi-title {
-        font-size: 2.6rem;
-        font-weight: 900;
+        font-size: 2.7rem;
+        font-weight: 950;
         color: #FFFFFF !important;
-        line-height: 1;
+        -webkit-text-fill-color: #FFFFFF !important;
+        line-height: .95;
+        letter-spacing: -.04rem;
     }
 
     .korbi-subtitle {
         margin-top: .45rem;
-        color: #DDEBFA !important;
-        font-size: .95rem;
+        color: #E6F0FA !important;
+        -webkit-text-fill-color: #E6F0FA !important;
+        font-size: .96rem;
+        font-weight: 650;
     }
 
     .korbi-brandline {
         margin-top: .55rem;
         color: #ABCAE9 !important;
-        font-size: .8rem;
-        font-weight: 800;
-        letter-spacing: .08rem;
+        -webkit-text-fill-color: #ABCAE9 !important;
+        font-size: .78rem;
+        font-weight: 900;
+        letter-spacing: .11rem;
         text-transform: uppercase;
     }
 
-    h1, h2, h3, h4, h5, h6 { color: var(--ssu-navy) !important; }
-
-    [data-testid="stMetric"] {
-        background: #FFFFFF;
-        border: 1px solid var(--ssu-border);
-        border-top: 4px solid var(--ssu-blue);
-        border-radius: 12px;
-        padding: .7rem .85rem;
-        box-shadow: 0 3px 10px rgba(23,54,93,.05);
+    h1, h2, h3, h4, h5, h6 {
+        color: var(--ssu-navy) !important;
+        -webkit-text-fill-color: var(--ssu-navy) !important;
     }
 
-    [data-testid="stMetric"] * { color: var(--ssu-navy) !important; }
+    .section-title-wrap {
+        margin: .15rem 0 1.1rem;
+        padding-left: .85rem;
+        border-left: 5px solid var(--ssu-blue);
+    }
+
+    .section-title-text {
+        color: var(--ssu-navy) !important;
+        -webkit-text-fill-color: var(--ssu-navy) !important;
+        font-size: 1.9rem;
+        line-height: 1.1;
+        font-weight: 950;
+        letter-spacing: -.025rem;
+        margin: 0 0 .3rem 0;
+    }
+
+    .section-subtitle-text {
+        color: #3C5368 !important;
+        -webkit-text-fill-color: #3C5368 !important;
+        font-size: .98rem;
+        line-height: 1.5;
+        font-weight: 650;
+        opacity: 1 !important;
+        max-width: 1180px;
+    }
+
+    [data-testid="stMetric"] {
+        background:
+            linear-gradient(180deg, rgba(0,83,155,.035), transparent 55%),
+            #FFFFFF;
+        border: 1px solid var(--ssu-border);
+        border-top: 4px solid var(--ssu-blue);
+        border-radius: 13px;
+        padding: .75rem .9rem;
+        box-shadow: 0 6px 18px rgba(16,44,73,.065);
+    }
+
+    [data-testid="stMetric"] * {
+        color: var(--ssu-navy) !important;
+        -webkit-text-fill-color: var(--ssu-navy) !important;
+    }
 
     .hero {
-        background: linear-gradient(118deg, #102C49 0%, #004C97 100%);
-        border-radius: 18px;
-        padding: 3.4rem 3.5rem;
-        margin: .2rem 0 1.25rem;
-        box-shadow: 0 10px 28px rgba(7,35,63,.12);
+        background:
+            radial-gradient(circle at 82% 18%, rgba(171,202,233,.18), transparent 19rem),
+            linear-gradient(118deg, #0B2945 0%, #004C97 70%, #17365D 100%);
+        border-radius: 20px;
+        padding: 3.65rem 3.65rem;
+        margin: .2rem 0 1.35rem;
+        box-shadow: 0 18px 40px rgba(8,40,71,.18);
         position: relative;
         overflow: hidden;
-        border: 1px solid rgba(255,255,255,.08);
+        border: 1px solid rgba(255,255,255,.1);
+    }
+
+    .hero::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background:
+            repeating-linear-gradient(
+                118deg,
+                transparent 0,
+                transparent 44px,
+                rgba(255,255,255,.028) 44px,
+                rgba(255,255,255,.028) 48px
+            );
+        pointer-events: none;
+    }
+
+    .hero::after {
+        content: "";
+        position: absolute;
+        width: 32rem;
+        height: 8rem;
+        right: -8rem;
+        bottom: 1rem;
+        transform: rotate(-18deg);
+        background: linear-gradient(90deg, transparent, rgba(255,255,255,.08), transparent);
+        pointer-events: none;
     }
 
     .hero-inner {
@@ -219,244 +338,307 @@ st.markdown(
 
     .hero-kicker {
         color: #ABCAE9 !important;
+        -webkit-text-fill-color: #ABCAE9 !important;
         font-size: .78rem;
-        font-weight: 900;
-        letter-spacing: .16rem;
+        font-weight: 950;
+        letter-spacing: .17rem;
         text-transform: uppercase;
     }
 
     .hero-title {
         color: #FFFFFF !important;
-        font-size: clamp(4.2rem, 7vw, 6.5rem);
-        font-weight: 900;
-        line-height: .9;
-        letter-spacing: -.16rem;
-        margin: .85rem 0 1.1rem;
+        -webkit-text-fill-color: #FFFFFF !important;
+        font-size: clamp(4.2rem, 7vw, 6.7rem);
+        font-weight: 950;
+        line-height: .88;
+        letter-spacing: -.18rem;
+        margin: .88rem 0 1.1rem;
+        text-shadow: 0 6px 22px rgba(0,0,0,.15);
     }
 
     .hero-sub {
         color: #FFFFFF !important;
-        font-size: clamp(1.45rem, 2.2vw, 2rem);
-        font-weight: 750;
+        -webkit-text-fill-color: #FFFFFF !important;
+        font-size: clamp(1.45rem, 2.2vw, 2.05rem);
+        font-weight: 800;
         line-height: 1.14;
-        max-width: 900px;
+        max-width: 920px;
     }
 
     .hero-body {
-        color: #D8E7F5 !important;
-        max-width: 900px;
-        font-size: 1.08rem;
+        color: #E3EFFA !important;
+        -webkit-text-fill-color: #E3EFFA !important;
+        max-width: 920px;
+        font-size: 1.05rem;
         line-height: 1.68;
         margin-top: 1.2rem;
+        font-weight: 560;
     }
 
     .value-grid {
         display: grid;
         grid-template-columns: repeat(4, minmax(0, 1fr));
-        gap: .85rem;
-        margin: 0 0 1.8rem;
+        gap: .9rem;
+        margin: 0 0 1.85rem;
+    }
+
+    .value-card,
+    .capability-card,
+    .landing-panel,
+    .section-card,
+    .analysis-box {
+        background:
+            linear-gradient(180deg, rgba(0,83,155,.025), transparent 42%),
+            #FFFFFF;
+        border: 1px solid var(--ssu-border);
+        border-radius: 13px;
+        box-shadow: 0 7px 20px rgba(16,44,73,.06);
     }
 
     .value-card {
-        background: #FFFFFF;
-        border: 1px solid var(--ssu-border);
-        border-top: 3px solid var(--ssu-blue);
-        border-radius: 10px;
+        border-top: 4px solid var(--ssu-blue);
         padding: 1.15rem 1.2rem;
-        box-shadow: 0 3px 10px rgba(7,35,63,.04);
+        transition: transform .16s ease, box-shadow .16s ease;
+    }
+
+    .value-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 24px rgba(16,44,73,.1);
     }
 
     .value-card .num {
         color: var(--ssu-blue) !important;
-        font-weight: 900;
+        -webkit-text-fill-color: var(--ssu-blue) !important;
+        font-weight: 950;
         font-size: .72rem;
-        letter-spacing: .12rem;
+        letter-spacing: .14rem;
     }
 
     .value-card h3 {
         margin: .45rem 0 .5rem;
-        font-size: 1.05rem;
+        font-size: 1.06rem;
+        color: var(--ssu-navy) !important;
+        -webkit-text-fill-color: var(--ssu-navy) !important;
+        font-weight: 850;
     }
 
-    .value-card p {
+    .value-card p,
+    .capability-card p,
+    .landing-panel p {
         margin: 0;
-        color: var(--ssu-muted) !important;
-        line-height: 1.55;
-        font-size: .9rem;
+        color: var(--ssu-text) !important;
+        -webkit-text-fill-color: var(--ssu-text) !important;
+        line-height: 1.58;
+        font-size: .91rem;
+        font-weight: 590;
+        opacity: 1 !important;
     }
 
     .landing-panel {
-        background: #FFFFFF;
-        border: 1px solid var(--ssu-border);
-        border-radius: 18px;
-        padding: 1.6rem 1.75rem;
-        box-shadow: 0 5px 18px rgba(7,35,63,.05);
+        padding: 1.65rem 1.8rem;
         margin-bottom: 1rem;
-    }
-
-    .capability-grid {
-        display: grid;
-        grid-template-columns: repeat(3, minmax(0, 1fr));
-        gap: 1rem 1.2rem;
-        margin: .7rem 0 1.8rem;
-    }
-
-    .capability-card {
-        background: #FFFFFF;
-        border: 1px solid var(--ssu-border);
-        border-top: 3px solid var(--ssu-blue);
-        border-radius: 10px;
-        padding: 1.05rem 1.1rem;
-        box-shadow: 0 3px 10px rgba(7,35,63,.04);
-    }
-
-    .capability-card h3 {
-        margin: 0 0 .45rem 0;
-        color: #17365D !important;
-        -webkit-text-fill-color: #17365D !important;
-        font-size: 1.05rem;
-        font-weight: 800;
-    }
-
-    .capability-card p {
-        margin: 0;
-        color: #263746 !important;
-        -webkit-text-fill-color: #263746 !important;
-        opacity: 1 !important;
-        line-height: 1.55;
-        font-size: .9rem;
-        font-weight: 600;
     }
 
     .landing-eyebrow {
         color: var(--ssu-blue) !important;
+        -webkit-text-fill-color: var(--ssu-blue) !important;
         font-size: .72rem;
-        font-weight: 900;
-        letter-spacing: .12rem;
+        font-weight: 950;
+        letter-spacing: .13rem;
         text-transform: uppercase;
-        margin-bottom: .45rem;
+        margin-bottom: .48rem;
     }
 
     .landing-panel h2 {
         margin: 0 0 .65rem;
         font-size: 1.55rem;
+        font-weight: 900;
     }
 
-    .landing-panel p {
-        color: var(--ssu-muted) !important;
-        line-height: 1.65;
-        margin: 0;
+    .capability-grid {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 1rem 1.15rem;
+        margin: .7rem 0 1.8rem;
     }
 
-    @media (max-width: 900px) {
-        .value-grid { grid-template-columns: repeat(2, 1fr); }
-        .hero { padding: 2.7rem 2rem; }
-        .hero-title { letter-spacing: -.08rem; }
+    .capability-card {
+        border-top: 4px solid var(--ssu-blue);
+        padding: 1.05rem 1.1rem;
+    }
+
+    .capability-card h3 {
+        margin: 0 0 .45rem 0;
+        color: var(--ssu-navy) !important;
+        -webkit-text-fill-color: var(--ssu-navy) !important;
+        font-size: 1.05rem;
+        font-weight: 850;
     }
 
     .support-card {
-        background: linear-gradient(135deg,#17365D 0%,#004C97 100%);
+        background:
+            radial-gradient(circle at 82% 20%, rgba(171,202,233,.18), transparent 16rem),
+            linear-gradient(135deg,#102C49 0%,#00539B 100%);
         border-radius: 18px;
-        padding: 1.6rem 2rem;
+        padding: 1.65rem 2rem;
         margin: .75rem 0 1.2rem;
-        box-shadow: 0 6px 18px rgba(23,54,93,.12);
+        box-shadow: 0 10px 26px rgba(16,44,73,.16);
+        border: 1px solid rgba(255,255,255,.08);
     }
 
     .support-kicker {
         color: #ABCAE9 !important;
+        -webkit-text-fill-color: #ABCAE9 !important;
         text-transform: uppercase;
-        letter-spacing: .1rem;
+        letter-spacing: .11rem;
         font-size: .78rem;
-        font-weight: 850;
+        font-weight: 900;
     }
 
     .support-value {
         color: #FFFFFF !important;
+        -webkit-text-fill-color: #FFFFFF !important;
         font-size: 3rem;
         font-weight: 950;
         margin-top: .25rem;
     }
 
     .support-copy {
-        color: #DDEBFA !important;
+        color: #E3EFFA !important;
+        -webkit-text-fill-color: #E3EFFA !important;
         margin-top: .4rem;
         font-size: 1rem;
+        font-weight: 600;
     }
 
     .analysis-box {
-        background: #FFFFFF;
-        border: 1px solid var(--ssu-border);
         border-left: 5px solid var(--ssu-blue);
-        border-radius: 12px;
         padding: 1rem 1.15rem;
         margin: .55rem 0 1rem;
     }
 
-    .small-muted { color: var(--ssu-muted); font-size: .85rem; }
+    .small-muted {
+        color: var(--ssu-muted) !important;
+        -webkit-text-fill-color: var(--ssu-muted) !important;
+        font-size: .85rem;
+    }
 
     [data-testid="stDataFrame"] {
         border: 1px solid var(--ssu-border);
-        border-radius: 10px;
+        border-radius: 12px;
         overflow: hidden;
         background: #FFFFFF;
+        box-shadow: 0 5px 18px rgba(16,44,73,.05);
     }
 
     .stButton > button,
     .stDownloadButton > button {
-        border-radius: 8px;
-        font-weight: 700;
+        border-radius: 9px !important;
+        font-weight: 800 !important;
+        min-height: 2.55rem !important;
+        transition: transform .14s ease, box-shadow .14s ease, background .14s ease;
     }
 
-    .stButton > button[kind="primary"] {
-        background: var(--ssu-blue) !important;
-        border-color: var(--ssu-blue) !important;
+    .stButton > button[kind="primary"],
+    .stDownloadButton > button {
+        background: linear-gradient(180deg, #0A62AE 0%, #00539B 100%) !important;
+        border: 1px solid #004681 !important;
         color: #FFFFFF !important;
+        -webkit-text-fill-color: #FFFFFF !important;
+        box-shadow: 0 4px 10px rgba(0,83,155,.16);
     }
 
-    /* V7.5 operational status cards */
+    .stButton > button[kind="primary"]:hover,
+    .stDownloadButton > button:hover {
+        background: linear-gradient(180deg, #00539B 0%, #003B78 100%) !important;
+        transform: translateY(-1px);
+        box-shadow: 0 6px 14px rgba(0,83,155,.2);
+    }
+
     .program-grid {
         display:grid;
         grid-template-columns:repeat(3,minmax(0,1fr));
-        gap:.75rem;
+        gap:.8rem;
         margin:.5rem 0 1.5rem 0;
     }
+
     .program-card {
         border:1px solid var(--ssu-border);
-        border-left:5px solid #1565C0;
+        border-left:5px solid var(--monitor);
         border-radius:12px;
-        padding:.85rem .95rem;
-        background:#EAF2FB;
-        min-height:92px;
+        padding:.9rem 1rem;
+        background:#EDF4FC;
+        min-height:94px;
+        box-shadow:0 5px 14px rgba(16,44,73,.045);
     }
-    .program-card .sport {font-size:.74rem;font-weight:850;text-transform:uppercase;letter-spacing:.02rem;}
-    .program-card .status {font-size:1.18rem;font-weight:900;margin:.12rem 0 .2rem;}
-    .program-card .detail {font-size:.82rem;line-height:1.25;color:#334E68 !important;}
-    .program-card.healthy {background:#EAF6EC;border-left-color:#2E7D32;}
-    .program-card.healthy .sport,.program-card.healthy .status {color:#2E7D32 !important;}
-    .program-card.monitor {background:#EAF2FB;border-left-color:#1565C0;}
-    .program-card.monitor .sport,.program-card.monitor .status {color:#1565C0 !important;}
-    .program-card.caution {background:#FFF7DA;border-left-color:#B07A00;}
-    .program-card.caution .sport,.program-card.caution .status {color:#9A6B00 !important;}
-    .program-card.highrisk {background:#FFF0E5;border-left-color:#C75A00;}
-    .program-card.highrisk .sport,.program-card.highrisk .status {color:#C75A00 !important;}
-    .program-card.overbudget {background:#FDECEA;border-left-color:#B3261E;}
-    .program-card.overbudget .sport,.program-card.overbudget .status {color:#B3261E !important;}
+
+    .program-card .sport {
+        font-size:.74rem;
+        font-weight:900;
+        text-transform:uppercase;
+        letter-spacing:.03rem;
+    }
+
+    .program-card .status {
+        font-size:1.18rem;
+        font-weight:950;
+        margin:.12rem 0 .2rem;
+    }
+
+    .program-card .detail {
+        font-size:.82rem;
+        line-height:1.3;
+        color:#334E68 !important;
+        -webkit-text-fill-color:#334E68 !important;
+        font-weight:600;
+    }
+
+    .program-card.healthy {background:#EAF6EE;border-left-color:var(--good);}
+    .program-card.healthy .sport,.program-card.healthy .status {color:var(--good) !important;-webkit-text-fill-color:var(--good) !important;}
+    .program-card.monitor {background:#EAF2FB;border-left-color:var(--monitor);}
+    .program-card.monitor .sport,.program-card.monitor .status {color:var(--monitor) !important;-webkit-text-fill-color:var(--monitor) !important;}
+    .program-card.caution {background:#FFF7DA;border-left-color:var(--warn);}
+    .program-card.caution .sport,.program-card.caution .status {color:var(--warn) !important;-webkit-text-fill-color:var(--warn) !important;}
+    .program-card.highrisk {background:#FFF0E5;border-left-color:var(--risk);}
+    .program-card.highrisk .sport,.program-card.highrisk .status {color:var(--risk) !important;-webkit-text-fill-color:var(--risk) !important;}
+    .program-card.overbudget {background:#FDECEA;border-left-color:var(--bad);}
+    .program-card.overbudget .sport,.program-card.overbudget .status {color:var(--bad) !important;-webkit-text-fill-color:var(--bad) !important;}
 
     .section-card {
-        background:#FFFFFF;
-        border:1px solid var(--ssu-border);
         border-top:4px solid var(--ssu-blue);
-        border-radius:12px;
         padding:1rem 1.05rem;
-        box-shadow:0 2px 8px rgba(23,54,93,.04);
         height:100%;
     }
-    .section-card .eyebrow {font-size:.72rem;font-weight:850;text-transform:uppercase;letter-spacing:.05rem;color:#64788A !important;}
-    .section-card .big {font-size:1.7rem;font-weight:900;color:#17365D !important;margin:.15rem 0;}
-    .decision-badge {display:inline-block;padding:.28rem .55rem;border-radius:999px;font-size:.72rem;font-weight:900;letter-spacing:.04rem;}
-    .decision-approve {background:#EAF6EC;color:#2E7D32 !important;}
-    .decision-defer {background:#FFF7DA;color:#8A6200 !important;}
-    .decision-deny {background:#FDECEA;color:#B3261E !important;}
+
+    .section-card .eyebrow {
+        font-size:.72rem;
+        font-weight:900;
+        text-transform:uppercase;
+        letter-spacing:.055rem;
+        color:#64788A !important;
+        -webkit-text-fill-color:#64788A !important;
+    }
+
+    .section-card .big {
+        font-size:1.7rem;
+        font-weight:950;
+        color:var(--ssu-navy) !important;
+        -webkit-text-fill-color:var(--ssu-navy) !important;
+        margin:.15rem 0;
+    }
+
+    .decision-badge {
+        display:inline-block;
+        padding:.3rem .58rem;
+        border-radius:999px;
+        font-size:.72rem;
+        font-weight:950;
+        letter-spacing:.04rem;
+    }
+
+    .decision-approve {background:#EAF6EC;color:#237A45 !important;-webkit-text-fill-color:#237A45 !important;}
+    .decision-defer {background:#FFF4D5;color:#8A6200 !important;-webkit-text-fill-color:#8A6200 !important;}
+    .decision-deny {background:#FDECEA;color:#B42318 !important;-webkit-text-fill-color:#B42318 !important;}
 
     .korbi-table-wrap {
         overflow-x:auto;
@@ -464,235 +646,156 @@ st.markdown(
         border:1px solid var(--ssu-border);
         border-radius:12px;
         margin:.5rem 0 1.25rem;
-        box-shadow:0 2px 8px rgba(23,54,93,.04);
+        box-shadow:0 5px 16px rgba(16,44,73,.055);
     }
-    table.korbi-table {border-collapse:collapse;width:100%;min-width:760px;font-size:.84rem;}
-    .korbi-table th {background:#17365D;color:#FFFFFF !important;text-align:left;padding:.72rem .75rem;white-space:nowrap;}
-    .korbi-table td {padding:.65rem .75rem;border-bottom:1px solid #E2EAF2;color:#26384A !important;white-space:nowrap;}
+
+    table.korbi-table {
+        border-collapse:collapse;
+        width:100%;
+        min-width:760px;
+        font-size:.84rem;
+    }
+
+    .korbi-table th {
+        background:linear-gradient(180deg,#17365D 0%,#102C49 100%);
+        color:#FFFFFF !important;
+        -webkit-text-fill-color:#FFFFFF !important;
+        text-align:left;
+        padding:.74rem .78rem;
+        white-space:nowrap;
+        font-weight:850;
+    }
+
+    .korbi-table td {
+        padding:.67rem .78rem;
+        border-bottom:1px solid #E2EAF2;
+        color:#26384A !important;
+        -webkit-text-fill-color:#26384A !important;
+        white-space:nowrap;
+        background:#FFFFFF;
+    }
+
     .korbi-table tr:nth-child(even) td {background:#F7FAFD;}
     .korbi-table tr:hover td {background:#EAF2FB;}
-    .korbi-table .yes {color:#2E7D32 !important;font-weight:800;}
-    .korbi-table .no {color:#9AA8B6 !important;}
+    .korbi-table .yes {color:#237A45 !important;font-weight:850;}
+    .korbi-table .no {color:#7F8F9D !important;}
 
-    @media (max-width: 900px) {
-        .program-grid {grid-template-columns:1fr;}
-        .capability-grid {grid-template-columns:1fr;}
+    .neutral-note,
+    .benchmark-note,
+    .premium-note {
+        background:#FFFFFF;
+        border:1px solid var(--ssu-border);
+        border-left:4px solid var(--ssu-blue);
+        border-radius:9px;
+        padding:12px 14px;
+        color:#263746 !important;
+        -webkit-text-fill-color:#263746 !important;
+        font-weight:620;
+        line-height:1.55;
+        box-shadow:0 3px 10px rgba(16,44,73,.035);
     }
 
-    /* =====================================================
-       V7.5 LIGHT-BACKGROUND TEXT SAFETY
-       White text is reserved for intentionally dark surfaces.
-       ===================================================== */
+    .benchmark-note {
+        margin:.4rem 0 1rem;
+        font-size:.9rem;
+    }
 
-    /* Standard light-page text */
+    .neutral-note *,
+    .benchmark-note *,
+    .premium-note * {
+        color:#263746 !important;
+        -webkit-text-fill-color:#263746 !important;
+    }
+
+    .benchmark-note strong,
+    .premium-note strong {
+        color:var(--ssu-navy) !important;
+        -webkit-text-fill-color:var(--ssu-navy) !important;
+        font-weight:900;
+    }
+
+    .email-response-box {
+        width:100% !important;
+        box-sizing:border-box !important;
+        background:#FFFFFF !important;
+        color:#263746 !important;
+        -webkit-text-fill-color:#263746 !important;
+        border:1px solid var(--ssu-border) !important;
+        border-left:4px solid var(--ssu-blue) !important;
+        border-radius:10px !important;
+        padding:1rem 1.1rem !important;
+        margin:.35rem 0 .8rem 0 !important;
+        font-family:Inter, ui-sans-serif, system-ui, sans-serif !important;
+        font-size:.92rem !important;
+        line-height:1.6 !important;
+        font-weight:590 !important;
+        white-space:pre-wrap !important;
+        overflow-wrap:anywhere !important;
+        word-break:break-word !important;
+        overflow-x:hidden !important;
+        box-shadow:0 4px 12px rgba(16,44,73,.04);
+    }
+
     [data-testid="stMain"] p,
     [data-testid="stMain"] label,
     [data-testid="stMain"] .stCaption,
     [data-testid="stMain"] [data-testid="stMarkdownContainer"] {
         color:#263746;
+        -webkit-text-fill-color:#263746;
     }
 
-    /* Landing / content cards */
-    .value-card,
-    .value-card *,
-    .capability-card,
-    .capability-card *,
-    .landing-panel,
-    .landing-panel *,
-    .analysis-box,
-    .analysis-box *,
-    .section-card,
-    .section-card * {
-        color:#263746 !important;
-        -webkit-text-fill-color:#263746 !important;
-        opacity:1 !important;
-    }
-
-    .value-card h3,
-    .capability-card h3,
-    .landing-panel h2,
-    .section-card .big {
-        color:#17365D !important;
-        -webkit-text-fill-color:#17365D !important;
-        font-weight:800 !important;
-    }
-
-    .value-card .num,
-    .landing-eyebrow {
-        color:#00539B !important;
-        -webkit-text-fill-color:#00539B !important;
-        font-weight:900 !important;
-    }
-
-    .value-card p,
-    .capability-card p,
-    .landing-panel p {
-        color:#263746 !important;
-        -webkit-text-fill-color:#263746 !important;
-        opacity:1 !important;
-        font-weight:600 !important;
-    }
-
-    /* Streamlit tabs on light backgrounds */
     button[data-baseweb="tab"] {
         background:transparent !important;
-        color:#17365D !important;
-        -webkit-text-fill-color:#17365D !important;
-        font-weight:700 !important;
+        color:var(--ssu-navy) !important;
+        -webkit-text-fill-color:var(--ssu-navy) !important;
+        font-weight:780 !important;
     }
 
     button[data-baseweb="tab"] *,
     button[data-baseweb="tab"] p,
     button[data-baseweb="tab"] span,
     button[data-baseweb="tab"] div {
-        color:#17365D !important;
-        -webkit-text-fill-color:#17365D !important;
+        color:var(--ssu-navy) !important;
+        -webkit-text-fill-color:var(--ssu-navy) !important;
         opacity:1 !important;
-        font-weight:700 !important;
+        font-weight:780 !important;
     }
 
     button[data-baseweb="tab"][aria-selected="true"],
     button[data-baseweb="tab"][aria-selected="true"] * {
-        color:#00539B !important;
-        -webkit-text-fill-color:#00539B !important;
-        font-weight:850 !important;
+        color:var(--ssu-blue) !important;
+        -webkit-text-fill-color:var(--ssu-blue) !important;
+        font-weight:900 !important;
     }
 
-    /* Explicitly preserve white text only on dark surfaces */
+    /* Decision radio labels should stay readable on the light canvas. */
+    [data-testid="stRadio"] label,
+    [data-testid="stRadio"] label *,
+    [data-testid="stRadio"] p {
+        color:var(--ssu-navy) !important;
+        -webkit-text-fill-color:var(--ssu-navy) !important;
+        font-weight:700 !important;
+    }
+
+    /* White text only on intentionally dark surfaces. */
     .hero-title,
     .hero-sub,
+    .korbi-title,
     .support-value,
     .korbi-table th,
-    .stButton > button[kind="primary"] {
+    .stButton > button[kind="primary"],
+    .stDownloadButton > button {
         color:#FFFFFF !important;
         -webkit-text-fill-color:#FFFFFF !important;
     }
 
-    .hero-body {
-        color:#D8E7F5 !important;
-        -webkit-text-fill-color:#D8E7F5 !important;
+    @media (max-width: 900px) {
+        .value-grid {grid-template-columns:repeat(2,1fr);}
+        .program-grid {grid-template-columns:1fr;}
+        .capability-grid {grid-template-columns:1fr;}
+        .hero {padding:2.8rem 2rem;}
+        .hero-title {letter-spacing:-.08rem;}
     }
-
-
-    /* Consistent page titles / subtitles on light backgrounds */
-    .section-title-wrap { margin: .15rem 0 1.05rem; }
-    .section-title-text {
-        color:#17365D !important;
-        -webkit-text-fill-color:#17365D !important;
-        font-size:1.75rem;
-        line-height:1.15;
-        font-weight:850;
-        margin:0 0 .35rem 0;
-    }
-    .section-subtitle-text {
-        color:#3E5265 !important;
-        -webkit-text-fill-color:#3E5265 !important;
-        font-size:.98rem;
-        line-height:1.5;
-        font-weight:600;
-        opacity:1 !important;
-    }
-
-    /* Segmented controls match the Home page action buttons */
-    [data-testid="stSegmentedControl"] {
-        gap:.55rem !important;
-    }
-    [data-testid="stSegmentedControl"] button {
-        background:#00539B !important;
-        border:1px solid #00539B !important;
-        border-radius:8px !important;
-        color:#FFFFFF !important;
-        -webkit-text-fill-color:#FFFFFF !important;
-        font-weight:750 !important;
-        min-height:2.5rem !important;
-        padding:.45rem 1rem !important;
-        box-shadow:none !important;
-    }
-    [data-testid="stSegmentedControl"] button * {
-        color:#FFFFFF !important;
-        -webkit-text-fill-color:#FFFFFF !important;
-        opacity:1 !important;
-        font-weight:750 !important;
-    }
-    [data-testid="stSegmentedControl"] button:hover {
-        background:#004C97 !important;
-        border-color:#004C97 !important;
-    }
-    [data-testid="stSegmentedControl"] button[aria-pressed="true"],
-    [data-testid="stSegmentedControl"] button[data-selected="true"] {
-        background:#00539B !important;
-        border:2px solid #17365D !important;
-        box-shadow:0 0 0 2px #ABCAE9 inset !important;
-    }
-    [data-testid="stSegmentedControl"] button[aria-pressed="true"] *,
-    [data-testid="stSegmentedControl"] button[data-selected="true"] * {
-        color:#FFFFFF !important;
-        -webkit-text-fill-color:#FFFFFF !important;
-        font-weight:850 !important;
-    }
-
-    /* Neutral business note: not a positive/negative status color */
-    .neutral-note {
-        background:#FFFFFF;
-        border:1px solid #D5E2F0;
-        border-left:4px solid #00539B;
-        border-radius:8px;
-        padding:12px 14px;
-        color:#263746 !important;
-        -webkit-text-fill-color:#263746 !important;
-        font-weight:600;
-        line-height:1.55;
-    }
-    .neutral-note * {
-        color:#263746 !important;
-        -webkit-text-fill-color:#263746 !important;
-    }
-
-    .benchmark-note {
-        color:#3E5265 !important;
-        -webkit-text-fill-color:#3E5265 !important;
-        font-size:.9rem;
-        line-height:1.5;
-        font-weight:600;
-        margin:.35rem 0 1rem;
-    }
-    .benchmark-note strong {
-        color:#17365D !important;
-        -webkit-text-fill-color:#17365D !important;
-        font-weight:800;
-    }
-
-    .hero-kicker,
-    .support-kicker {
-        color:#ABCAE9 !important;
-        -webkit-text-fill-color:#ABCAE9 !important;
-    }
-
-    .support-copy {
-        color:#DDEBFA !important;
-        -webkit-text-fill-color:#DDEBFA !important;
-    }
-
-    /* Email-ready response boxes: vertical wrapping, never horizontal scroll */
-    .email-response-box {
-        width: 100% !important;
-        box-sizing: border-box !important;
-        background: #171A21 !important;
-        color: #FFFFFF !important;
-        -webkit-text-fill-color: #FFFFFF !important;
-        border: 1px solid #2B3440 !important;
-        border-radius: 8px !important;
-        padding: 1rem 1.1rem !important;
-        margin: .35rem 0 .8rem 0 !important;
-        font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace !important;
-        font-size: .9rem !important;
-        line-height: 1.6 !important;
-        white-space: pre-wrap !important;
-        overflow-wrap: anywhere !important;
-        word-break: break-word !important;
-        overflow-x: hidden !important;
-    }
-
     </style>
     """,
     unsafe_allow_html=True,
@@ -803,6 +906,176 @@ def load_decisions():
 def current_decision_df():
     rows = load_decision_rows()
     return pd.DataFrame(rows) if rows else pd.DataFrame(columns=DECISION_FIELDS)
+
+
+DEFERRED_FUTURE_SEED = [
+    {
+        "Request ID": "DF-001",
+        "Program": "Men's Soccer",
+        "Purchase Request": "Portable recovery cold tubs",
+        "Deferred Amount": 4200,
+        "Reason Deferred": "Current-year approval would reduce remaining flexibility below a comfortable operating reserve.",
+        "Next Step": "Elevate to AD if operationally necessary; otherwise carry forward.",
+        "Target Fiscal Year": "FY 2028-29",
+        "Anticipated FY Budget": 4500,
+        "Status": "Carried Forward",
+        "Source": "Simulated Planning Seed",
+    },
+    {
+        "Request ID": "DF-002",
+        "Program": "Women's Soccer",
+        "Purchase Request": "Additional GPS athlete-tracking units",
+        "Deferred Amount": 6800,
+        "Reason Deferred": "Not essential for current-year competition; travel and core operating needs take priority.",
+        "Next Step": "Carry forward to next budget cycle.",
+        "Target Fiscal Year": "FY 2028-29",
+        "Anticipated FY Budget": 7200,
+        "Status": "Carried Forward",
+        "Source": "Simulated Planning Seed",
+    },
+    {
+        "Request ID": "DF-003",
+        "Program": "Men's Basketball",
+        "Purchase Request": "Additional video-analysis hardware",
+        "Deferred Amount": 9500,
+        "Reason Deferred": "Existing system remains functional; higher-priority competition and travel costs were retained.",
+        "Next Step": "Reprice and include in next-year operating plan.",
+        "Target Fiscal Year": "FY 2028-29",
+        "Anticipated FY Budget": 10000,
+        "Status": "Carried Forward",
+        "Source": "Simulated Planning Seed",
+    },
+    {
+        "Request ID": "DF-004",
+        "Program": "Women's Basketball",
+        "Purchase Request": "Locker room equipment refresh",
+        "Deferred Amount": 12000,
+        "Reason Deferred": "Capital-style improvement deferred to protect current-year operating capacity.",
+        "Next Step": "Evaluate for next-year budget or alternative funding.",
+        "Target Fiscal Year": "FY 2028-29",
+        "Anticipated FY Budget": 12600,
+        "Status": "Carried Forward",
+        "Source": "Simulated Planning Seed",
+    },
+    {
+        "Request ID": "DF-005",
+        "Program": "Baseball",
+        "Purchase Request": "Portable batting cage upgrades",
+        "Deferred Amount": 8750,
+        "Reason Deferred": "Useful but not immediately required for competition readiness.",
+        "Next Step": "Include in next-year equipment planning.",
+        "Target Fiscal Year": "FY 2028-29",
+        "Anticipated FY Budget": 9200,
+        "Status": "Carried Forward",
+        "Source": "Simulated Planning Seed",
+    },
+    {
+        "Request ID": "DF-006",
+        "Program": "Softball",
+        "Purchase Request": "Bullpen / training equipment package",
+        "Deferred Amount": 7400,
+        "Reason Deferred": "Current-year equipment allocation is limited and core competition needs take priority.",
+        "Next Step": "Carry forward and revalidate need before budget submission.",
+        "Target Fiscal Year": "FY 2028-29",
+        "Anticipated FY Budget": 7800,
+        "Status": "Carried Forward",
+        "Source": "Simulated Planning Seed",
+    },
+    {
+        "Request ID": "DF-007",
+        "Program": "Men's Cross Country",
+        "Purchase Request": "Additional travel support package",
+        "Deferred Amount": 5600,
+        "Reason Deferred": "Current-year travel budget is already committed to scheduled competition.",
+        "Next Step": "Include in next-year travel budget assumptions.",
+        "Target Fiscal Year": "FY 2028-29",
+        "Anticipated FY Budget": 5900,
+        "Status": "Carried Forward",
+        "Source": "Simulated Planning Seed",
+    },
+    {
+        "Request ID": "DF-008",
+        "Program": "Women's Volleyball",
+        "Purchase Request": "Practice technology package",
+        "Deferred Amount": 6250,
+        "Reason Deferred": "Deferred behind core competition, travel, and equipment requirements.",
+        "Next Step": "Reassess technology need during next-year budget build.",
+        "Target Fiscal Year": "FY 2028-29",
+        "Anticipated FY Budget": 6600,
+        "Status": "Carried Forward",
+        "Source": "Simulated Planning Seed",
+    },
+    {
+        "Request ID": "DF-009",
+        "Program": "Men's Golf",
+        "Purchase Request": "Tournament analytics software",
+        "Deferred Amount": 3800,
+        "Reason Deferred": "Current-year approval depends on another funding source; otherwise it moves to next year's plan.",
+        "Next Step": "Seek alternative funding; carry forward if unfunded.",
+        "Target Fiscal Year": "FY 2028-29",
+        "Anticipated FY Budget": 4000,
+        "Status": "Carried Forward",
+        "Source": "Simulated Planning Seed",
+    },
+    {
+        "Request ID": "DF-010",
+        "Program": "Athletics Administration",
+        "Purchase Request": "Shared recruiting / operations software",
+        "Deferred Amount": 14000,
+        "Reason Deferred": "Department-wide software purchase deferred until annual technology priorities are reviewed.",
+        "Next Step": "Evaluate as a shared-services budget item for next year.",
+        "Target Fiscal Year": "FY 2028-29",
+        "Anticipated FY Budget": 14700,
+        "Status": "Carried Forward",
+        "Source": "Simulated Planning Seed",
+    },
+]
+
+
+def deferred_future_needs_df():
+    rows = [dict(r) for r in DEFERRED_FUTURE_SEED]
+    decisions = current_decision_df()
+
+    if not decisions.empty and "manager_decision" in decisions.columns:
+        deferred = decisions[
+            decisions["manager_decision"].astype(str).str.upper() == "DEFER"
+        ].copy()
+
+        for _, record in deferred.iterrows():
+            amount = safe_float(record.get("amount"))
+            target_fy = str(record.get("target_fiscal_year", "")).strip()
+            if not target_fy or target_fy.lower() == "nan":
+                target_fy = "FY 2027-28"
+
+            anticipated = safe_float(record.get("anticipated_next_year_budget"))
+            if anticipated <= 0 and target_fy == "FY 2028-29":
+                anticipated = round(amount * 1.05, -1)
+
+            next_action = str(record.get("next_action", "")).strip()
+            if not next_action or next_action.lower() == "nan":
+                next_action = (
+                    "Reconsider later this fiscal year; elevate to the Director of Athletics "
+                    "if operationally necessary."
+                )
+
+            reason = str(record.get("decision_rationale", "")).strip()
+            if not reason or reason.lower() == "nan":
+                reason = str(record.get("budget_impact_summary", "")).strip()
+
+            rows.append({
+                "Request ID": str(record.get("request_id", "")),
+                "Program": str(record.get("program_name", "")),
+                "Purchase Request": str(record.get("description", "")),
+                "Deferred Amount": amount,
+                "Reason Deferred": reason,
+                "Next Step": next_action,
+                "Target Fiscal Year": target_fy,
+                "Anticipated FY Budget": anticipated if anticipated > 0 else amount,
+                "Status": "Carried Forward" if target_fy == "FY 2028-29" else "Deferred",
+                "Source": "Live KORBI Decision",
+            })
+
+    return pd.DataFrame(rows)
 
 
 def first_existing_column(df, candidates):
@@ -1142,7 +1415,7 @@ def requestor_name(row):
     return ""
 
 
-def decision_rationale(row, decision):
+def decision_rationale(row, decision, next_action="", target_fiscal_year="", anticipated_next_year_budget=0):
     decision = str(decision).upper().strip()
     amount = safe_float(row.get("amount"))
     program = str(row.get("program_name", "the program"))
@@ -1168,14 +1441,27 @@ def decision_rationale(row, decision):
         )
 
     if decision == "DEFER":
-        return (
+        rationale = (
             f"The {money(amount)} request for {description} was deferred because approving it now would move "
             f"{program} from {before_pct:.1f}% to {after_pct:.1f}% projected utilization and reduce projected "
             f"year-end flexibility from {money(before_remaining)} to {money(after_remaining)}. The need may be valid, "
             f"but preserving capacity for remaining travel, equipment, and other operating requirements is the stronger "
-            f"financial decision at this point. The request can be reconsidered if savings, another funding source, or "
-            f"additional budget capacity is identified."
+            f"financial decision at this point."
         )
+
+        if next_action:
+            rationale += f" Recommended next step: {next_action}."
+
+        if target_fiscal_year:
+            rationale += f" Planning target: {target_fiscal_year}."
+
+        if safe_float(anticipated_next_year_budget) > 0:
+            rationale += (
+                f" Anticipated budget requirement for that cycle: "
+                f"{money(anticipated_next_year_budget)}."
+            )
+
+        return rationale
 
     # DENY
     if after_remaining < 0 or after_pct > 100:
@@ -1193,7 +1479,7 @@ def decision_rationale(row, decision):
     )
 
 
-def requestor_email(row, decision, name="", notes=""):
+def requestor_email(row, decision, name="", notes="", next_action="", target_fiscal_year="", anticipated_next_year_budget=0):
     decision = str(decision).upper().strip()
     amount = safe_float(row.get("amount"))
     description = str(row.get("description", "request"))
@@ -1218,9 +1504,18 @@ def requestor_email(row, decision, name="", notes=""):
             f"Approving it at this point would move the {program} budget from {before_pct:.1f}% to {after_pct:.1f}% "
             f"projected utilization and reduce projected year-end flexibility from {money(before_remaining)} to "
             f"{money(after_remaining)}. That would leave less room for remaining travel, equipment, or other unexpected "
-            f"operating needs. If offsetting savings, another funding source, or additional capacity becomes available, "
-            f"we can revisit the request."
+            f"operating needs."
         )
+        if next_action:
+            body += f" The next step is to {next_action[0].lower() + next_action[1:] if len(next_action) > 1 else next_action.lower()}."
+        if target_fiscal_year == "FY 2028-29":
+            body += (
+                f" If the need remains valid, it will also be tracked for the {target_fiscal_year} budget cycle"
+                + (
+                    f" at an anticipated planning amount of {money(anticipated_next_year_budget)}."
+                    if safe_float(anticipated_next_year_budget) > 0 else "."
+                )
+            )
     else:
         if after_remaining < 0 or after_pct > 100:
             body = (
@@ -1300,10 +1595,24 @@ def live_request_row(row):
     return live
 
 
-def save_decision(row, recommendation, suggestion, decision, reviewer, notes, requestor=""):
+def save_decision(row, recommendation, suggestion, decision, reviewer, notes, requestor="", next_action="", target_fiscal_year="", anticipated_next_year_budget=0):
     decisions = load_decisions()
-    rationale = decision_rationale(row, decision)
-    email_text = requestor_email(row, decision, requestor, notes)
+    rationale = decision_rationale(
+        row,
+        decision,
+        next_action=next_action,
+        target_fiscal_year=target_fiscal_year,
+        anticipated_next_year_budget=anticipated_next_year_budget,
+    )
+    email_text = requestor_email(
+        row,
+        decision,
+        requestor,
+        notes,
+        next_action=next_action,
+        target_fiscal_year=target_fiscal_year,
+        anticipated_next_year_budget=anticipated_next_year_budget,
+    )
 
     record = {
         "request_id": row.get("request_id", ""),
@@ -1334,6 +1643,9 @@ def save_decision(row, recommendation, suggestion, decision, reviewer, notes, re
         "review_date": SIMULATION_DATE,
         "decision_timestamp": datetime.now().isoformat(timespec="seconds"),
         "manager_notes": notes,
+        "next_action": next_action,
+        "target_fiscal_year": target_fiscal_year,
+        "anticipated_next_year_budget": anticipated_next_year_budget,
     }
 
     decisions[str(row.get("request_id", ""))] = record
@@ -2084,6 +2396,7 @@ page = st.sidebar.radio(
         "Sport Budgets",
         "Purchase Requests",
         "CSU Benchmarking",
+        "Deferred & Future Needs",
         "Decision Log",
     ],
     label_visibility="collapsed",
@@ -2124,7 +2437,7 @@ if page == "Home":
             """
             <div class="hero">
                 <div class="hero-inner">
-                    <div class="hero-kicker">V7.5 Simulation Environment • Fall 2027 Restart Scenario</div>
+                    <div class="hero-kicker">V7.6 Athletics Premium • Simulation Environment • Fall 2027 Restart Scenario</div>
                     <div class="hero-title">KORBI</div>
                     <div class="hero-sub">One operating picture for every program, every request, and every dollar.</div>
                     <div class="hero-body">
@@ -2265,6 +2578,10 @@ if page == "Home":
         (
             "Accountability",
             "Keep an audit trail of requests, management decisions, financial impact, approvals, denials, and remaining obligations.",
+        ),
+        (
+            "Budget-Cycle Memory",
+            "Carry deferred needs into the next fiscal-year planning cycle so equipment, travel, technology, and other unfunded requests are not forgotten.",
         ),
     ]
 
@@ -2862,10 +3179,16 @@ elif page == "Purchase Requests":
 
     st.markdown("#### KORBI Recommendation")
     st.info(recommendation)
-    st.write(suggestion)
+    st.markdown(
+        f'<div class="premium-note">{html.escape(str(suggestion))}</div>',
+        unsafe_allow_html=True,
+    )
 
     st.markdown("#### Coach Impact")
-    st.info(coach_impact(row).replace("$", r"\$"))
+    st.markdown(
+        f'<div class="premium-note">{html.escape(coach_impact(row))}</div>',
+        unsafe_allow_html=True,
+    )
 
     left, right = st.columns(2)
 
@@ -2929,6 +3252,55 @@ elif page == "Purchase Requests":
         key=f"decision_{row.get('request_id', '')}",
     )
 
+    next_action = ""
+    target_fiscal_year = ""
+    anticipated_next_year_budget = 0.0
+
+    if decision == "DEFER":
+        st.markdown("### Deferred Request Next Step")
+
+        next_action_options = [
+            "Reconsider later this fiscal year",
+            "Elevate to Director of Athletics for additional funding",
+            "Seek alternative / external funding",
+            "Carry forward to FY 2028-29 budget",
+            "Elevate to AD; if unfunded, carry forward to FY 2028-29",
+        ]
+
+        saved_next_action = str(raw_row.get("next_action", "")).strip()
+        next_default = (
+            next_action_options.index(saved_next_action)
+            if saved_next_action in next_action_options
+            else 4
+        )
+
+        next_action = st.selectbox(
+            "Next Action",
+            next_action_options,
+            index=next_default,
+            key=f"next_action_{row.get('request_id', '')}",
+        )
+
+        if "FY 2028-29" in next_action:
+            target_fiscal_year = "FY 2028-29"
+            saved_next_budget = safe_float(raw_row.get("anticipated_next_year_budget"))
+            default_next_budget = saved_next_budget if saved_next_budget > 0 else round(safe_float(row.get("amount")) * 1.05, -1)
+
+            anticipated_next_year_budget = st.number_input(
+                "Anticipated FY 2028-29 Budget ($)",
+                min_value=0.0,
+                value=float(default_next_budget),
+                step=100.0,
+                format="%.0f",
+                key=f"next_budget_{row.get('request_id', '')}",
+            )
+
+            st.caption(
+                "KORBI will retain this deferred need for the next budget cycle so it is not lost when FY 2028-29 planning begins."
+            )
+        else:
+            target_fiscal_year = "FY 2027-28"
+
     notes = st.text_area(
         "Manager notes",
         value=str(raw_row.get("manager_notes", "")) if str(raw_row.get("manager_notes", "")).lower() != "nan" else "",
@@ -2937,8 +3309,22 @@ elif page == "Purchase Requests":
     )
 
     # Preview the exact rationale that will be stored with the decision.
-    rationale_preview = decision_rationale(row, decision)
-    email_preview = requestor_email(row, decision, requestor, notes)
+    rationale_preview = decision_rationale(
+        row,
+        decision,
+        next_action=next_action,
+        target_fiscal_year=target_fiscal_year,
+        anticipated_next_year_budget=anticipated_next_year_budget,
+    )
+    email_preview = requestor_email(
+        row,
+        decision,
+        requestor,
+        notes,
+        next_action=next_action,
+        target_fiscal_year=target_fiscal_year,
+        anticipated_next_year_budget=anticipated_next_year_budget,
+    )
 
     st.markdown("### KORBI Decision Explanation")
     st.info(rationale_preview.replace("$", r"\$"))
@@ -2959,6 +3345,9 @@ elif page == "Purchase Requests":
             reviewer=reviewer,
             notes=notes,
             requestor=requestor,
+            next_action=next_action,
+            target_fiscal_year=target_fiscal_year,
+            anticipated_next_year_budget=anticipated_next_year_budget,
         )
         st.success(
             f"{row.get('request_id', '')} saved as {decision}. KORBI has updated the decision layer, request status, "
@@ -3372,6 +3761,191 @@ elif page == "Payroll & Staffing":
 
 
 # ============================================================
+# DEFERRED & FUTURE NEEDS
+# ============================================================
+
+elif page == "Deferred & Future Needs":
+
+    section_title(
+        "Deferred & Future Needs",
+        "Track current-year requests that were deferred, elevated, or carried into the next budget cycle so program needs are not lost between fiscal years."
+    )
+
+    deferred_df = deferred_future_needs_df()
+
+    if deferred_df.empty:
+        st.info("No deferred or future needs are currently tracked.")
+    else:
+        # Filters
+        f1, f2, f3 = st.columns(3)
+
+        with f1:
+            program_options = ["All Athletics"] + sorted(
+                deferred_df["Program"].dropna().astype(str).unique().tolist()
+            )
+            deferred_program = st.selectbox(
+                "Program / Department",
+                program_options,
+                key="deferred_program_filter",
+            )
+
+        with f2:
+            fy_options = ["All Fiscal Years"] + sorted(
+                deferred_df["Target Fiscal Year"].dropna().astype(str).unique().tolist()
+            )
+            deferred_fy = st.selectbox(
+                "Target Fiscal Year",
+                fy_options,
+                key="deferred_fy_filter",
+            )
+
+        with f3:
+            status_options = ["All Statuses"] + sorted(
+                deferred_df["Status"].dropna().astype(str).unique().tolist()
+            )
+            deferred_status = st.selectbox(
+                "Status",
+                status_options,
+                key="deferred_status_filter",
+            )
+
+        filtered_deferred = deferred_df.copy()
+
+        if deferred_program != "All Athletics":
+            filtered_deferred = filtered_deferred[
+                filtered_deferred["Program"].astype(str) == deferred_program
+            ]
+
+        if deferred_fy != "All Fiscal Years":
+            filtered_deferred = filtered_deferred[
+                filtered_deferred["Target Fiscal Year"].astype(str) == deferred_fy
+            ]
+
+        if deferred_status != "All Statuses":
+            filtered_deferred = filtered_deferred[
+                filtered_deferred["Status"].astype(str) == deferred_status
+            ]
+
+        total_deferred = pd.to_numeric(
+            filtered_deferred["Deferred Amount"],
+            errors="coerce",
+        ).fillna(0).sum()
+
+        next_year_total = pd.to_numeric(
+            filtered_deferred.loc[
+                filtered_deferred["Target Fiscal Year"].astype(str) == "FY 2028-29",
+                "Anticipated FY Budget",
+            ],
+            errors="coerce",
+        ).fillna(0).sum()
+
+        carried_count = int(
+            (
+                filtered_deferred["Target Fiscal Year"].astype(str)
+                == "FY 2028-29"
+            ).sum()
+        )
+
+        programs_affected = filtered_deferred["Program"].dropna().astype(str).nunique()
+
+        m1, m2, m3, m4 = st.columns(4)
+        m1.metric("Deferred Requests", f"{len(filtered_deferred):,}")
+        m2.metric("Deferred Value", money_zero(total_deferred))
+        m3.metric("FY 2028-29 Planned Need", money_zero(next_year_total))
+        m4.metric("Programs Affected", f"{programs_affected:,}")
+
+        st.markdown(
+            '<div class="premium-note"><strong>Budget-cycle purpose:</strong> '
+            'Every carried-forward request remains visible with its original amount, reason for deferral, '
+            'next action, and anticipated future-year budget. This gives Athletics a starting list of unfunded '
+            'needs before the next budget cycle begins.</div>',
+            unsafe_allow_html=True,
+        )
+
+        st.markdown("## Deferred Needs by Program")
+
+        grouped = (
+            filtered_deferred.groupby("Program", dropna=False)
+            .agg(
+                Deferred_Requests=("Request ID", "count"),
+                Deferred_Value=("Deferred Amount", "sum"),
+                Anticipated_FY_Budget=("Anticipated FY Budget", "sum"),
+            )
+            .reset_index()
+            .rename(
+                columns={
+                    "Deferred_Requests": "Deferred Requests",
+                    "Deferred_Value": "Deferred Value",
+                    "Anticipated_FY_Budget": "Anticipated FY Budget",
+                }
+            )
+        )
+
+        grouped["Deferred Value"] = grouped["Deferred Value"].apply(money_zero)
+        grouped["Anticipated FY Budget"] = grouped["Anticipated FY Budget"].apply(money_zero)
+
+        st.markdown(
+            '<div class="korbi-table-wrap">'
+            + grouped.to_html(index=False, classes="korbi-table", border=0, escape=True)
+            + '</div>',
+            unsafe_allow_html=True,
+        )
+
+        st.markdown("## Deferred Request Detail")
+
+        detail_columns = [
+            "Program",
+            "Purchase Request",
+            "Deferred Amount",
+            "Reason Deferred",
+            "Next Step",
+            "Target Fiscal Year",
+            "Anticipated FY Budget",
+            "Status",
+        ]
+
+        detail = filtered_deferred[detail_columns].copy()
+        detail["Deferred Amount"] = detail["Deferred Amount"].apply(money_zero)
+        detail["Anticipated FY Budget"] = detail["Anticipated FY Budget"].apply(money_zero)
+
+        st.markdown(
+            '<div class="korbi-table-wrap">'
+            + detail.to_html(index=False, classes="korbi-table", border=0, escape=True)
+            + '</div>',
+            unsafe_allow_html=True,
+        )
+
+        if carried_count > 0:
+            st.markdown("## FY 2028-29 Carry-Forward Planning")
+
+            next_year = filtered_deferred[
+                filtered_deferred["Target Fiscal Year"].astype(str) == "FY 2028-29"
+            ].copy()
+
+            if not next_year.empty:
+                planning_total = pd.to_numeric(
+                    next_year["Anticipated FY Budget"],
+                    errors="coerce",
+                ).fillna(0).sum()
+
+                st.markdown(
+                    f'<div class="premium-note">'
+                    f'<strong>{carried_count:,}</strong> request'
+                    f'{"s" if carried_count != 1 else ""} are currently positioned for the next budget cycle, '
+                    f'with an anticipated planning requirement of <strong>{money_zero(planning_total)}</strong>. '
+                    f'Before FY 2028-29 is finalized, each item should be revalidated, repriced, and either funded, '
+                    f'elevated, or closed.</div>',
+                    unsafe_allow_html=True,
+                )
+
+        dataframe_download(
+            filtered_deferred,
+            "korbi_deferred_future_needs.csv",
+            "Download Deferred & Future Needs CSV",
+        )
+
+
+# ============================================================
 # DECISION LOG
 # ============================================================
 
@@ -3474,11 +4048,23 @@ elif page == "Decision Log":
                 if str(record.get("manager_notes", "")).strip() and str(record.get("manager_notes", "")).lower() != "nan":
                     st.write(f"**Manager notes:** {record.get('manager_notes')}")
 
+                if decision_value == "DEFER":
+                    next_action_value = str(record.get("next_action", "")).strip()
+                    target_fy_value = str(record.get("target_fiscal_year", "")).strip()
+                    anticipated_value = safe_float(record.get("anticipated_next_year_budget"))
+
+                    if next_action_value and next_action_value.lower() != "nan":
+                        st.write(f"**Next action:** {next_action_value}")
+                    if target_fy_value and target_fy_value.lower() != "nan":
+                        st.write(f"**Planning target:** {target_fy_value}")
+                    if anticipated_value > 0:
+                        st.write(f"**Anticipated future-year budget:** {money(anticipated_value)}")
+
             with right:
                 st.markdown("### Email-Ready Response")
                 email_text = str(record.get("requestor_email_response", "")).strip()
                 if not email_text or email_text.lower() == "nan":
-                    email_text = "This decision predates the V7.5 email-response field. Re-save the request decision to generate an email-ready response."
+                    email_text = "This decision predates the V7.6 email-response field. Re-save the request decision to generate an email-ready response."
                 st.caption("The full response is shown below and wraps vertically for easy reading.")
                 wrapped_email_box(email_text)
                 st.download_button(
