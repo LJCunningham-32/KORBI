@@ -1940,11 +1940,16 @@ elif page == "Purchase Requests":
     # Always derive current status from the saved decision layer.
     request_master = request_status_table()
 
-    mode = st.radio(
-        "Show",
-        ["Awaiting Review", "All Requests", "Reviewed"],
-        horizontal=True,
-    )
+    mode = st.segmented_control(
+    "Show",
+    options=[
+        "Awaiting Review",
+        "All Requests",
+        "Reviewed",
+    ],
+    default="Awaiting Review",
+    selection_mode="single",
+)
 
     if mode == "Awaiting Review":
         view_df = request_master[request_master["request_status"] == "OPEN"].copy()
