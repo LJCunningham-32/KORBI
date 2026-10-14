@@ -2249,7 +2249,7 @@ elif page == "Purchase Requests":
     st.write(suggestion)
 
     st.markdown("#### Coach Impact")
-    st.info(coach_impact(row))
+    st.info(coach_impact(row).replace("$", r"\$"))
 
     left, right = st.columns(2)
 
@@ -2316,7 +2316,7 @@ elif page == "Purchase Requests":
     email_preview = requestor_email(row, decision, requestor, notes)
 
     st.markdown("### KORBI Decision Explanation")
-    st.info(rationale_preview)
+    st.info(rationale_preview.replace("$", r"\$"))
 
     st.markdown("### Email-Ready Response to Requestor")
     st.caption(
