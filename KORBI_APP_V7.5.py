@@ -689,26 +689,42 @@ def budget_impact(row):
 
 
 def coach_impact(row):
-    amount = safe_float(row.get("amount"))
-    before_remaining = safe_float(row.get("baseline_remaining"))
-    after_remaining = safe_float(row.get("remaining_with_request"))
-    share = amount / before_remaining * 100 if before_remaining > 0 else 100.0
+    baseline_remaining = pd.to_numeric(
+        row.get("baseline_remaining", 0),
+        errors="coerce"
+    )
 
-    if after_remaining < 0:
-        return (
-            f"This request would use the program's remaining flexibility and create a projected "
-            f"deficit of {money(abs(after_remaining))}. The request needs an offset, transfer, "
-            f"alternative funding source, or a change in scope."
-        )
+    remaining_with_request = pd.to_numeric(
+        row.get("remaining_with_request", 0),
+        errors="coerce"
+    )
+
+    if pd.isna(baseline_remaining):
+        baseline_remaining = 0
+
+    if pd.isna(remaining_with_request):
+        remaining_with_request = 0
+
+    flexibility_reduction = max(
+        0,
+        baseline_remaining - remaining_with_request
+    )
+
+    flexibility_reduction_pct = (
+        (flexibility_reduction / baseline_remaining) * 100
+        if baseline_remaining > 0
+        else 0
+    )
 
     return (
-        f"This request can be evaluated within the current program budget, but it would reduce "
-        f"projected year-end flexibility from {money(before_remaining)} to {money(after_remaining)}. "
-        f"That uses about {share:.1f}% of the flexibility currently available. KORBI does not assume "
-        f"what the program may need later; it shows the tradeoff so the coach can decide whether this "
-        f"expense is worth reducing flexibility for future travel changes, equipment needs, or other "
-        f"unplanned requirements."
-    )
+        f"This request can be evaluated within the current program budget, "
+        f"but it would reduce projected year-end flexibility from "
+        f"${baseline_remaining:,.0f} to ${remaining_with_request:,.0f}. "
+        f"That represents a {flexibility_reduction_pct:.1f}% reduction "
+        f"in remaining flexibility. "
+        f"KORBI does not assume what the program may need later; it shows "
+        f"the trade-off so the coach can decide whether this expense is worth "
+        f"reducing capacity for future travel, equipment, or o
 
 
 def risk_summary(row):
