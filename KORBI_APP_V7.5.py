@@ -1,5 +1,6 @@
-import textwrap
+
 import csv
+import textwrap
 from pathlib import Path
 from datetime import datetime
 
@@ -37,6 +38,8 @@ def korbi_file(filename):
     if root_path.exists():
         return root_path
 
+    # If the file does not exist yet (for example the decision log),
+    # choose a writable location appropriate for the current environment.
     if PROCESSED_FOLDER.exists():
         return processed_path
 
@@ -131,7 +134,6 @@ st.markdown(
     }
 
     [data-testid="stSidebar"] * { color: #FFFFFF !important; }
-
     [data-testid="stSidebar"] input,
     [data-testid="stSidebar"] textarea {
         color: #17365D !important;
@@ -178,9 +180,7 @@ st.markdown(
         text-transform: uppercase;
     }
 
-    h1, h2, h3, h4, h5, h6 {
-        color: var(--ssu-navy) !important;
-    }
+    h1, h2, h3, h4, h5, h6 { color: var(--ssu-navy) !important; }
 
     [data-testid="stMetric"] {
         background: #FFFFFF;
@@ -191,9 +191,7 @@ st.markdown(
         box-shadow: 0 3px 10px rgba(23,54,93,.05);
     }
 
-    [data-testid="stMetric"] * {
-        color: var(--ssu-navy) !important;
-    }
+    [data-testid="stMetric"] * { color: var(--ssu-navy) !important; }
 
     .hero {
         background: linear-gradient(118deg, #102C49 0%, #004C97 100%);
@@ -309,6 +307,12 @@ st.markdown(
         margin: 0;
     }
 
+    @media (max-width: 900px) {
+        .value-grid { grid-template-columns: repeat(2, 1fr); }
+        .hero { padding: 2.7rem 2rem; }
+        .hero-title { letter-spacing: -.08rem; }
+    }
+
     .support-card {
         background: linear-gradient(135deg,#17365D 0%,#004C97 100%);
         border-radius: 18px;
@@ -347,10 +351,7 @@ st.markdown(
         margin: .55rem 0 1rem;
     }
 
-    .small-muted {
-        color: var(--ssu-muted);
-        font-size: .85rem;
-    }
+    .small-muted { color: var(--ssu-muted); font-size: .85rem; }
 
     [data-testid="stDataFrame"] {
         border: 1px solid var(--ssu-border);
@@ -371,13 +372,13 @@ st.markdown(
         color: #FFFFFF !important;
     }
 
+    /* V7.5 operational status cards */
     .program-grid {
         display:grid;
         grid-template-columns:repeat(3,minmax(0,1fr));
         gap:.75rem;
         margin:.5rem 0 1.5rem 0;
     }
-
     .program-card {
         border:1px solid var(--ssu-border);
         border-left:5px solid #1565C0;
@@ -386,99 +387,35 @@ st.markdown(
         background:#EAF2FB;
         min-height:92px;
     }
+    .program-card .sport {font-size:.74rem;font-weight:850;text-transform:uppercase;letter-spacing:.02rem;}
+    .program-card .status {font-size:1.18rem;font-weight:900;margin:.12rem 0 .2rem;}
+    .program-card .detail {font-size:.82rem;line-height:1.25;color:#334E68 !important;}
+    .program-card.healthy {background:#EAF6EC;border-left-color:#2E7D32;}
+    .program-card.healthy .sport,.program-card.healthy .status {color:#2E7D32 !important;}
+    .program-card.monitor {background:#EAF2FB;border-left-color:#1565C0;}
+    .program-card.monitor .sport,.program-card.monitor .status {color:#1565C0 !important;}
+    .program-card.caution {background:#FFF7DA;border-left-color:#B07A00;}
+    .program-card.caution .sport,.program-card.caution .status {color:#9A6B00 !important;}
+    .program-card.highrisk {background:#FFF0E5;border-left-color:#C75A00;}
+    .program-card.highrisk .sport,.program-card.highrisk .status {color:#C75A00 !important;}
+    .program-card.overbudget {background:#FDECEA;border-left-color:#B3261E;}
+    .program-card.overbudget .sport,.program-card.overbudget .status {color:#B3261E !important;}
 
-    .program-card .sport {
-        font-size:.74rem;
-        font-weight:850;
-        text-transform:uppercase;
-        letter-spacing:.02rem;
+    .section-card {
+        background:#FFFFFF;
+        border:1px solid var(--ssu-border);
+        border-top:4px solid var(--ssu-blue);
+        border-radius:12px;
+        padding:1rem 1.05rem;
+        box-shadow:0 2px 8px rgba(23,54,93,.04);
+        height:100%;
     }
-
-    .program-card .status {
-        font-size:1.18rem;
-        font-weight:900;
-        margin:.12rem 0 .2rem;
-    }
-
-    .program-card .detail {
-        font-size:.82rem;
-        line-height:1.25;
-        color:#334E68 !important;
-    }
-
-    .program-card.healthy {
-        background:#EAF6EC;
-        border-left-color:#2E7D32;
-    }
-
-    .program-card.healthy .sport,
-    .program-card.healthy .status {
-        color:#2E7D32 !important;
-    }
-
-    .program-card.monitor {
-        background:#EAF2FB;
-        border-left-color:#1565C0;
-    }
-
-    .program-card.monitor .sport,
-    .program-card.monitor .status {
-        color:#1565C0 !important;
-    }
-
-    .program-card.caution {
-        background:#FFF7DA;
-        border-left-color:#B07A00;
-    }
-
-    .program-card.caution .sport,
-    .program-card.caution .status {
-        color:#9A6B00 !important;
-    }
-
-    .program-card.highrisk {
-        background:#FFF0E5;
-        border-left-color:#C75A00;
-    }
-
-    .program-card.highrisk .sport,
-    .program-card.highrisk .status {
-        color:#C75A00 !important;
-    }
-
-    .program-card.overbudget {
-        background:#FDECEA;
-        border-left-color:#B3261E;
-    }
-
-    .program-card.overbudget .sport,
-    .program-card.overbudget .status {
-        color:#B3261E !important;
-    }
-
-    .decision-badge {
-        display:inline-block;
-        padding:.28rem .55rem;
-        border-radius:999px;
-        font-size:.72rem;
-        font-weight:900;
-        letter-spacing:.04rem;
-    }
-
-    .decision-approve {
-        background:#EAF6EC;
-        color:#2E7D32 !important;
-    }
-
-    .decision-defer {
-        background:#FFF7DA;
-        color:#8A6200 !important;
-    }
-
-    .decision-deny {
-        background:#FDECEA;
-        color:#B3261E !important;
-    }
+    .section-card .eyebrow {font-size:.72rem;font-weight:850;text-transform:uppercase;letter-spacing:.05rem;color:#64788A !important;}
+    .section-card .big {font-size:1.7rem;font-weight:900;color:#17365D !important;margin:.15rem 0;}
+    .decision-badge {display:inline-block;padding:.28rem .55rem;border-radius:999px;font-size:.72rem;font-weight:900;letter-spacing:.04rem;}
+    .decision-approve {background:#EAF6EC;color:#2E7D32 !important;}
+    .decision-defer {background:#FFF7DA;color:#8A6200 !important;}
+    .decision-deny {background:#FDECEA;color:#B3261E !important;}
 
     .korbi-table-wrap {
         overflow-x:auto;
@@ -488,49 +425,16 @@ st.markdown(
         margin:.5rem 0 1.25rem;
         box-shadow:0 2px 8px rgba(23,54,93,.04);
     }
-
-    table.korbi-table {
-        border-collapse:collapse;
-        width:100%;
-        min-width:760px;
-        font-size:.84rem;
-    }
-
-    .korbi-table th {
-        background:#17365D;
-        color:#FFFFFF !important;
-        text-align:left;
-        padding:.72rem .75rem;
-        white-space:nowrap;
-    }
-
-    .korbi-table td {
-        padding:.65rem .75rem;
-        border-bottom:1px solid #E2EAF2;
-        color:#26384A !important;
-        white-space:nowrap;
-    }
-
-    .korbi-table tr:nth-child(even) td {
-        background:#F7FAFD;
-    }
-
-    .korbi-table tr:hover td {
-        background:#EAF2FB;
-    }
+    table.korbi-table {border-collapse:collapse;width:100%;min-width:760px;font-size:.84rem;}
+    .korbi-table th {background:#17365D;color:#FFFFFF !important;text-align:left;padding:.72rem .75rem;white-space:nowrap;}
+    .korbi-table td {padding:.65rem .75rem;border-bottom:1px solid #E2EAF2;color:#26384A !important;white-space:nowrap;}
+    .korbi-table tr:nth-child(even) td {background:#F7FAFD;}
+    .korbi-table tr:hover td {background:#EAF2FB;}
+    .korbi-table .yes {color:#2E7D32 !important;font-weight:800;}
+    .korbi-table .no {color:#9AA8B6 !important;}
 
     @media (max-width: 900px) {
-        .value-grid {
-            grid-template-columns: repeat(2, 1fr);
-        }
-
-        .hero {
-            padding: 2.7rem 2rem;
-        }
-
-        .program-grid {
-            grid-template-columns:1fr;
-        }
+        .program-grid {grid-template-columns:1fr;}
     }
     </style>
     """,
@@ -553,28 +457,21 @@ def safe_float(value):
 
 def money(value):
     value = safe_float(value)
-
     if abs(value) < 0.005:
         return "-"
-
     if value < 0:
         return f"(${abs(value):,.0f})"
-
     return f"${value:,.0f}"
 
 
 def compact_money(value):
     value = safe_float(value)
-
     sign = "-" if value < 0 else ""
     value = abs(value)
-
     if value >= 1_000_000:
         return f"{sign}${value / 1_000_000:.2f}M"
-
     if value >= 1_000:
         return f"{sign}${value / 1_000:.1f}K"
-
     return f"{sign}${value:,.0f}"
 
 
@@ -585,7 +482,6 @@ def pct(value):
 def read_df(path):
     if not path.exists():
         return pd.DataFrame()
-
     try:
         return pd.read_csv(path)
     except Exception:
@@ -595,51 +491,32 @@ def read_df(path):
 def read_rows(path):
     if not path.exists():
         return []
-
     with open(path, "r", encoding="utf-8-sig", newline="") as f:
         return list(csv.DictReader(f))
 
 
 def write_decisions(rows):
+    # Keep the current Streamlit session immediately consistent, even on
+    # hosted environments where the local filesystem may be temporary.
     normalized = []
-
     for row in rows:
-        normalized.append(
-            {
-                field: row.get(field, "")
-                for field in DECISION_FIELDS
-            }
-        )
-
+        normalized.append({field: row.get(field, "") for field in DECISION_FIELDS})
     st.session_state["_korbi_decision_records"] = normalized
 
     try:
         PROCESSED_FOLDER.mkdir(parents=True, exist_ok=True)
-
-        with open(
-            FILES["decisions"],
-            "w",
-            encoding="utf-8",
-            newline=""
-        ) as f:
-            writer = csv.DictWriter(
-                f,
-                fieldnames=DECISION_FIELDS
-            )
-
+        with open(FILES["decisions"], "w", encoding="utf-8", newline="") as f:
+            writer = csv.DictWriter(f, fieldnames=DECISION_FIELDS)
             writer.writeheader()
             writer.writerows(normalized)
-
     except OSError:
+        # Session state still keeps the prototype functional for the active session.
         pass
 
 
 def load_decision_rows():
     if "_korbi_decision_records" not in st.session_state:
-        st.session_state["_korbi_decision_records"] = read_rows(
-            FILES["decisions"]
-        )
-
+        st.session_state["_korbi_decision_records"] = read_rows(FILES["decisions"])
     return st.session_state["_korbi_decision_records"]
 
 
@@ -653,40 +530,27 @@ def load_decisions():
 
 def current_decision_df():
     rows = load_decision_rows()
-
-    if rows:
-        return pd.DataFrame(rows)
-
-    return pd.DataFrame(
-        columns=DECISION_FIELDS
-    )
+    return pd.DataFrame(rows) if rows else pd.DataFrame(columns=DECISION_FIELDS)
 
 
 def first_existing_column(df, candidates):
     for col in candidates:
         if col in df.columns:
             return col
-
     return None
 
 
 def section_title(title, subtitle=None):
     st.subheader(title)
-
     if subtitle:
         st.caption(subtitle)
 
 
-def accounting_table(
-    df,
-    currency_cols=None,
-    percent_cols=None
-):
+def accounting_table(df, currency_cols=None, percent_cols=None):
     if df is None or df.empty:
         return df
 
     out = df.copy()
-
     currency_cols = currency_cols or []
     percent_cols = percent_cols or []
 
@@ -697,23 +561,15 @@ def accounting_table(
     for col in percent_cols:
         if col in out.columns:
             out[col] = out[col].apply(
-                lambda x:
-                    "-"
-                    if abs(safe_float(x)) < 0.005
-                    else f"{safe_float(x):.1f}%"
+                lambda x: "-" if abs(safe_float(x)) < 0.005 else f"{safe_float(x):.1f}%"
             )
 
     return out
 
 
-def dataframe_download(
-    df,
-    filename,
-    label
-):
+def dataframe_download(df, filename, label):
     if df is None or df.empty:
         return
-
     st.download_button(
         label=label,
         data=df.to_csv(index=False).encode("utf-8"),
@@ -744,24 +600,11 @@ cost_drivers_df = read_df(FILES["cost_drivers"])
 team_summary_df = read_df(FILES["team_summary"])
 
 reviewed_ids = set()
+if not decision_df.empty and "request_id" in decision_df.columns:
+    reviewed_ids = set(decision_df["request_id"].astype(str))
 
-if (
-    not decision_df.empty
-    and "request_id" in decision_df.columns
-):
-    reviewed_ids = set(
-        decision_df["request_id"].astype(str)
-    )
-
-if (
-    not triage_df.empty
-    and "request_id" in triage_df.columns
-):
-    triage_df["reviewed"] = (
-        triage_df["request_id"]
-        .astype(str)
-        .isin(reviewed_ids)
-    )
+if not triage_df.empty and "request_id" in triage_df.columns:
+    triage_df["reviewed"] = triage_df["request_id"].astype(str).isin(reviewed_ids)
 
 
 # ============================================================
@@ -769,814 +612,407 @@ if (
 # ============================================================
 
 def category_context(row):
-    category = str(
-        row.get(
-            "category_code",
-            ""
-        )
-    ).upper()
-
-    priority = str(
-        row.get(
-            "priority",
-            ""
-        )
-    ).upper()
+    category = str(row.get("category_code", "")).upper()
+    priority = str(row.get("priority", "")).upper()
 
     if category == "TRAV":
         return (
             "This request affects team travel and competition operations. "
-            "Airfare, lodging, transportation, and event schedules can make "
-            "these costs time-sensitive."
+            "Airfare, lodging, transportation, and event schedules can make these costs time-sensitive."
         )
-
     if category == "MIE":
         return (
-            "This request affects meals and incidental expenses tied to team "
-            "travel and should align with the approved travel plan and per diem policy."
+            "This request affects meals and incidental expenses tied to team travel "
+            "and should align with the approved travel plan and per diem policy."
         )
-
     if category == "FAC":
         return (
-            "This request affects a field, facility, or competition space and may "
-            "affect safety, practice availability, or event readiness."
+            "This request affects a field, facility, or competition space and may affect "
+            "safety, practice availability, or event readiness."
         )
-
     if category == "TECH":
         return (
-            "This request affects technology, analytics, software, or performance "
-            "systems. Recurring licensing or renewal costs should also be considered."
+            "This request affects technology, analytics, software, or performance systems. "
+            "Recurring licensing or renewal costs should also be considered."
         )
-
     if category == "UNIF":
-        return (
-            "This request affects uniforms or apparel needed for team "
-            "operations and competition."
-        )
-
+        return "This request affects uniforms or apparel needed for team operations and competition."
     if category == "OPS":
         return (
-            "This request affects team or event operations required to conduct "
-            "practices, games, or the competitive season."
+            "This request affects team or event operations required to conduct practices, games, "
+            "or the competitive season."
         )
-
     if category == "EQUIP":
         if priority == "CRITICAL":
             return (
-                "This request affects equipment required for safe or continuous "
-                "team operations. Delay may create safety or continuity risk."
+                "This request affects equipment required for safe or continuous team operations. "
+                "Delay may create safety or continuity risk."
             )
-
         if priority == "NECESSARY":
             return (
-                "This request addresses worn, aging, damaged, or operationally "
-                "important equipment. Delay may increase reliability or replacement risk."
+                "This request addresses worn, aging, damaged, or operationally important equipment. "
+                "Delay may increase reliability or replacement risk."
             )
-
         return (
-            "This equipment request may improve performance or student-athlete "
-            "experience, but current operations can generally continue without "
-            "immediate purchase."
+            "This equipment request may improve performance or student-athlete experience, "
+            "but current operations can generally continue without immediate purchase."
         )
 
-    return (
-        "This request affects general program operations."
-    )
+    return "This request affects general program operations."
 
 
 def budget_impact(row):
-    amount = safe_float(
-        row.get("amount")
-    )
+    amount = safe_float(row.get("amount"))
+    annual = safe_float(row.get("annual_budget"))
+    before_remaining = safe_float(row.get("baseline_remaining"))
+    after_remaining = safe_float(row.get("remaining_with_request"))
+    before_pct = safe_float(row.get("baseline_percent"))
+    after_pct = safe_float(row.get("percent_with_request"))
 
-    annual = safe_float(
-        row.get("annual_budget")
-    )
-
-    before_remaining = safe_float(
-        row.get("baseline_remaining")
-    )
-
-    after_remaining = safe_float(
-        row.get("remaining_with_request")
-    )
-
-    before_pct = safe_float(
-        row.get("baseline_percent")
-    )
-
-    after_pct = safe_float(
-        row.get("percent_with_request")
-    )
-
-    request_pct = (
-        amount / annual * 100
-        if annual
-        else 0
-    )
-
-    cushion_used = (
-        amount / before_remaining * 100
-        if before_remaining > 0
-        else 100.0
-    )
+    request_pct = amount / annual * 100 if annual else 0
+    cushion_used = amount / before_remaining * 100 if before_remaining > 0 else 100.0
 
     if after_remaining < 0:
         return (
-            f"The {money(amount)} request equals {request_pct:.1f}% of the "
-            f"annual operating budget. Projected utilization rises from "
-            f"{before_pct:.1f}% to {after_pct:.1f}%. It eliminates the remaining "
-            f"cushion and creates a projected deficit of "
+            f"The {money(amount)} request equals {request_pct:.1f}% of the annual operating budget. "
+            f"Projected utilization rises from {before_pct:.1f}% to {after_pct:.1f}%. "
+            f"It eliminates the remaining cushion and creates a projected deficit of "
             f"{money(abs(after_remaining))}."
         )
 
     return (
-        f"The {money(amount)} request equals {request_pct:.1f}% of the annual "
-        f"operating budget. Projected utilization rises from {before_pct:.1f}% "
-        f"to {after_pct:.1f}%. The projected cushion falls from "
-        f"{money(before_remaining)} to {money(after_remaining)}, using about "
-        f"{cushion_used:.1f}% of the program's remaining financial flexibility."
+        f"The {money(amount)} request equals {request_pct:.1f}% of the annual operating budget. "
+        f"Projected utilization rises from {before_pct:.1f}% to {after_pct:.1f}%. "
+        f"The projected cushion falls from {money(before_remaining)} to {money(after_remaining)}, "
+        f"using about {cushion_used:.1f}% of the program's remaining financial flexibility."
     )
 
 
 def coach_impact(row):
-    amount = safe_float(
-        row.get("amount")
-    )
-
-    before_remaining = safe_float(
-        row.get("baseline_remaining")
-    )
-
-    after_remaining = safe_float(
-        row.get("remaining_with_request")
-    )
-
-    share = (
-        amount / before_remaining * 100
-        if before_remaining > 0
-        else 100.0
-    )
+    amount = safe_float(row.get("amount"))
+    before_remaining = safe_float(row.get("baseline_remaining"))
+    after_remaining = safe_float(row.get("remaining_with_request"))
+    share = amount / before_remaining * 100 if before_remaining > 0 else 100.0
 
     if after_remaining < 0:
         return (
-            f"This request would use the program's remaining flexibility and "
-            f"create a projected deficit of {money(abs(after_remaining))}. "
-            f"The request needs an offset, transfer, alternative funding source, "
-            f"or a change in scope."
+            f"This request would use the program's remaining flexibility and create a projected "
+            f"deficit of {money(abs(after_remaining))}. The request needs an offset, transfer, "
+            f"alternative funding source, or a change in scope."
         )
 
     return (
-        f"This request can be evaluated within the current program budget, but "
-        f"it would reduce projected year-end flexibility from "
-        f"{money(before_remaining)} to {money(after_remaining)}. That uses about "
-        f"{share:.1f}% of the flexibility currently available. KORBI does not "
-        f"assume what the program may need later; it shows the tradeoff so the "
-        f"coach can decide whether this expense is worth reducing flexibility "
-        f"for future travel changes, equipment needs, or other unplanned requirements."
+        f"This request can be evaluated within the current program budget, but it would reduce "
+        f"projected year-end flexibility from {money(before_remaining)} to {money(after_remaining)}. "
+        f"That uses about {share:.1f}% of the flexibility currently available. KORBI does not assume "
+        f"what the program may need later; it shows the tradeoff so the coach can decide whether this "
+        f"expense is worth reducing flexibility for future travel changes, equipment needs, or other "
+        f"unplanned requirements."
     )
 
 
 def risk_summary(row):
-    after_pct = safe_float(
-        row.get(
-            "percent_with_request"
-        )
-    )
-
-    remaining = safe_float(
-        row.get(
-            "remaining_with_request"
-        )
-    )
-
-    priority = str(
-        row.get(
-            "priority",
-            ""
-        )
-    ).upper()
+    after_pct = safe_float(row.get("percent_with_request"))
+    remaining = safe_float(row.get("remaining_with_request"))
+    priority = str(row.get("priority", "")).upper()
 
     if after_pct > 100:
         return (
-            "HIGH FINANCIAL RISK. Approval would place the program over its "
-            "projected annual operating budget and require an offset, transfer, "
-            "or alternative funding source."
+            "HIGH FINANCIAL RISK. Approval would place the program over its projected annual operating "
+            "budget and require an offset, transfer, or alternative funding source."
         )
-
     if after_pct >= 95:
         return (
-            f"HIGH FINANCIAL RISK. Only {money(remaining)} would remain. "
-            f"Unexpected travel, competition, equipment, or operating costs "
-            f"could push the program over budget."
+            f"HIGH FINANCIAL RISK. Only {money(remaining)} would remain. Unexpected travel, competition, "
+            "equipment, or operating costs could push the program over budget."
         )
-
     if after_pct >= 90:
         return (
-            "MODERATE-HIGH FINANCIAL RISK. The request remains within budget, "
-            "but the program would move into a tight financial position."
+            "MODERATE-HIGH FINANCIAL RISK. The request remains within budget, but the program would move "
+            "into a tight financial position."
         )
-
-    if (
-        after_pct >= 80
-        and priority == "ENHANCEMENT"
-    ):
+    if after_pct >= 80 and priority == "ENHANCEMENT":
         return (
-            "MODERATE FINANCIAL RISK. The request fits, but it is discretionary "
-            "and reduces flexibility available for required costs later in the year."
+            "MODERATE FINANCIAL RISK. The request fits, but it is discretionary and reduces flexibility "
+            "available for required costs later in the year."
         )
-
     if after_pct >= 80:
         return (
-            "MODERATE FINANCIAL RISK. The purchase fits within the current "
-            "forecast, but remaining seasonal obligations should continue "
-            "to be monitored."
+            "MODERATE FINANCIAL RISK. The purchase fits within the current forecast, but remaining "
+            "seasonal obligations should continue to be monitored."
         )
 
     return (
-        "LOWER FINANCIAL RISK. The forecast indicates adequate capacity remains "
-        "after the request, subject to normal procurement and operational review."
+        "LOWER FINANCIAL RISK. The forecast indicates adequate capacity remains after the request, "
+        "subject to normal procurement and operational review."
     )
 
 
 def actionable_recommendation(row):
-    after_pct = safe_float(
-        row.get("percent_with_request")
-    )
-
-    remaining = safe_float(
-        row.get("remaining_with_request")
-    )
-
-    amount = safe_float(
-        row.get("amount")
-    )
-
-    priority = str(
-        row.get("priority", "")
-    ).upper()
-
-    category = str(
-        row.get("category_code", "")
-    ).upper()
+    after_pct = safe_float(row.get("percent_with_request"))
+    remaining = safe_float(row.get("remaining_with_request"))
+    amount = safe_float(row.get("amount"))
+    priority = str(row.get("priority", "")).upper()
+    category = str(row.get("category_code", "")).upper()
 
     if after_pct > 100:
         if priority == "CRITICAL":
             return (
                 "ESCALATE — CRITICAL NEED REQUIRES A FUNDING SOURCE",
-                (
-                    f"Do not fund the {money(amount)} request from the current "
-                    f"allocation without an offset, transfer, or alternative "
-                    f"funding source. Because the need is critical, escalate "
-                    f"rather than simply deny it."
-                ),
+                f"Do not fund the {money(amount)} request from the current allocation without an offset, "
+                "transfer, or alternative funding source. Because the need is critical, escalate rather than simply deny it."
             )
-
         return (
             "DENY OR DEFER — REQUEST CREATES A PROJECTED DEFICIT",
-            (
-                "Do not approve from the current operating budget. Identify "
-                "savings, reduce scope, use another funding source, or "
-                "reconsider if the forecast improves."
-            ),
+            "Do not approve from the current operating budget. Identify savings, reduce scope, "
+            "use another funding source, or reconsider if the forecast improves."
         )
 
     if after_pct >= 95:
         if priority == "CRITICAL":
             return (
                 "APPROVE ONLY WITH SENIOR MANAGEMENT REVIEW",
-                (
-                    f"The critical need may justify the purchase, but only "
-                    f"{money(remaining)} would remain. Confirm remaining "
-                    f"obligations and contingency funding first."
-                ),
+                f"The critical need may justify the purchase, but only {money(remaining)} would remain. "
+                "Confirm remaining obligations and contingency funding first."
             )
-
         if priority == "NECESSARY":
             return (
                 "DEFER UNLESS OFFSETTING SAVINGS ARE IDENTIFIED",
-                (
-                    f"The request addresses a legitimate need, but only "
-                    f"{money(remaining)} would remain. Confirm remaining "
-                    f"obligations or identify savings equal to at least "
-                    f"{money(amount)}."
-                ),
+                f"The request addresses a legitimate need, but only {money(remaining)} would remain. "
+                f"Confirm remaining obligations or identify savings equal to at least {money(amount)}."
             )
-
         return (
             "DEFER — PRESERVE REMAINING BUDGET CAPACITY",
-            (
-                "The enhancement would leave too little flexibility for "
-                "required seasonal costs."
-            ),
+            "The enhancement would leave too little flexibility for required seasonal costs."
         )
 
     if after_pct >= 90:
         if priority == "CRITICAL":
             return (
                 "APPROVE — MONITOR REMAINING OBLIGATIONS",
-                (
-                    "The request supports a critical need and remains within "
-                    "budget. Confirm scheduled travel and other required costs "
-                    "remain funded."
-                ),
+                "The request supports a critical need and remains within budget. "
+                "Confirm scheduled travel and other required costs remain funded."
             )
-
         if priority == "NECESSARY":
             return (
                 "APPROVE ONLY AFTER REMAINING COSTS ARE CONFIRMED",
-                (
-                    "The need appears legitimate, but the program would move "
-                    "into a tight position."
-                ),
+                "The need appears legitimate, but the program would move into a tight position."
             )
-
         return (
             "DEFER — BUSINESS VALUE DOES NOT OUTWEIGH CURRENT BUDGET RISK",
-            (
-                "The enhancement would materially reduce year-end flexibility."
-            ),
+            "The enhancement would materially reduce year-end flexibility."
         )
 
     if after_pct >= 80:
         if priority == "CRITICAL":
             return (
                 "APPROVE — ADEQUATE CAPACITY REMAINS",
-                (
-                    "The request addresses a critical need and the program "
-                    "retains reasonable forecasted capacity afterward."
-                ),
+                "The request addresses a critical need and the program retains reasonable forecasted capacity afterward."
             )
-
         if priority == "NECESSARY":
             return (
                 "APPROVE WITH BUDGET MONITORING",
-                (
-                    "The purchase addresses a necessary need and fits within "
-                    "the forecast."
-                ),
+                "The purchase addresses a necessary need and fits within the forecast."
             )
-
         return (
             "CONSIDER — REQUIRE CLEAR OPERATIONAL VALUE",
-            (
-                "The enhancement fits financially, but approval should depend "
-                "on whether the benefit is worth reducing the remaining cushion."
-            ),
+            "The enhancement fits financially, but approval should depend on whether the benefit is worth reducing the remaining cushion."
         )
 
     if priority == "CRITICAL":
         return (
             "APPROVE — FINANCIAL CAPACITY SUPPORTS THE NEED",
-            (
-                "The request addresses a critical operational requirement and "
-                "adequate forecasted capacity remains."
-            ),
+            "The request addresses a critical operational requirement and adequate forecasted capacity remains."
         )
-
     if priority == "NECESSARY":
         return (
             "APPROVE — FINANCIAL CAPACITY REMAINS HEALTHY",
-            (
-                "The purchase addresses a necessary operating requirement and "
-                "the program retains a healthy projected cushion."
-            ),
+            "The purchase addresses a necessary operating requirement and the program retains a healthy projected cushion."
         )
-
     if category == "TECH":
         return (
             "CONSIDER — VERIFY VALUE AND RECURRING COSTS",
-            (
-                "The program has capacity for the enhancement. Confirm measurable "
-                "value and any future subscription, licensing, or renewal costs."
-            ),
+            "The program has capacity for the enhancement. Confirm measurable value and any future subscription, licensing, or renewal costs."
         )
-
     return (
         "CONSIDER — FINANCIALLY AFFORDABLE",
-        (
-            "The program has sufficient forecasted capacity. Approval should "
-            "depend on operational value relative to other uses of the "
-            "remaining budget."
-        ),
+        "The program has sufficient forecasted capacity. Approval should depend on operational value relative to other uses of the remaining budget."
     )
 
 
 def requestor_name(row):
     for key in [
-        "requestor_name",
-        "requestor",
-        "requester_name",
-        "requester",
-        "coach_name",
-        "coach",
-        "submitted_by",
-        "requested_by",
+        "requestor_name", "requestor", "requester_name", "requester",
+        "coach_name", "coach", "submitted_by", "requested_by"
     ]:
-        value = str(
-            row.get(
-                key,
-                ""
-            )
-        ).strip()
-
-        if (
-            value
-            and value.lower() not in {"nan", "none"}
-        ):
+        value = str(row.get(key, "")).strip()
+        if value and value.lower() not in {"nan", "none"}:
             return value
-
     return ""
 
 
-def decision_rationale(
-    row,
-    decision
-):
-    decision = str(
-        decision
-    ).upper().strip()
-
-    amount = safe_float(
-        row.get("amount")
-    )
-
-    program = str(
-        row.get(
-            "program_name",
-            "the program"
-        )
-    )
-
-    description = str(
-        row.get(
-            "description",
-            "the request"
-        )
-    )
-
-    before_pct = safe_float(
-        row.get("baseline_percent")
-    )
-
-    after_pct = safe_float(
-        row.get("percent_with_request")
-    )
-
-    before_remaining = safe_float(
-        row.get("baseline_remaining")
-    )
-
-    after_remaining = safe_float(
-        row.get("remaining_with_request")
-    )
+def decision_rationale(row, decision):
+    decision = str(decision).upper().strip()
+    amount = safe_float(row.get("amount"))
+    program = str(row.get("program_name", "the program"))
+    description = str(row.get("description", "the request"))
+    priority = str(row.get("priority", "")).upper()
+    before_pct = safe_float(row.get("baseline_percent"))
+    after_pct = safe_float(row.get("percent_with_request"))
+    before_remaining = safe_float(row.get("baseline_remaining"))
+    after_remaining = safe_float(row.get("remaining_with_request"))
 
     if decision == "APPROVE":
         if after_remaining < 0:
             return (
-                f"The {money(amount)} request for {description} was approved as "
-                f"a management exception despite a projected deficit of "
-                f"{money(abs(after_remaining))}. Approval requires an offset, "
-                f"transfer, or alternative funding source and should be tracked "
-                f"as an exception to the current operating plan."
+                f"The {money(amount)} request for {description} was approved as a management exception despite "
+                f"a projected deficit of {money(abs(after_remaining))}. Approval requires an offset, transfer, "
+                f"or alternative funding source and should be tracked as an exception to the current operating plan."
             )
-
         return (
-            f"The {money(amount)} request for {description} was approved because "
-            f"it can be supported within the current {program} forecast. "
-            f"Projected utilization moves from {before_pct:.1f}% to "
-            f"{after_pct:.1f}% and projected year-end flexibility changes from "
-            f"{money(before_remaining)} to {money(after_remaining)}. The approval "
-            f"recognizes the operating value of the request while retaining "
-            f"visibility into the reduced cushion."
+            f"The {money(amount)} request for {description} was approved because it can be supported within the "
+            f"current {program} forecast. Projected utilization moves from {before_pct:.1f}% to {after_pct:.1f}% "
+            f"and projected year-end flexibility changes from {money(before_remaining)} to {money(after_remaining)}. "
+            f"The approval recognizes the operating value of the request while retaining visibility into the reduced cushion."
         )
 
     if decision == "DEFER":
         return (
-            f"The {money(amount)} request for {description} was deferred because "
-            f"approving it now would move {program} from {before_pct:.1f}% to "
-            f"{after_pct:.1f}% projected utilization and reduce projected "
-            f"year-end flexibility from {money(before_remaining)} to "
-            f"{money(after_remaining)}. The need may be valid, but preserving "
-            f"capacity for remaining travel, equipment, and other operating "
-            f"requirements is the stronger financial decision at this point. "
-            f"The request can be reconsidered if savings, another funding source, "
-            f"or additional budget capacity is identified."
+            f"The {money(amount)} request for {description} was deferred because approving it now would move "
+            f"{program} from {before_pct:.1f}% to {after_pct:.1f}% projected utilization and reduce projected "
+            f"year-end flexibility from {money(before_remaining)} to {money(after_remaining)}. The need may be valid, "
+            f"but preserving capacity for remaining travel, equipment, and other operating requirements is the stronger "
+            f"financial decision at this point. The request can be reconsidered if savings, another funding source, or "
+            f"additional budget capacity is identified."
         )
 
-    if (
-        after_remaining < 0
-        or after_pct > 100
-    ):
+    # DENY
+    if after_remaining < 0 or after_pct > 100:
         return (
-            f"The {money(amount)} request for {description} was denied because it "
-            f"would push {program} beyond its projected annual operating capacity. "
-            f"The request would result in {after_pct:.1f}% projected utilization "
-            f"and a projected deficit of {money(abs(after_remaining))}. No "
-            f"offsetting savings or alternative funding source is currently identified."
+            f"The {money(amount)} request for {description} was denied because it would push {program} beyond its "
+            f"projected annual operating capacity. The request would result in {after_pct:.1f}% projected utilization "
+            f"and a projected deficit of {money(abs(after_remaining))}. No offsetting savings or alternative funding "
+            f"source is currently identified."
         )
-
     return (
-        f"The {money(amount)} request for {description} was denied because the "
-        f"expected operating value does not justify reducing {program}'s projected "
-        f"year-end flexibility from {money(before_remaining)} to "
-        f"{money(after_remaining)} at this time. The funds should remain available "
-        f"for higher-priority or unplanned requirements later in the year."
+        f"The {money(amount)} request for {description} was denied because the expected operating value does not "
+        f"justify reducing {program}'s projected year-end flexibility from {money(before_remaining)} to "
+        f"{money(after_remaining)} at this time. The funds should remain available for higher-priority or unplanned "
+        f"requirements later in the year."
     )
 
 
-def requestor_email(
-    row,
-    decision,
-    name="",
-    notes=""
-):
-    decision = str(
-        decision
-    ).upper().strip()
-
-    amount = safe_float(
-        row.get("amount")
-    )
-
-    description = str(
-        row.get(
-            "description",
-            "request"
-        )
-    )
-
-    program = str(
-        row.get(
-            "program_name",
-            "program"
-        )
-    )
-
-    before_pct = safe_float(
-        row.get("baseline_percent")
-    )
-
-    after_pct = safe_float(
-        row.get("percent_with_request")
-    )
-
-    before_remaining = safe_float(
-        row.get("baseline_remaining")
-    )
-
-    after_remaining = safe_float(
-        row.get("remaining_with_request")
-    )
-
-    greeting = (
-        f"{name},"
-        if name
-        else "Hello,"
-    )
+def requestor_email(row, decision, name="", notes=""):
+    decision = str(decision).upper().strip()
+    amount = safe_float(row.get("amount"))
+    description = str(row.get("description", "request"))
+    program = str(row.get("program_name", "program"))
+    before_pct = safe_float(row.get("baseline_percent"))
+    after_pct = safe_float(row.get("percent_with_request"))
+    before_remaining = safe_float(row.get("baseline_remaining"))
+    after_remaining = safe_float(row.get("remaining_with_request"))
+    greeting = f"{name}," if name else "Hello,"
 
     if decision == "APPROVE":
         body = (
-            f"I reviewed your {money(amount)} request for {description}. "
-            f"The request is approved. Based on the current {program} forecast, "
-            f"projected budget utilization moves from {before_pct:.1f}% to "
-            f"{after_pct:.1f}%, leaving approximately {money(after_remaining)} "
-            f"in projected year-end flexibility. Please proceed through the "
-            f"normal purchasing process and keep any material changes to cost "
-            f"or scope visible before committing additional funds."
+            f"I reviewed your {money(amount)} request for {description}. The request is approved. "
+            f"Based on the current {program} forecast, projected budget utilization moves from "
+            f"{before_pct:.1f}% to {after_pct:.1f}%, leaving approximately {money(after_remaining)} in projected "
+            f"year-end flexibility. Please proceed through the normal purchasing process and keep any material "
+            f"changes to cost or scope visible before committing additional funds."
         )
-
     elif decision == "DEFER":
         body = (
-            f"I reviewed your {money(amount)} request for {description}. "
-            f"The request is being deferred for now. Approving it at this point "
-            f"would move the {program} budget from {before_pct:.1f}% to "
-            f"{after_pct:.1f}% projected utilization and reduce projected "
-            f"year-end flexibility from {money(before_remaining)} to "
-            f"{money(after_remaining)}. That would leave less room for remaining "
-            f"travel, equipment, or other unexpected operating needs. If offsetting "
-            f"savings, another funding source, or additional capacity becomes "
-            f"available, we can revisit the request."
+            f"I reviewed your {money(amount)} request for {description}. The request is being deferred for now. "
+            f"Approving it at this point would move the {program} budget from {before_pct:.1f}% to {after_pct:.1f}% "
+            f"projected utilization and reduce projected year-end flexibility from {money(before_remaining)} to "
+            f"{money(after_remaining)}. That would leave less room for remaining travel, equipment, or other unexpected "
+            f"operating needs. If offsetting savings, another funding source, or additional capacity becomes available, "
+            f"we can revisit the request."
         )
-
     else:
-        if (
-            after_remaining < 0
-            or after_pct > 100
-        ):
+        if after_remaining < 0 or after_pct > 100:
             body = (
-                f"I reviewed your {money(amount)} request for {description}. "
-                f"The request is denied under the current budget because it would "
-                f"move the {program} forecast to {after_pct:.1f}% utilization "
-                f"and create a projected deficit of approximately "
-                f"{money(abs(after_remaining))}. If another funding source or "
-                f"an offsetting reduction is identified, the request can be "
-                f"reconsidered as a new funding decision."
+                f"I reviewed your {money(amount)} request for {description}. The request is denied under the current "
+                f"budget because it would move the {program} forecast to {after_pct:.1f}% utilization and create a "
+                f"projected deficit of approximately {money(abs(after_remaining))}. If another funding source or an "
+                f"offsetting reduction is identified, the request can be reconsidered as a new funding decision."
             )
-
         else:
             body = (
-                f"I reviewed your {money(amount)} request for {description}. "
-                f"The request is denied at this time because the expected value "
-                f"does not justify reducing projected year-end flexibility from "
-                f"{money(before_remaining)} to {money(after_remaining)}. We need "
-                f"to preserve that capacity for higher-priority and unplanned "
-                f"operating requirements later in the year."
+                f"I reviewed your {money(amount)} request for {description}. The request is denied at this time because "
+                f"the expected value does not justify reducing projected year-end flexibility from {money(before_remaining)} "
+                f"to {money(after_remaining)}. We need to preserve that capacity for higher-priority and unplanned operating "
+                f"requirements later in the year."
             )
 
     if notes.strip():
-        body += (
-            f"\n\nAdditional context: "
-            f"{notes.strip()}"
-        )
+        body += f"\n\nAdditional context: {notes.strip()}"
 
-    return (
-        f"{greeting}\n\n"
-        f"{body}\n\n"
-        f"Thank you."
-    )
+    return f"{greeting}\n\n{body}\n\nThank you."
 
 
-def approved_decision_adjustments(
-    program_name=None,
-    exclude_request_id=None
-):
+def approved_decision_adjustments(program_name=None, exclude_request_id=None):
     decisions = current_decision_df()
-
-    if (
-        decisions.empty
-        or "manager_decision" not in decisions.columns
-    ):
+    if decisions.empty or "manager_decision" not in decisions.columns:
         return 0.0
 
     approved = decisions[
-        decisions[
-            "manager_decision"
-        ]
-        .astype(str)
-        .str.upper()
-        == "APPROVE"
+        decisions["manager_decision"].astype(str).str.upper() == "APPROVE"
     ].copy()
 
-    if page == "Home":
-        program_name
-        and "program_name" in approved.columns
-    ):
+    if program_name and "program_name" in approved.columns:
         approved = approved[
-            approved[
-                "program_name"
-            ].astype(str)
-            == str(program_name)
+            approved["program_name"].astype(str) == str(program_name)
         ]
 
-    if (
-        exclude_request_id
-        and "request_id" in approved.columns
-    ):
+    if exclude_request_id and "request_id" in approved.columns:
         approved = approved[
-            approved[
-                "request_id"
-            ].astype(str)
-            != str(exclude_request_id)
+            approved["request_id"].astype(str) != str(exclude_request_id)
         ]
 
     if "amount" not in approved.columns:
         return 0.0
 
-    return pd.to_numeric(
-        approved["amount"],
-        errors="coerce"
-    ).fillna(0).sum()
+    return pd.to_numeric(approved["amount"], errors="coerce").fillna(0).sum()
 
 
 def live_request_row(row):
+    """Recalculate a request against decisions already approved in this simulation."""
     live = dict(row)
-
-    program = str(
-        live.get(
-            "program_name",
-            ""
-        )
-    )
-
-    request_id = str(
-        live.get(
-            "request_id",
-            ""
-        )
-    )
-
-    amount = safe_float(
-        live.get("amount")
-    )
-
-    annual = safe_float(
-        live.get("annual_budget")
-    )
-
-    base_projected = safe_float(
-        live.get("baseline_projected")
-    )
-
-    base_open = safe_float(
-        live.get("open_pos")
-    )
+    program = str(live.get("program_name", ""))
+    request_id = str(live.get("request_id", ""))
+    amount = safe_float(live.get("amount"))
+    annual = safe_float(live.get("annual_budget"))
+    base_projected = safe_float(live.get("baseline_projected"))
+    base_open = safe_float(live.get("open_pos"))
 
     added = approved_decision_adjustments(
         program_name=program,
         exclude_request_id=request_id,
     )
 
-    current_projected = (
-        base_projected
-        + added
-    )
+    current_projected = base_projected + added
+    current_remaining = annual - current_projected
+    current_pct = (current_projected / annual * 100) if annual else 0.0
+    projected_with = current_projected + amount
+    remaining_with = annual - projected_with
+    pct_with = (projected_with / annual * 100) if annual else 0.0
 
-    current_remaining = (
-        annual
-        - current_projected
-    )
-
-    current_pct = (
-        current_projected
-        / annual
-        * 100
-        if annual
-        else 0.0
-    )
-
-    projected_with = (
-        current_projected
-        + amount
-    )
-
-    remaining_with = (
-        annual
-        - projected_with
-    )
-
-    pct_with = (
-        projected_with
-        / annual
-        * 100
-        if annual
-        else 0.0
-    )
-
-    live["open_pos"] = (
-        base_open
-        + added
-    )
-
-    live["baseline_projected"] = (
-        current_projected
-    )
-
-    live["baseline_remaining"] = (
-        current_remaining
-    )
-
-    live["baseline_percent"] = (
-        current_pct
-    )
-
-    live["projected_with_request"] = (
-        projected_with
-    )
-
-    live["remaining_with_request"] = (
-        remaining_with
-    )
-
-    live["percent_with_request"] = (
-        pct_with
-    )
-
+    live["open_pos"] = base_open + added
+    live["baseline_projected"] = current_projected
+    live["baseline_remaining"] = current_remaining
+    live["baseline_percent"] = current_pct
+    live["projected_with_request"] = projected_with
+    live["remaining_with_request"] = remaining_with
+    live["percent_with_request"] = pct_with
     return live
 
 
-def save_decision(
-    row,
-    recommendation,
-    suggestion,
-    decision,
-    reviewer,
-    notes,
-    requestor=""
-):
+def save_decision(row, recommendation, suggestion, decision, reviewer, notes, requestor=""):
     decisions = load_decisions()
-
-    rationale = decision_rationale(
-        row,
-        decision
-    )
-
-    email_text = requestor_email(
-        row,
-        decision,
-        requestor,
-        notes
-    )
+    rationale = decision_rationale(row, decision)
+    email_text = requestor_email(row, decision, requestor, notes)
 
     record = {
         "request_id": row.get("request_id", ""),
@@ -1609,73 +1045,30 @@ def save_decision(
         "manager_notes": notes,
     }
 
-    decisions[
-        str(
-            row.get(
-                "request_id",
-                ""
-            )
-        )
-    ] = record
-
-    write_decisions(
-        list(
-            decisions.values()
-        )
-    )
-
+    decisions[str(row.get("request_id", ""))] = record
+    write_decisions(list(decisions.values()))
     return record
 
 
 def department_financial_summary():
-    annual = 0.0
-    actual = 0.0
-    committed = 0.0
-    projected = 0.0
+    annual = actual = committed = projected = 0.0
 
     if not department_df.empty:
         if "annual_budget" in department_df.columns:
-            annual = pd.to_numeric(
-                department_df["annual_budget"],
-                errors="coerce"
-            ).fillna(0).sum()
-
+            annual = pd.to_numeric(department_df["annual_budget"], errors="coerce").fillna(0).sum()
         if "q1_actual" in department_df.columns:
-            actual = pd.to_numeric(
-                department_df["q1_actual"],
-                errors="coerce"
-            ).fillna(0).sum()
-
+            actual = pd.to_numeric(department_df["q1_actual"], errors="coerce").fillna(0).sum()
         if "open_commitments" in department_df.columns:
-            committed = pd.to_numeric(
-                department_df["open_commitments"],
-                errors="coerce"
-            ).fillna(0).sum()
-
+            committed = pd.to_numeric(department_df["open_commitments"], errors="coerce").fillna(0).sum()
         if "projected_year_end" in department_df.columns:
-            projected = pd.to_numeric(
-                department_df["projected_year_end"],
-                errors="coerce"
-            ).fillna(0).sum()
+            projected = pd.to_numeric(department_df["projected_year_end"], errors="coerce").fillna(0).sum()
 
-    approved_adjustment = (
-        approved_decision_adjustments()
-    )
-
+    approved_adjustment = approved_decision_adjustments()
     committed += approved_adjustment
     projected += approved_adjustment
 
-    remaining_forecast = max(
-        projected
-        - actual
-        - committed,
-        0
-    )
-
-    variance = (
-        annual
-        - projected
-    )
+    remaining_forecast = max(projected - actual - committed, 0)
+    variance = annual - projected
 
     return {
         "annual": annual,
@@ -1699,91 +1092,37 @@ def funding_summary():
     if funding_df.empty:
         return result
 
-    amount_col = first_existing_column(
-        funding_df,
-        [
-            "amount",
-            "funding_amount",
-            "value",
-        ],
-    )
+    amount_col = first_existing_column(funding_df, ["amount", "funding_amount", "value"])
+    category_col = first_existing_column(funding_df, ["funding_category", "category", "revenue_category"])
+    model_col = first_existing_column(funding_df, ["model_type", "model"])
 
-    category_col = first_existing_column(
-        funding_df,
-        [
-            "funding_category",
-            "category",
-            "revenue_category",
-        ],
-    )
-
-    model_col = first_existing_column(
-        funding_df,
-        [
-            "model_type",
-            "model",
-        ],
-    )
-
-    if (
-        not amount_col
-        or not category_col
-    ):
+    if not amount_col or not category_col:
         return result
 
     temp = funding_df.copy()
-
-    temp["_amount"] = pd.to_numeric(
-        temp[amount_col],
-        errors="coerce",
-    ).fillna(0)
+    temp["_amount"] = pd.to_numeric(temp[amount_col], errors="coerce").fillna(0)
 
     if model_col:
-        one_time_mask = (
-            temp[model_col]
-            .astype(str)
-            .str.contains(
-                "ONE_TIME_REBUILD",
-                case=False,
-                na=False
-            )
+        one_time_mask = temp[model_col].astype(str).str.contains(
+            "ONE_TIME_REBUILD", case=False, na=False
         )
-
-        result["one_time_rebuild"] = (
-            temp.loc[
-                one_time_mask,
-                "_amount"
-            ]
-            .sum()
-        )
-
-        recurring = temp.loc[
-            ~one_time_mask
-        ].copy()
-
+        result["one_time_rebuild"] = temp.loc[one_time_mask, "_amount"].sum()
+        recurring = temp.loc[~one_time_mask].copy()
     else:
         recurring = temp.copy()
 
-    categories = recurring[
-        category_col
-    ].astype(str)
+    categories = recurring[category_col].astype(str)
 
     result["modeled_university_support"] = recurring.loc[
         categories.str.contains(
-            "INSTITUTIONAL_SUPPORT|UNIVERSITY_SUPPORT",
-            case=False,
-            na=False,
-            regex=True,
+            "INSTITUTIONAL_SUPPORT|UNIVERSITY_SUPPORT", case=False, na=False, regex=True
         ),
         "_amount",
     ].sum()
 
     result["student_fees"] = recurring.loc[
         categories.str.contains(
-            "STUDENT_FEES|STUDENT FEE",
-            case=False,
-            na=False,
-            regex=True,
+            "STUDENT_FEES|STUDENT FEE", case=False, na=False, regex=True
         ),
         "_amount",
     ].sum()
@@ -1791,9 +1130,8 @@ def funding_summary():
     result["external_revenue"] = recurring.loc[
         categories.str.contains(
             (
-                "FUNDRAISING|DONATION|DONOR|SPONSOR|TICKET|"
-                "CAMP|CLINIC|MERCH|LICENS|NCAA|CONFERENCE|"
-                "OTHER_REVENUE|EXTERNAL|CORPORATE|PARTNERSHIP"
+                "FUNDRAISING|DONATION|DONOR|SPONSOR|TICKET|CAMP|CLINIC|"
+                "MERCH|LICENS|NCAA|CONFERENCE|OTHER_REVENUE|EXTERNAL|CORPORATE|PARTNERSHIP"
             ),
             case=False,
             na=False,
@@ -1809,26 +1147,10 @@ def university_support_projection():
     financial = department_financial_summary()
     funding = funding_summary()
 
-    projected_expenses = financial[
-        "projected"
-    ]
-
-    before_external = max(
-        projected_expenses
-        - funding["student_fees"],
-        0,
-    )
-
-    required_support = max(
-        before_external
-        - funding["external_revenue"],
-        0,
-    )
-
-    external_reduction = (
-        before_external
-        - required_support
-    )
+    projected_expenses = financial["projected"]
+    before_external = max(projected_expenses - funding["student_fees"], 0)
+    required_support = max(before_external - funding["external_revenue"], 0)
+    external_reduction = before_external - required_support
 
     return {
         **financial,
@@ -1839,191 +1161,84 @@ def university_support_projection():
     }
 
 
-def request_status_table(
-    program_name=None
-):
+def request_status_table(program_name=None):
     if triage_df.empty:
         return pd.DataFrame()
 
     view = triage_df.copy()
 
-    if (
-        program_name
-        and program_name != "All Programs"
-        and "program_name" in view.columns
-    ):
-        view = view[
-            view[
-                "program_name"
-            ].astype(str)
-            == str(program_name)
-        ].copy()
+    if program_name and program_name != "All Programs" and "program_name" in view.columns:
+        view = view[view["program_name"].astype(str) == str(program_name)].copy()
 
     decisions = current_decision_df()
-
     if (
         not decisions.empty
         and "request_id" in decisions.columns
         and "request_id" in view.columns
     ):
         decision_cols = [
-            c
-            for c in [
-                "request_id",
-                "manager_decision",
-                "review_date",
-                "reviewed_by",
-                "manager_notes",
-                "requestor_name",
-                "decision_rationale",
-                "requestor_email_response",
+            c for c in [
+                "request_id", "manager_decision", "review_date", "reviewed_by",
+                "manager_notes", "requestor_name", "decision_rationale",
+                "requestor_email_response"
             ]
             if c in decisions.columns
         ]
-
         view = view.merge(
             decisions[decision_cols],
             on="request_id",
             how="left",
-            suffixes=(
-                "",
-                "_decision"
-            ),
+            suffixes=("", "_decision"),
         )
 
     def classify_status(row):
-        decision = str(
-            row.get(
-                "manager_decision",
-                ""
-            )
-        ).upper().strip()
-
+        decision = str(row.get("manager_decision", "")).upper().strip()
         if decision == "APPROVE":
             return "APPROVED"
-
         if decision == "DENY":
             return "DENIED"
-
+        # Deferred items remain active and visible as open work.
         return "OPEN"
 
     def classify_type(row):
         allocation_fields = [
-            "request_type",
-            "budget_type",
-            "allocation_status",
-            "funding_status",
-            "planned_status",
-            "plan_status",
-            "planned",
-            "allocated",
+            "request_type", "budget_type", "allocation_status", "funding_status",
+            "planned_status", "plan_status", "planned", "allocated"
         ]
-
-        allocation_text = " ".join(
-            str(
-                row.get(
-                    field,
-                    ""
-                )
-            )
-            for field in allocation_fields
-        ).upper()
-
-        if any(
-            word in allocation_text
-            for word in [
-                "ALLOCATED",
-                "PLANNED",
-                "BUDGETED",
-                "TRUE",
-                "YES",
-            ]
-        ):
+        allocation_text = " ".join(str(row.get(field, "")) for field in allocation_fields).upper()
+        if any(word in allocation_text for word in ["ALLOCATED", "PLANNED", "BUDGETED", "TRUE", "YES"]):
             return "ALLOCATED"
-
         return "UNPLANNED"
 
-    view["request_status"] = view.apply(
-        classify_status,
-        axis=1
-    )
-
-    view["request_type"] = view.apply(
-        classify_type,
-        axis=1
-    )
-
+    view["request_status"] = view.apply(classify_status, axis=1)
+    view["request_type"] = view.apply(classify_type, axis=1)
     return view
 
 
-def monthly_financial_outlook(
-    program_name=None
-):
-    months = pd.date_range(
-        "2027-07-01",
-        "2028-06-01",
-        freq="MS",
-    )
+def monthly_financial_outlook(program_name=None):
+    months = pd.date_range("2027-07-01", "2028-06-01", freq="MS")
 
-    monthly = pd.DataFrame(
-        {
-            "month_date": months
-        }
-    )
-
-    monthly["Month"] = (
-        monthly["month_date"]
-        .dt.strftime("%b %Y")
-    )
-
+    monthly = pd.DataFrame({"month_date": months})
+    monthly["Month"] = monthly["month_date"].dt.strftime("%b %Y")
     monthly["Actual"] = 0.0
     monthly["Committed"] = 0.0
     monthly["Remaining Forecast"] = 0.0
 
     if not ledger_df.empty:
         date_col = first_existing_column(
-            ledger_df,
-            [
-                "transaction_date",
-                "posting_date",
-                "expense_date",
-                "date",
-            ],
+            ledger_df, ["transaction_date", "posting_date", "expense_date", "date"]
         )
-
         amount_col = first_existing_column(
-            ledger_df,
-            [
-                "amount",
-                "transaction_amount",
-                "expense_amount",
-                "actual_amount",
-            ],
+            ledger_df, ["amount", "transaction_amount", "expense_amount", "actual_amount"]
         )
-
         program_col = first_existing_column(
-            ledger_df,
-            [
-                "program_name",
-                "program",
-                "sport",
-                "team",
-            ],
+            ledger_df, ["program_name", "program", "sport", "team"]
         )
-
         type_col = first_existing_column(
-            ledger_df,
-            [
-                "transaction_type",
-                "type",
-                "status",
-            ],
+            ledger_df, ["transaction_type", "type", "status"]
         )
 
-        if (
-            date_col
-            and amount_col
-        ):
+        if date_col and amount_col:
             ledger = ledger_df.copy()
 
             if (
@@ -2032,120 +1247,50 @@ def monthly_financial_outlook(
                 and program_col
             ):
                 ledger = ledger[
-                    ledger[
-                        program_col
-                    ].astype(str)
-                    == str(program_name)
+                    ledger[program_col].astype(str) == str(program_name)
                 ].copy()
 
-            ledger["_date"] = pd.to_datetime(
-                ledger[date_col],
-                errors="coerce"
-            )
-
-            ledger["_amount"] = pd.to_numeric(
-                ledger[amount_col],
-                errors="coerce"
-            ).fillna(0)
-
-            ledger = ledger[
-                ledger["_date"].notna()
-            ].copy()
-
-            ledger["month_date"] = (
-                ledger["_date"]
-                .dt.to_period("M")
-                .dt.to_timestamp()
-            )
+            ledger["_date"] = pd.to_datetime(ledger[date_col], errors="coerce")
+            ledger["_amount"] = pd.to_numeric(ledger[amount_col], errors="coerce").fillna(0)
+            ledger = ledger[ledger["_date"].notna()].copy()
+            ledger["month_date"] = ledger["_date"].dt.to_period("M").dt.to_timestamp()
 
             if type_col:
-                committed_mask = (
-                    ledger[type_col]
-                    .astype(str)
-                    .str.contains(
-                        "PO|OPEN|COMMIT",
-                        case=False,
-                        na=False,
-                        regex=True,
-                    )
+                committed_mask = ledger[type_col].astype(str).str.contains(
+                    "PO|OPEN|COMMIT", case=False, na=False, regex=True
                 )
-
             else:
-                committed_mask = pd.Series(
-                    False,
-                    index=ledger.index
-                )
+                committed_mask = pd.Series(False, index=ledger.index)
 
             actual_group = (
-                ledger.loc[
-                    ~committed_mask
-                ]
-                .groupby(
-                    "month_date"
-                )["_amount"]
+                ledger.loc[~committed_mask]
+                .groupby("month_date")["_amount"]
                 .sum()
                 .to_dict()
             )
 
             committed_group = (
-                ledger.loc[
-                    committed_mask
-                ]
-                .groupby(
-                    "month_date"
-                )["_amount"]
+                ledger.loc[committed_mask]
+                .groupby("month_date")["_amount"]
                 .sum()
                 .to_dict()
             )
 
-            monthly["Actual"] = (
-                monthly["month_date"]
-                .map(actual_group)
-                .fillna(0)
-            )
-
-            monthly["Committed"] = (
-                monthly["month_date"]
-                .map(committed_group)
-                .fillna(0)
-            )
+            monthly["Actual"] = monthly["month_date"].map(actual_group).fillna(0)
+            monthly["Committed"] = monthly["month_date"].map(committed_group).fillna(0)
 
     if not future_df.empty:
         future_date_col = first_existing_column(
-            future_df,
-            [
-                "expense_date",
-                "expected_date",
-                "scheduled_date",
-                "date",
-                "transaction_date",
-            ],
+            future_df, ["expense_date", "expected_date", "scheduled_date", "date", "transaction_date"]
         )
-
         future_amount_col = first_existing_column(
-            future_df,
-            [
-                "amount",
-                "expected_amount",
-                "forecast_amount",
-                "expense_amount",
-            ],
+            future_df, ["amount", "expected_amount", "forecast_amount", "expense_amount"]
         )
-
         future_program_col = first_existing_column(
-            future_df,
-            [
-                "program_name",
-                "program",
-                "sport",
-                "team",
-            ],
+            future_df, ["program_name", "program", "sport", "team"]
         )
 
-        if (
-            future_date_col
-            and future_amount_col
-        ):
+        if future_date_col and future_amount_col:
             future = future_df.copy()
 
             if (
@@ -2154,148 +1299,53 @@ def monthly_financial_outlook(
                 and future_program_col
             ):
                 future = future[
-                    future[
-                        future_program_col
-                    ].astype(str)
-                    == str(program_name)
+                    future[future_program_col].astype(str) == str(program_name)
                 ].copy()
 
-            future["_date"] = pd.to_datetime(
-                future[future_date_col],
-                errors="coerce"
-            )
+            future["_date"] = pd.to_datetime(future[future_date_col], errors="coerce")
+            future["_amount"] = pd.to_numeric(future[future_amount_col], errors="coerce").fillna(0)
+            future = future[future["_date"].notna()].copy()
+            future["month_date"] = future["_date"].dt.to_period("M").dt.to_timestamp()
 
-            future["_amount"] = pd.to_numeric(
-                future[future_amount_col],
-                errors="coerce"
-            ).fillna(0)
-
-            future = future[
-                future["_date"].notna()
-            ].copy()
-
-            future["month_date"] = (
-                future["_date"]
-                .dt.to_period("M")
-                .dt.to_timestamp()
-            )
-
-            future_group = (
-                future
-                .groupby(
-                    "month_date"
-                )["_amount"]
-                .sum()
-                .to_dict()
-            )
-
-            monthly["Remaining Forecast"] = (
-                monthly["month_date"]
-                .map(future_group)
-                .fillna(0)
-            )
+            future_group = future.groupby("month_date")["_amount"].sum().to_dict()
+            monthly["Remaining Forecast"] = monthly["month_date"].map(future_group).fillna(0)
 
     monthly["Monthly Outlook"] = (
-        monthly["Actual"]
-        + monthly["Committed"]
-        + monthly["Remaining Forecast"]
+        monthly["Actual"] + monthly["Committed"] + monthly["Remaining Forecast"]
     )
 
-    simulation_month = (
-        pd.Timestamp(SIMULATION_DATE)
-        .to_period("M")
-        .to_timestamp()
-    )
-
-    monthly["Status"] = monthly[
-        "month_date"
-    ].apply(
-        lambda x:
-            "EXECUTED"
-            if x < simulation_month
-            else (
-                "CURRENT"
-                if x == simulation_month
-                else "FORECAST"
-            )
+    simulation_month = pd.Timestamp(SIMULATION_DATE).to_period("M").to_timestamp()
+    monthly["Status"] = monthly["month_date"].apply(
+        lambda x: "EXECUTED" if x < simulation_month else ("CURRENT" if x == simulation_month else "FORECAST")
     )
 
     return monthly[
-        [
-            "Month",
-            "Status",
-            "Actual",
-            "Committed",
-            "Remaining Forecast",
-            "Monthly Outlook",
-        ]
+        ["Month", "Status", "Actual", "Committed", "Remaining Forecast", "Monthly Outlook"]
     ]
 
 
-def program_metrics(
-    program_name
-):
-    if (
-        triage_df.empty
-        or "program_name" not in triage_df.columns
-    ):
+def program_metrics(program_name):
+    if triage_df.empty or "program_name" not in triage_df.columns:
         return None
 
-    rows = triage_df[
-        triage_df[
-            "program_name"
-        ].astype(str)
-        == str(program_name)
-    ]
-
+    rows = triage_df[triage_df["program_name"].astype(str) == str(program_name)]
     if rows.empty:
         return None
 
     row = rows.iloc[0]
 
-    annual = safe_float(
-        row.get("annual_budget")
-    )
+    annual = safe_float(row.get("annual_budget"))
+    actual = safe_float(row.get("q1_actuals"))
+    committed = safe_float(row.get("open_pos"))
+    projected = safe_float(row.get("baseline_projected"))
+    remaining = safe_float(row.get("baseline_remaining"))
 
-    actual = safe_float(
-        row.get("q1_actuals")
-    )
-
-    committed = safe_float(
-        row.get("open_pos")
-    )
-
-    projected = safe_float(
-        row.get("baseline_projected")
-    )
-
-    approved_adjustment = (
-        approved_decision_adjustments(
-            program_name
-        )
-    )
-
+    approved_adjustment = approved_decision_adjustments(program_name)
     committed += approved_adjustment
     projected += approved_adjustment
-
-    remaining = (
-        annual
-        - projected
-    )
-
-    utilization = (
-        projected
-        / annual
-        * 100
-        if annual
-        else 0.0
-    )
-
-    unallocated = (
-        annual
-        - actual
-        - committed
-    )
+    remaining = annual - projected
+    utilization = (projected / annual * 100) if annual else 0.0
+    unallocated = annual - actual - committed
 
     return {
         "annual": annual,
@@ -2314,24 +1364,15 @@ def program_metrics(
 # ============================================================
 
 def go_to_page(page_name):
-    st.session_state[
-        "page_nav"
-    ] = page_name
+    st.session_state["page_nav"] = page_name
 
 
 if "page_nav" not in st.session_state:
-    st.session_state[
-        "page_nav"
-    ] = "Home"
+    st.session_state["page_nav"] = "Home"
 
 
-st.sidebar.markdown(
-    "## KORBI"
-)
-
-st.sidebar.caption(
-    "Sonoma State Athletics"
-)
+st.sidebar.markdown("## KORBI")
+st.sidebar.caption("Sonoma State Athletics")
 
 page = st.sidebar.radio(
     "Navigation",
@@ -2357,22 +1398,18 @@ st.sidebar.caption(
     "Human approval remains required. KORBI provides decision support."
 )
 
+# Keep the landing page visually clean. Interior pages use a compact branded header.
 if page != "Home":
     st.markdown(
         """
         <div class="korbi-header">
             <div class="korbi-title">KORBI</div>
-            <div class="korbi-subtitle">
-                Knowledge & Operations Resource for Business Intelligence
-            </div>
-            <div class="korbi-brandline">
-                Sonoma State Athletics Business Operations
-            </div>
+            <div class="korbi-subtitle">Knowledge & Operations Resource for Business Intelligence</div>
+            <div class="korbi-brandline">Sonoma State Athletics Business Operations</div>
         </div>
         """,
         unsafe_allow_html=True,
     )
-
     st.info(
         "V7.5 simulation environment — financial position as of October 1, 2027. "
         "Simulated activity is not Sonoma State actual financial data."
@@ -2383,77 +1420,45 @@ if page != "Home":
 # HOME
 # ============================================================
 
-st.markdown(
-        textwrap.dedent(
-            """
-            <div class="hero">
-                <div class="hero-inner">
-                    <div class="hero-kicker">
-                        V7.5 Simulation Environment • Fall 2027 Restart Scenario
-                    </div>
-
-                    <div class="hero-title">
-                        KORBI
-                    </div>
-
-                    <div class="hero-sub">
-                        One operating picture for every program, every request, and every dollar.
-                    </div>
-
-                    <div class="hero-body">
-                        KORBI empowers coaches with financial context, aligns day-to-day
-                        decisions with department objectives, standardizes operating procedures,
-                        and makes the year-round impact of budget changes clear before decisions
-                        are made.
-                    </div>
-                </div>
-            </div>
-            """
-        ),
-        unsafe_allow_html=True,
-    )
+if page == "Home":
 
     st.markdown(
         textwrap.dedent(
             """
-            <div class="value-grid">
+            <div class="hero">
+                <div class="hero-inner">
+                    <div class="hero-kicker">V7.5 Simulation Environment • Fall 2027 Restart Scenario</div>
+                    <div class="hero-title">KORBI</div>
+                    <div class="hero-sub">One operating picture for every program, every request, and every dollar.</div>
+                    <div class="hero-body">
+                        KORBI empowers coaches with financial context, aligns day-to-day decisions with department objectives,
+                        standardizes operating procedures, and makes the year-round impact of budget changes clear before
+                        decisions are made.
+                    </div>
+                </div>
+            </div>
 
+            <div class="value-grid">
                 <div class="value-card">
                     <div class="num">EMPOWER</div>
                     <h3>Empower Coaches</h3>
-                    <p>
-                        Give coaches visibility into spend, commitments, remaining
-                        flexibility, and the impact of new decisions.
-                    </p>
+                    <p>Give coaches visibility into spend, commitments, remaining flexibility, and the impact of new decisions.</p>
                 </div>
-
                 <div class="value-card">
                     <div class="num">ALIGN</div>
                     <h3>Align Business Objectives</h3>
-                    <p>
-                        Connect individual team decisions to department priorities,
-                        forecasts, and institutional support.
-                    </p>
+                    <p>Connect individual team decisions to department priorities, forecasts, and institutional support.</p>
                 </div>
-
                 <div class="value-card">
                     <div class="num">STANDARDIZE</div>
                     <h3>Unify the Process</h3>
-                    <p>
-                        Create one repeatable operating model for purchasing, travel,
-                        equipment, approvals, and financial review.
-                    </p>
+                    <p>Create one repeatable operating model for purchasing, travel, equipment, approvals, and financial review.</p>
                 </div>
-
                 <div class="value-card">
                     <div class="num">CLARIFY</div>
                     <h3>Clarify the Impact</h3>
-                    <p>
-                        Show what saying yes today means for the financial flexibility
-                        a program may need later in the season.
-                    </p>
+                    <p>Show what saying yes today means for the financial flexibility a program may need later in the season.</p>
                 </div>
-
             </div>
             """
         ),
@@ -2487,41 +1492,25 @@ st.markdown(
             args=("Purchase Requests",),
         )
 
-    left, right = st.columns(
-        [1.2, 0.8],
-        gap="large"
-    )
+    st.markdown("<div style='height:.6rem'></div>", unsafe_allow_html=True)
+
+    left, right = st.columns([1.2, .8], gap="large")
 
     with left:
         st.markdown(
             textwrap.dedent(
                 """
                 <div class="landing-panel">
-                    <div class="landing-eyebrow">
-                        The Problem KORBI Is Designed to Solve
-                    </div>
-
-                    <h2>
-                        Restart athletics with limited staff—without losing control of the budget.
-                    </h2>
-
+                    <div class="landing-eyebrow">The Problem KORBI Is Designed to Solve</div>
+                    <h2>Restart athletics with limited staff—without losing control of the budget.</h2>
                     <p>
-                        Sonoma State Athletics is preparing to restart intercollegiate
-                        sports in Fall 2027 with limited staffing, significant operational
-                        work, and major startup needs.
-
+                        Sonoma State Athletics is preparing to restart intercollegiate sports in Fall 2027 with limited
+                        staffing, significant operational work, and major startup needs. The gym and operating environment
+                        must be rebuilt: equipment must be purchased, facilities prepared, travel and purchasing processes
+                        established, coaches supported, vendors engaged, and budgets managed carefully from day one.
                         <br><br>
-
-                        The gym and operating environment must be rebuilt: equipment must
-                        be purchased, facilities prepared, travel and purchasing processes
-                        established, coaches supported, vendors engaged, and budgets managed
-                        carefully from day one.
-
-                        <br><br>
-
-                        The challenge is not simply getting teams back on the field. It is
-                        doing so responsibly. Every equipment purchase, travel request,
-                        vendor commitment, and operating decision affects the resources
+                        The challenge is not simply getting teams back on the field. It is doing so responsibly. Every
+                        equipment purchase, travel request, vendor commitment, and operating decision affects the resources
                         available later in the year.
                     </p>
                 </div>
@@ -2535,25 +1524,14 @@ st.markdown(
             textwrap.dedent(
                 """
                 <div class="landing-panel">
-                    <div class="landing-eyebrow">
-                        Operating Principle
-                    </div>
-
-                    <h2>
-                        Not the department of “no.”
-                    </h2>
-
+                    <div class="landing-eyebrow">Operating Principle</div>
+                    <h2>Not the department of “no.”</h2>
                     <p>
-                        KORBI gives coaches and administrators enough information to
-                        understand tradeoffs, move faster, and make informed decisions
-                        while preserving the financial flexibility needed to successfully
-                        finish the season.
-
+                        KORBI gives coaches and administrators enough information to understand tradeoffs, move faster,
+                        and make informed decisions while preserving the financial flexibility needed to successfully finish
+                        the season.
                         <br><br>
-
-                        <strong style="color:#17365D">
-                            Build the program. Empower the coaches. Protect the budget.
-                        </strong>
+                        <strong style="color:#17365D">Build the program. Empower the coaches. Protect the budget.</strong>
                     </p>
                 </div>
                 """
@@ -2561,76 +1539,42 @@ st.markdown(
             unsafe_allow_html=True,
         )
 
-    st.markdown(
-        "## What KORBI Can Do for Sonoma State"
-    )
+    st.markdown("## What KORBI Can Do for Sonoma State")
+    st.caption("One operating layer for Athletics")
 
-    st.caption(
-        "One operating layer for Athletics"
-    )
-
-    c1, c2, c3 = st.columns(
-        3,
-        gap="large"
-    )
+    c1, c2, c3 = st.columns(3, gap="large")
 
     with c1:
-        st.markdown(
-            "### Live Financial Picture"
-        )
-
+        st.markdown("### Live Financial Picture")
         st.write(
-            "See actual spend, approved commitments, open requests, future "
-            "obligations, external revenue, and projected year-end position "
-            "in one place."
+            "See actual spend, approved commitments, open requests, future obligations, external revenue, "
+            "and projected year-end position in one place."
         )
-
-        st.markdown(
-            "### Startup Readiness"
-        )
-
+        st.markdown("### Startup Readiness")
         st.write(
-            "Track the equipment, supplies, facilities, travel, and operating "
-            "work required to have teams ready for Fall 2027."
+            "Track the equipment, supplies, facilities, travel, and operating work required to have teams ready for Fall 2027."
         )
 
     with c2:
-        st.markdown(
-            "### Coach Budget Visibility"
-        )
-
+        st.markdown("### Coach Budget Visibility")
         st.write(
-            "Show each coach what has been spent, what is already committed, "
-            "what remains, and how a request changes flexibility."
+            "Show each coach what has been spent, what is already committed, what remains, and how a request changes flexibility."
         )
-
-        st.markdown(
-            "### Standardized Requests"
-        )
-
+        st.markdown("### Standardized Requests")
         st.write(
-            "Use the same request, review, approval, denial, and documentation "
-            "process across every program."
+            "Use the same request, review, approval, denial, and documentation process across every program."
         )
 
     with c3:
-        st.markdown(
-            "### Forecast & University Support"
-        )
-
+        st.markdown("### Forecast & University Support")
         st.write(
-            "Continuously project year-end expenses and show how outside "
-            "revenue can reduce the university support required."
+            "Continuously project year-end expenses and show how outside revenue can reduce the university support required."
         )
-
-        st.markdown(
-            "### Accountability"
-        )
-
+        st.markdown("### Accountability")
         st.write(
-            "Keep an audit trail of requests, management decisions, financial "
-            "impact, approvals, denials, and remaining obligations."
+            "Keep an audit trail of requests, management decisions, financial impact, approvals, denials, and remaining obligations."
         )
+
 
 # ============================================================
 # EXECUTIVE DASHBOARD
@@ -2640,32 +1584,20 @@ elif page == "Executive Dashboard":
 
     section_title(
         "Executive Dashboard",
-        (
-            "Department-wide financial position, university support "
-            "requirement, risk, and management workload."
-        ),
+        "Department-wide financial position, university support requirement, risk, and management workload."
     )
 
     support = university_support_projection()
 
-    st.markdown(
-        "## University Support Requirement"
-    )
+    st.markdown("## University Support Requirement")
 
     st.markdown(
         f"""
         <div class="support-card">
-            <div class="support-kicker">
-                Projected University Support Required
-            </div>
-
-            <div class="support-value">
-                {money(support["required_support"])}
-            </div>
-
+            <div class="support-kicker">Projected University Support Required</div>
+            <div class="support-value">{money(support["required_support"])}</div>
             <div class="support-copy">
-                External athletics revenue has reduced the modeled university
-                requirement by
+                External athletics revenue has reduced the modeled university requirement by
                 <strong>{money(support["external_reduction"])}</strong>.
             </div>
         </div>
@@ -2674,105 +1606,40 @@ elif page == "Executive Dashboard":
     )
 
     s1, s2, s3, s4 = st.columns(4)
-
-    s1.metric(
-        "Projected Athletics Expenses",
-        compact_money(
-            support["projected"]
-        ),
-    )
-
-    s2.metric(
-        "Student-Fee Support",
-        compact_money(
-            support["student_fees"]
-        ),
-    )
-
-    s3.metric(
-        "External / Earned Revenue",
-        compact_money(
-            support["external_revenue"]
-        ),
-    )
-
-    s4.metric(
-        "Net University Requirement",
-        compact_money(
-            support["required_support"]
-        ),
-    )
+    s1.metric("Projected Athletics Expenses", compact_money(support["projected"]))
+    s2.metric("Student-Fee Support", compact_money(support["student_fees"]))
+    s3.metric("External / Earned Revenue", compact_money(support["external_revenue"]))
+    s4.metric("Net University Requirement", compact_money(support["required_support"]))
 
     st.caption(
-        "External / earned revenue remains separate from university support. "
-        "In this simulation, each additional dollar of outside athletics "
-        "revenue reduces the modeled university requirement dollar-for-dollar "
-        "if expenses remain unchanged."
+        "External / earned revenue remains separate from university support. In this simulation, each additional "
+        "dollar of outside athletics revenue reduces the modeled university requirement dollar-for-dollar if expenses "
+        "remain unchanged."
     )
 
-    st.markdown(
-        "## Projected Year-End Position"
-    )
+    st.markdown("## Projected Year-End Position")
 
     f1, f2, f3, f4 = st.columns(4)
+    f1.metric("Actual Posted", compact_money(support["actual"]))
+    f2.metric("Approved / Committed", compact_money(support["committed"]))
+    f3.metric("Remaining Forecast", compact_money(support["remaining_forecast"]))
+    f4.metric("Projected Year-End", compact_money(support["projected"]))
 
-    f1.metric(
-        "Actual Posted",
-        compact_money(
-            support["actual"]
-        ),
-    )
-
-    f2.metric(
-        "Approved / Committed",
-        compact_money(
-            support["committed"]
-        ),
-    )
-
-    f3.metric(
-        "Remaining Forecast",
-        compact_money(
-            support["remaining_forecast"]
-        ),
-    )
-
-    f4.metric(
-        "Projected Year-End",
-        compact_money(
-            support["projected"]
-        ),
-    )
-
-    if (
-        support.get(
-            "approved_decision_adjustment",
-            0
-        )
-        > 0
-    ):
+    if support.get("approved_decision_adjustment", 0) > 0:
         st.caption(
-            f"Saved purchase approvals currently add "
-            f"{money(support['approved_decision_adjustment'])} to the "
-            f"simulation's committed and projected year-end expense position."
+            f"Saved purchase approvals currently add {money(support['approved_decision_adjustment'])} to the "
+            "simulation's committed and projected year-end expense position."
         )
-
     else:
-        st.caption(
-            "Actual Posted + Approved / Committed + Remaining Forecast "
-            "= Projected Year-End."
-        )
+        st.caption("Actual Posted + Approved / Committed + Remaining Forecast = Projected Year-End.")
 
     if support["variance"] >= 0:
         st.success(
-            f"KORBI currently projects Athletics to finish "
-            f"{money(support['variance'])} favorable to the annual plan."
+            f"KORBI currently projects Athletics to finish {money(support['variance'])} favorable to the annual plan."
         )
-
     else:
         st.error(
-            f"KORBI currently projects Athletics to finish "
-            f"{money(abs(support['variance']))} over the annual plan."
+            f"KORBI currently projects Athletics to finish {money(abs(support['variance']))} over the annual plan."
         )
 
     current_requests = request_status_table()
@@ -2780,211 +1647,78 @@ elif page == "Executive Dashboard":
 
     pending = 0
     high_risk = 0
-
     if not current_requests.empty:
-        pending = int(
-            (
-                current_requests[
-                    "request_status"
-                ]
-                == "OPEN"
-            ).sum()
-        )
-
+        pending = int((current_requests["request_status"] == "OPEN").sum())
         if "financial_status" in current_requests.columns:
             high_risk = int(
-                current_requests[
-                    "financial_status"
-                ]
-                .astype(str)
-                .str.upper()
-                .isin(
-                    [
-                        "HIGH RISK",
-                        "OVER BUDGET",
-                    ]
-                )
-                .sum()
+                current_requests["financial_status"].astype(str).str.upper().isin(
+                    ["HIGH RISK", "OVER BUDGET"]
+                ).sum()
             )
 
-    reviewed = len(
-        decisions_now
-    )
+    reviewed = len(decisions_now)
 
-    st.markdown(
-        "## Management Workload"
-    )
-
+    st.markdown("## Management Workload")
     c1, c2, c3 = st.columns(3)
+    c1.metric("Requests Awaiting Review", pending)
+    c2.metric("Requests Reviewed", reviewed)
+    c3.metric("High-Risk Requests", high_risk)
 
-    c1.metric(
-        "Requests Awaiting Review",
-        pending
-    )
-
-    c2.metric(
-        "Requests Reviewed",
-        reviewed
-    )
-
-    c3.metric(
-        "High-Risk Requests",
-        high_risk
-    )
-
-    st.markdown(
-        "## Program Budget Status — All 10 Restart Sports"
-    )
+    st.markdown("## Program Budget Status — All 10 Restart Sports")
 
     cards = []
-
-    if (
-        not triage_df.empty
-        and "program_name" in triage_df.columns
-    ):
-        for program_name in sorted(
-            triage_df[
-                "program_name"
-            ]
-            .dropna()
-            .astype(str)
-            .unique()
-        ):
-            metrics = program_metrics(
-                program_name
-            )
-
+    if not triage_df.empty and "program_name" in triage_df.columns:
+        for program_name in sorted(triage_df["program_name"].dropna().astype(str).unique()):
+            metrics = program_metrics(program_name)
             if not metrics:
                 continue
 
-            util = metrics[
-                "utilization"
-            ]
-
+            util = metrics["utilization"]
             if util > 100:
-                status = "OVER BUDGET"
-                css = "overbudget"
-
+                status, css = "OVER BUDGET", "overbudget"
             elif util >= 95:
-                status = "HIGH RISK"
-                css = "highrisk"
-
+                status, css = "HIGH RISK", "highrisk"
             elif util >= 90:
-                status = "CAUTION"
-                css = "caution"
-
+                status, css = "CAUTION", "caution"
             elif util >= 80:
-                status = "MONITOR"
-                css = "monitor"
-
+                status, css = "MONITOR", "monitor"
             else:
-                status = "HEALTHY"
-                css = "healthy"
+                status, css = "HEALTHY", "healthy"
 
             cards.append(
-                f"""
-                <div class="program-card {css}">
-                    <div class="sport">
-                        {program_name}
-                    </div>
-
-                    <div class="status">
-                        {status}
-                    </div>
-
-                    <div class="detail">
-                        {util:.1f}% projected utilization |
-                        Remaining capacity:
-                        {money(metrics["remaining"])}
-                    </div>
-                </div>
-                """
+                f'''<div class="program-card {css}">
+                    <div class="sport">{program_name}</div>
+                    <div class="status">{status}</div>
+                    <div class="detail">{util:.1f}% projected utilization | Remaining capacity: {money(metrics["remaining"])}</div>
+                </div>'''
             )
 
     if cards:
         st.markdown(
-            '<div class="program-grid">'
-            + "".join(cards)
-            + "</div>",
+            '<div class="program-grid">' + ''.join(cards) + '</div>',
             unsafe_allow_html=True,
         )
-
     else:
-        st.info(
-            "No sport-level budget positions are currently available."
-        )
+        st.info("No sport-level budget positions are currently available.")
 
-    st.markdown(
-        "## Department Financial Detail"
-    )
-
+    st.markdown("## Department Financial Detail")
     d1, d2, d3, d4 = st.columns(4)
-
-    d1.metric(
-        "Annual Athletics Plan",
-        money(
-            support["annual"]
-        ),
-    )
-
-    d2.metric(
-        "YTD Actual Expenditures",
-        money(
-            support["actual"]
-        ),
-    )
-
-    d3.metric(
-        "Projected Year-End",
-        money(
-            support["projected"]
-        ),
-    )
-
+    d1.metric("Annual Athletics Plan", money(support["annual"]))
+    d2.metric("YTD Actual Expenditures", money(support["actual"]))
+    d3.metric("Projected Year-End", money(support["projected"]))
     d4.metric(
-        (
-            "Projected Favorable Variance"
-            if support["variance"] >= 0
-            else "Projected Unfavorable Variance"
-        ),
-        money(
-            abs(
-                support["variance"]
-            )
-        ),
+        "Projected Favorable Variance" if support["variance"] >= 0 else "Projected Unfavorable Variance",
+        money(abs(support["variance"])),
     )
 
-    util = (
-        support["projected"]
-        / support["annual"]
-        * 100
-        if support["annual"]
-        else 0
-    )
+    util = (support["projected"] / support["annual"] * 100) if support["annual"] else 0
+    st.progress(min(max(util / 100, 0), 1.0), text=f"Department projected utilization: {util:.1f}%")
 
-    st.progress(
-        min(
-            max(
-                util / 100,
-                0
-            ),
-            1.0
-        ),
-        text=(
-            f"Department projected utilization: "
-            f"{util:.1f}%"
-        ),
-    )
-
-    st.markdown(
-        "## KORBI Executive Interpretation"
-    )
-
+    st.markdown("## KORBI Executive Interpretation")
     st.info(
-        "KORBI keeps the department focused on four connected questions: "
-        "what has posted, what has already been committed, what is still "
-        "forecasted, and how much university support will ultimately be "
-        "required after external athletics revenue is considered."
+        "KORBI keeps the department focused on four connected questions: what has posted, what has already been "
+        "committed, what is still forecasted, and how much university support will ultimately be required after "
+        "external athletics revenue is considered."
     )
 
 
@@ -2996,50 +1730,24 @@ elif page == "Monthly Financials":
 
     section_title(
         "Monthly Financials",
-        (
-            "Executed months, current commitments, and remaining forecast "
-            "through the end of FY 2027-28."
-        ),
+        "Executed months, current commitments, and remaining forecast through the end of FY 2027-28."
     )
 
-    sport_options = [
-        "Entire Athletics"
-    ]
+    sport_options = ["Entire Athletics"]
 
-    if (
-        not triage_df.empty
-        and "program_name" in triage_df.columns
-    ):
+    if not triage_df.empty and "program_name" in triage_df.columns:
         sport_options += sorted(
-            triage_df[
-                "program_name"
-            ]
-            .dropna()
-            .astype(str)
-            .unique()
-            .tolist()
+            triage_df["program_name"].dropna().astype(str).unique().tolist()
         )
 
-    scope = st.selectbox(
-        "View",
-        sport_options
-    )
+    scope = st.selectbox("View", sport_options)
 
-    monthly_outlook = (
-        monthly_financial_outlook(
-            scope
-        )
-    )
+    monthly_outlook = monthly_financial_outlook(scope)
 
     if monthly_outlook.empty:
-        st.info(
-            "No monthly transaction or forecast data is currently available."
-        )
-
+        st.info("No monthly transaction or forecast data is currently available.")
     else:
-        st.markdown(
-            "### FY 2027-28 Monthly Execution & Forecast"
-        )
+        st.markdown("### FY 2027-28 Monthly Execution & Forecast")
 
         st.dataframe(
             accounting_table(
@@ -3056,65 +1764,22 @@ elif page == "Monthly Financials":
         )
 
         executed_total = monthly_outlook.loc[
-            monthly_outlook[
-                "Status"
-            ]
-            == "EXECUTED",
-            "Actual",
+            monthly_outlook["Status"] == "EXECUTED", "Actual"
         ].sum()
 
-        current_and_future_commitments = (
-            monthly_outlook[
-                "Committed"
-            ].sum()
-        )
-
-        future_total = (
-            monthly_outlook[
-                "Remaining Forecast"
-            ].sum()
-        )
-
-        outlook_total = (
-            monthly_outlook[
-                "Monthly Outlook"
-            ].sum()
-        )
+        current_and_future_commitments = monthly_outlook["Committed"].sum()
+        future_total = monthly_outlook["Remaining Forecast"].sum()
+        outlook_total = monthly_outlook["Monthly Outlook"].sum()
 
         m1, m2, m3, m4 = st.columns(4)
-
-        m1.metric(
-            "Executed Actuals",
-            money(
-                executed_total
-            ),
-        )
-
-        m2.metric(
-            "Open / Committed",
-            money(
-                current_and_future_commitments
-            ),
-        )
-
-        m3.metric(
-            "Future Forecast",
-            money(
-                future_total
-            ),
-        )
-
-        m4.metric(
-            "Modeled FY Outlook",
-            money(
-                outlook_total
-            ),
-        )
+        m1.metric("Executed Actuals", money(executed_total))
+        m2.metric("Open / Committed", money(current_and_future_commitments))
+        m3.metric("Future Forecast", money(future_total))
+        m4.metric("Modeled FY Outlook", money(outlook_total))
 
         st.info(
-            "As each month closes, KORBI replaces forecast assumptions "
-            "with actual posted activity. That makes the year-end view "
-            "more reliable as the fiscal year progresses."
+            "As each month closes, KORBI replaces forecast assumptions with actual posted activity. "
+            "That makes the year-end view more reliable as the fiscal year progresses."
         )
 
         dataframe_download(
@@ -3124,14 +1789,8 @@ elif page == "Monthly Financials":
         )
 
     if not financial_history_df.empty:
-        with st.expander(
-            "Prior-Year / Historical Financial Data"
-        ):
-            st.dataframe(
-                financial_history_df,
-                width="stretch",
-                hide_index=True,
-            )
+        with st.expander("Prior-Year / Historical Financial Data"):
+            st.dataframe(financial_history_df, width="stretch", hide_index=True)
 
 
 # ============================================================
@@ -3142,347 +1801,124 @@ elif page == "Sport Budgets":
 
     section_title(
         "Sport Budgets",
-        (
-            "Program budgets, actuals, commitments, year-end forecast, "
-            "and request status."
-        ),
+        "Program budgets, actuals, commitments, year-end forecast, and request status."
     )
 
-    if (
-        triage_df.empty
-        or "program_name" not in triage_df.columns
-    ):
-        st.warning(
-            "Sport-level triage/budget data is not loaded."
-        )
-
+    if triage_df.empty or "program_name" not in triage_df.columns:
+        st.warning("Sport-level triage/budget data is not loaded.")
     else:
-        programs = sorted(
-            triage_df[
-                "program_name"
-            ]
-            .dropna()
-            .astype(str)
-            .unique()
-        )
-
-        selection = st.selectbox(
-            "Program",
-            programs
-        )
-
-        metrics = program_metrics(
-            selection
-        )
+        programs = sorted(triage_df["program_name"].dropna().astype(str).unique())
+        selection = st.selectbox("Program", programs)
+        metrics = program_metrics(selection)
 
         if metrics:
             b1, b2, b3, b4, b5 = st.columns(5)
-
-            b1.metric(
-                "Annual Budget",
-                compact_money(
-                    metrics["annual"]
-                ),
-            )
-
-            b2.metric(
-                "Actual Spend",
-                compact_money(
-                    metrics["actual"]
-                ),
-            )
-
-            b3.metric(
-                "Committed",
-                compact_money(
-                    metrics["committed"]
-                ),
-            )
-
-            b4.metric(
-                "Projected Year-End",
-                compact_money(
-                    metrics["projected"]
-                ),
-            )
-
-            b5.metric(
-                "Projected Remaining",
-                compact_money(
-                    metrics["remaining"]
-                ),
-            )
+            b1.metric("Annual Budget", compact_money(metrics["annual"]))
+            b2.metric("Actual Spend", compact_money(metrics["actual"]))
+            b3.metric("Committed", compact_money(metrics["committed"]))
+            b4.metric("Projected Year-End", compact_money(metrics["projected"]))
+            b5.metric("Projected Remaining", compact_money(metrics["remaining"]))
 
             st.progress(
-                min(
-                    max(
-                        metrics["utilization"]
-                        / 100,
-                        0
-                    ),
-                    1.0
-                ),
-                text=(
-                    f"Projected utilization: "
-                    f"{metrics['utilization']:.1f}%"
-                ),
+                min(max(metrics["utilization"] / 100, 0), 1.0),
+                text=f"Projected utilization: {metrics['utilization']:.1f}%"
             )
 
             if metrics["utilization"] > 100:
-                st.error(
-                    "KORBI classifies this program as OVER BUDGET."
-                )
-
+                st.error("KORBI classifies this program as OVER BUDGET.")
             elif metrics["utilization"] >= 95:
-                st.error(
-                    "KORBI classifies this program as HIGH RISK."
-                )
-
+                st.error("KORBI classifies this program as HIGH RISK.")
             elif metrics["utilization"] >= 90:
-                st.warning(
-                    "KORBI classifies this program as CAUTION."
-                )
-
+                st.warning("KORBI classifies this program as CAUTION.")
             elif metrics["utilization"] >= 80:
-                st.info(
-                    "KORBI classifies this program as MONITOR."
-                )
-
+                st.info("KORBI classifies this program as MONITOR.")
             else:
-                st.success(
-                    "KORBI classifies this program as HEALTHY."
-                )
+                st.success("KORBI classifies this program as HEALTHY.")
 
-            if (
-                metrics.get(
-                    "approved_decision_adjustment",
-                    0
-                )
-                > 0
-            ):
+            if metrics.get("approved_decision_adjustment", 0) > 0:
                 st.caption(
-                    f"Saved approvals add "
-                    f"{money(metrics['approved_decision_adjustment'])} "
-                    f"to this program's current committed and projected "
-                    f"year-end position."
+                    f"Saved approvals add {money(metrics['approved_decision_adjustment'])} to this program's current "
+                    "committed and projected year-end position."
                 )
 
-        request_view = (
-            request_status_table(
-                selection
-            )
-        )
-
-        st.markdown(
-            "## Request Center"
-        )
+        request_view = request_status_table(selection)
+        st.markdown("## Request Center")
 
         if request_view.empty:
-            st.info(
-                f"No requests are currently loaded for {selection}."
-            )
-
+            st.info(f"No requests are currently loaded for {selection}.")
         else:
-            open_count = int(
-                (
-                    request_view[
-                        "request_status"
-                    ]
-                    == "OPEN"
-                ).sum()
-            )
-
-            allocated_count = int(
-                (
-                    request_view[
-                        "request_type"
-                    ]
-                    == "ALLOCATED"
-                ).sum()
-            )
-
-            approved_count = int(
-                (
-                    request_view[
-                        "request_status"
-                    ]
-                    == "APPROVED"
-                ).sum()
-            )
-
-            denied_count = int(
-                (
-                    request_view[
-                        "request_status"
-                    ]
-                    == "DENIED"
-                ).sum()
-            )
+            open_count = int((request_view["request_status"] == "OPEN").sum())
+            allocated_count = int((request_view["request_type"] == "ALLOCATED").sum())
+            approved_count = int((request_view["request_status"] == "APPROVED").sum())
+            denied_count = int((request_view["request_status"] == "DENIED").sum())
 
             r1, r2, r3, r4 = st.columns(4)
-
-            r1.metric(
-                "Open Requests",
-                open_count
-            )
-
-            r2.metric(
-                "Allocated / Planned",
-                allocated_count
-            )
-
-            r3.metric(
-                "Approved",
-                approved_count
-            )
-
-            r4.metric(
-                "Denied",
-                denied_count
-            )
+            r1.metric("Open Requests", open_count)
+            r2.metric("Allocated / Planned", allocated_count)
+            r3.metric("Approved", approved_count)
+            r4.metric("Denied", denied_count)
 
             request_columns = [
-                c
-                for c in [
-                    "request_id",
-                    "description",
-                    "category_code",
-                    "priority",
-                    "amount",
-                    "request_type",
-                    "request_status",
-                    "requestor_name",
-                    "reviewed_by",
-                    "review_date",
-                ]
-                if c in request_view.columns
+                c for c in [
+                    "request_id", "description", "category_code", "priority", "amount",
+                    "request_type", "request_status", "requestor_name", "reviewed_by", "review_date"
+                ] if c in request_view.columns
             ]
 
-            (
-                open_tab,
-                allocated_tab,
-                approved_tab,
-                denied_tab,
-            ) = st.tabs(
-                [
-                    "Open Requests",
-                    "Allocated Requests",
-                    "Approved Requests",
-                    "Denied Requests",
-                ]
+            open_tab, allocated_tab, approved_tab, denied_tab = st.tabs(
+                ["Open Requests", "Allocated Requests", "Approved Requests", "Denied Requests"]
             )
 
-            def show_request_rows(
-                df,
-                empty_text
-            ):
+            def show_request_rows(df, empty_text):
                 if df.empty:
-                    st.info(
-                        empty_text
-                    )
+                    st.info(empty_text)
                     return
-
                 st.dataframe(
-                    accounting_table(
-                        df[
-                            request_columns
-                        ].copy(),
-                        currency_cols=[
-                            "amount"
-                        ],
-                    ),
+                    accounting_table(df[request_columns].copy(), currency_cols=["amount"]),
                     width="stretch",
                     hide_index=True,
                 )
 
             with open_tab:
                 show_request_rows(
-                    request_view[
-                        request_view[
-                            "request_status"
-                        ]
-                        == "OPEN"
-                    ],
-                    f"No open requests for {selection}.",
+                    request_view[request_view["request_status"] == "OPEN"],
+                    f"No open requests for {selection}."
                 )
 
             with allocated_tab:
                 show_request_rows(
-                    request_view[
-                        request_view[
-                            "request_type"
-                        ]
-                        == "ALLOCATED"
-                    ],
-                    (
-                        "No requests are explicitly identified as "
-                        f"allocated/planned for {selection}."
-                    ),
+                    request_view[request_view["request_type"] == "ALLOCATED"],
+                    f"No requests are explicitly identified as allocated/planned for {selection}."
                 )
-
                 st.caption(
-                    "Allocated / Planned is a request type, not an approval. "
-                    "A planned item still follows the same review and "
-                    "purchasing controls."
+                    "Allocated / Planned is a request type, not an approval. A planned item still follows the same "
+                    "review and purchasing controls."
                 )
 
             with approved_tab:
-                approved_rows = request_view[
-                    request_view[
-                        "request_status"
-                    ]
-                    == "APPROVED"
-                ]
-
-                show_request_rows(
-                    approved_rows,
-                    f"No approved requests for {selection}.",
-                )
-
+                approved_rows = request_view[request_view["request_status"] == "APPROVED"]
+                show_request_rows(approved_rows, f"No approved requests for {selection}.")
                 if not approved_rows.empty:
-                    approved_value = pd.to_numeric(
-                        approved_rows[
-                            "amount"
-                        ],
-                        errors="coerce"
-                    ).fillna(0).sum()
-
-                    st.metric(
-                        "Approved Request Value",
-                        money(
-                            approved_value
-                        ),
-                    )
-
+                    approved_value = pd.to_numeric(approved_rows["amount"], errors="coerce").fillna(0).sum()
+                    st.metric("Approved Request Value", money(approved_value))
                     st.caption(
-                        "Approved requests are treated as committed money "
-                        "in KORBI's live simulation even before the final "
-                        "invoice posts."
+                        "Approved requests are treated as committed money in KORBI's live simulation even before the "
+                        "final invoice posts."
                     )
 
             with denied_tab:
                 show_request_rows(
-                    request_view[
-                        request_view[
-                            "request_status"
-                        ]
-                        == "DENIED"
-                    ],
-                    f"No denied requests for {selection}.",
+                    request_view[request_view["request_status"] == "DENIED"],
+                    f"No denied requests for {selection}."
                 )
 
-        st.markdown(
-            "## Coach Financial Impact"
-        )
-
+        st.markdown("## Coach Financial Impact")
         if metrics:
             st.info(
-                f"{selection} currently has {money(metrics['remaining'])} "
-                f"of projected year-end financial flexibility. A new request "
-                f"may fit within today's budget while still reducing the "
-                f"program's ability to respond to travel changes, equipment "
-                f"needs, or other unexpected requirements later. KORBI shows "
-                f"the tradeoff without assuming what the coach may want to buy next."
+                f"{selection} currently has {money(metrics['remaining'])} of projected year-end financial flexibility. "
+                "A new request may fit within today's budget while still reducing the program's ability to respond to "
+                "travel changes, equipment needs, or other unexpected requirements later. KORBI shows the tradeoff "
+                "without assuming what the coach may want to buy next."
             )
 
 
@@ -3494,374 +1930,136 @@ elif page == "Purchase Requests":
 
     section_title(
         "Purchase Requests",
-        (
-            "KORBI financial analysis, coach impact, and human "
-            "approval workflow."
-        ),
+        "KORBI financial analysis, coach impact, and human approval workflow."
     )
 
     if triage_df.empty:
-        st.error(
-            "No request triage data is loaded."
-        )
+        st.error("No request triage data is loaded.")
         st.stop()
 
-    request_master = (
-        request_status_table()
-    )
+    # Always derive current status from the saved decision layer.
+    request_master = request_status_table()
 
     mode = st.radio(
         "Show",
-        [
-            "Awaiting Review",
-            "All Requests",
-            "Reviewed",
-        ],
+        ["Awaiting Review", "All Requests", "Reviewed"],
         horizontal=True,
     )
 
     if mode == "Awaiting Review":
-        view_df = request_master[
-            request_master[
-                "request_status"
-            ]
-            == "OPEN"
-        ].copy()
-
+        view_df = request_master[request_master["request_status"] == "OPEN"].copy()
     elif mode == "Reviewed":
-        if "manager_decision" in request_master.columns:
-            view_df = request_master[
-                request_master[
-                    "manager_decision"
-                ].notna()
-            ].copy()
-
-        else:
-            view_df = request_master.iloc[
-                0:0
-            ].copy()
-
+        view_df = request_master[request_master["manager_decision"].notna()].copy() if "manager_decision" in request_master.columns else request_master.iloc[0:0].copy()
     else:
         view_df = request_master.copy()
 
     if view_df.empty:
-        st.success(
-            "No requests in this view."
-        )
+        st.success("No requests in this view.")
         st.stop()
 
     labels = [
-        (
-            f"{r.get('request_id', '')} — "
-            f"{r.get('program_name', '')} — "
-            f"{r.get('description', '')} — "
-            f"{money(r.get('amount'))}"
-        )
+        f"{r.get('request_id', '')} — {r.get('program_name', '')} — "
+        f"{r.get('description', '')} — {money(r.get('amount'))}"
         for _, r in view_df.iterrows()
     ]
 
-    selected = st.selectbox(
-        "Select request",
-        labels
-    )
+    selected = st.selectbox("Select request", labels)
+    raw_row = view_df.iloc[labels.index(selected)].to_dict()
+    row = live_request_row(raw_row)
 
-    raw_row = view_df.iloc[
-        labels.index(
-            selected
-        )
-    ].to_dict()
+    recommendation, suggestion = actionable_recommendation(row)
 
-    row = live_request_row(
-        raw_row
-    )
-
-    recommendation, suggestion = (
-        actionable_recommendation(
-            row
-        )
-    )
-
-    st.markdown(
-        f"### {row.get('program_name', '')} — "
-        f"{row.get('description', '')}"
-    )
+    st.markdown(f"### {row.get('program_name', '')} — {row.get('description', '')}")
 
     c1, c2, c3, c4 = st.columns(4)
+    c1.metric("Request", money(row.get("amount")))
+    c2.metric("Priority", str(row.get("priority", "")))
+    c3.metric("Before", pct(row.get("baseline_percent")))
+    c4.metric("After", pct(row.get("percent_with_request")))
 
-    c1.metric(
-        "Request",
-        money(
-            row.get("amount")
-        ),
-    )
+    st.markdown("#### KORBI Recommendation")
+    st.info(recommendation)
+    st.write(suggestion)
 
-    c2.metric(
-        "Priority",
-        str(
-            row.get(
-                "priority",
-                ""
-            )
-        ),
-    )
-
-    c3.metric(
-        "Before",
-        pct(
-            row.get(
-                "baseline_percent"
-            )
-        ),
-    )
-
-    c4.metric(
-        "After",
-        pct(
-            row.get(
-                "percent_with_request"
-            )
-        ),
-    )
-
-    st.markdown(
-        "#### KORBI Recommendation"
-    )
-
-    st.info(
-        recommendation
-    )
-
-    st.write(
-        suggestion
-    )
-
-    st.markdown(
-        "#### Coach Impact"
-    )
-
-    st.info(
-        coach_impact(
-            row
-        )
-    )
+    st.markdown("#### Coach Impact")
+    st.info(coach_impact(row))
 
     left, right = st.columns(2)
 
     with left:
-        st.markdown(
-            "#### Budget Before Request"
-        )
-
+        st.markdown("#### Budget Before Request")
         for label, key in [
-            (
-                "Annual operating budget",
-                "annual_budget",
-            ),
-            (
-                "Actuals",
-                "q1_actuals",
-            ),
-            (
-                "Open / committed",
-                "open_pos",
-            ),
-            (
-                "Scheduled future",
-                "scheduled_future",
-            ),
-            (
-                "Expected future",
-                "expected_future",
-            ),
-            (
-                "Projected remaining",
-                "baseline_remaining",
-            ),
+            ("Annual operating budget", "annual_budget"),
+            ("Actuals", "q1_actuals"),
+            ("Open / committed", "open_pos"),
+            ("Scheduled future", "scheduled_future"),
+            ("Expected future", "expected_future"),
+            ("Projected remaining", "baseline_remaining"),
         ]:
-            st.write(
-                f"**{label}:** "
-                f"{money(row.get(key))}"
-            )
+            st.write(f"**{label}:** {money(row.get(key))}")
 
     with right:
-        st.markdown(
-            "#### Budget After Request"
-        )
+        st.markdown("#### Budget After Request")
+        st.write(f"**Request amount:** {money(row.get('amount'))}")
+        st.write(f"**Projected year-end:** {money(row.get('projected_with_request'))}")
+        st.write(f"**Projected remaining:** {money(row.get('remaining_with_request'))}")
+        st.write(f"**Projected utilization:** {pct(row.get('percent_with_request'))}")
 
-        st.write(
-            f"**Request amount:** "
-            f"{money(row.get('amount'))}"
-        )
+    st.markdown("#### Budget Impact")
+    st.write(budget_impact(row))
 
-        st.write(
-            f"**Projected year-end:** "
-            f"{money(row.get('projected_with_request'))}"
-        )
-
-        st.write(
-            f"**Projected remaining:** "
-            f"{money(row.get('remaining_with_request'))}"
-        )
-
-        st.write(
-            f"**Projected utilization:** "
-            f"{pct(row.get('percent_with_request'))}"
-        )
-
-    st.markdown(
-        "#### Budget Impact"
-    )
-
-    st.write(
-        budget_impact(
-            row
-        )
-    )
-
-    st.markdown(
-        "#### Risk"
-    )
-
-    st.write(
-        risk_summary(
-            row
-        )
-    )
+    st.markdown("#### Risk")
+    st.write(risk_summary(row))
 
     st.markdown("---")
+    st.markdown("## Management Decision")
 
-    st.markdown(
-        "## Management Decision"
-    )
-
-    existing_requestor = (
-        requestor_name(
-            raw_row
-        )
-    )
-
-    if (
-        not existing_requestor
-        and "requestor_name" in raw_row
-    ):
-        existing_requestor = str(
-            raw_row.get(
-                "requestor_name",
-                ""
-            )
-        )
+    existing_requestor = requestor_name(raw_row)
+    if not existing_requestor and "requestor_name" in raw_row:
+        existing_requestor = str(raw_row.get("requestor_name", ""))
 
     requestor = st.text_input(
         "Requestor / Coach Name",
         value=existing_requestor,
-        placeholder=(
-            "Enter the requestor name so KORBI can prepare the response."
-        ),
-        key=(
-            f"requestor_"
-            f"{row.get('request_id', '')}"
-        ),
+        placeholder="Enter the requestor name so KORBI can prepare the response.",
+        key=f"requestor_{row.get('request_id', '')}",
     )
 
-    existing_decision = str(
-        raw_row.get(
-            "manager_decision",
-            ""
-        )
-    ).upper().strip()
-
-    decision_options = [
-        "APPROVE",
-        "DEFER",
-        "DENY",
-    ]
-
-    default_index = (
-        decision_options.index(
-            existing_decision
-        )
-        if existing_decision in decision_options
-        else 0
-    )
+    existing_decision = str(raw_row.get("manager_decision", "")).upper().strip()
+    decision_options = ["APPROVE", "DEFER", "DENY"]
+    default_index = decision_options.index(existing_decision) if existing_decision in decision_options else 0
 
     decision = st.radio(
         "Decision",
         decision_options,
         index=default_index,
         horizontal=True,
-        key=(
-            f"decision_"
-            f"{row.get('request_id', '')}"
-        ),
-    )
-
-    raw_notes = str(
-        raw_row.get(
-            "manager_notes",
-            ""
-        )
+        key=f"decision_{row.get('request_id', '')}",
     )
 
     notes = st.text_area(
         "Manager notes",
-        value=(
-            raw_notes
-            if raw_notes.lower() != "nan"
-            else ""
-        ),
-        placeholder=(
-            "Optional context, conditions, offsets, or follow-up instructions."
-        ),
-        key=(
-            f"notes_"
-            f"{row.get('request_id', '')}"
-        ),
+        value=str(raw_row.get("manager_notes", "")) if str(raw_row.get("manager_notes", "")).lower() != "nan" else "",
+        placeholder="Optional context, conditions, offsets, or follow-up instructions.",
+        key=f"notes_{row.get('request_id', '')}",
     )
 
-    rationale_preview = (
-        decision_rationale(
-            row,
-            decision
-        )
-    )
+    # Preview the exact rationale that will be stored with the decision.
+    rationale_preview = decision_rationale(row, decision)
+    email_preview = requestor_email(row, decision, requestor, notes)
 
-    email_preview = (
-        requestor_email(
-            row,
-            decision,
-            requestor,
-            notes
-        )
-    )
+    st.markdown("### KORBI Decision Explanation")
+    st.info(rationale_preview)
 
-    st.markdown(
-        "### KORBI Decision Explanation"
-    )
-
-    st.info(
-        rationale_preview
-    )
-
-    st.markdown(
-        "### Email-Ready Response to Requestor"
-    )
-
+    st.markdown("### Email-Ready Response to Requestor")
     st.caption(
-        "Use the copy control in the code box to copy this response "
-        "directly into an email. KORBI saves this wording with the "
-        "decision so the historical explanation does not change later."
+        "The copy control in the code box can be used to copy this response directly into an email. "
+        "KORBI saves this wording with the decision so the historical explanation does not change later."
     )
+    st.code(email_preview, language=None)
 
-    st.code(
-        email_preview,
-        language=None
-    )
-
-    if st.button(
-        "Save Management Decision",
-        type="primary"
-    ):
-        save_decision(
+    if st.button("Save Management Decision", type="primary"):
+        record = save_decision(
             row=row,
             recommendation=recommendation,
             suggestion=suggestion,
@@ -3870,14 +2068,62 @@ elif page == "Purchase Requests":
             notes=notes,
             requestor=requestor,
         )
-
         st.success(
-            f"{row.get('request_id', '')} saved as {decision}. "
-            f"KORBI has updated the decision layer, request status, "
-            f"sport budget impact, and department forecast."
+            f"{row.get('request_id', '')} saved as {decision}. KORBI has updated the decision layer, request status, "
+            "sport budget impact, and department forecast."
         )
-
         st.rerun()
+
+
+# ============================================================
+# REVENUE & FUNDING
+# ============================================================
+
+elif page == "Revenue & Funding":
+
+    section_title(
+        "Revenue & Funding",
+        "University support, student fees, external revenue, and one-time rebuild funding."
+    )
+
+    support = university_support_projection()
+
+    c1, c2, c3, c4 = st.columns(4)
+    c1.metric("Modeled University Support", money(support["modeled_university_support"]))
+    c2.metric("Student-Fee Support", money(support["student_fees"]))
+    c3.metric("External / Earned Revenue", money(support["external_revenue"]))
+    c4.metric("One-Time Rebuild Funding", money(support["one_time_rebuild"]))
+
+    st.markdown("## University Support Impact")
+
+    st.markdown(
+        f"""
+        <div class="support-card">
+            <div class="support-kicker">Projected University Support Required</div>
+            <div class="support-value">{money(support["required_support"])}</div>
+            <div class="support-copy">
+                Current external / earned athletics revenue reduces modeled university support
+                by <strong>{money(support["external_reduction"])}</strong>.
+            </div>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
+
+    st.warning(
+        "KORBI keeps university support separate from externally generated athletics revenue. "
+        "One-time rebuild funding is also kept separate from recurring operating revenue."
+    )
+
+    if funding_df.empty:
+        st.info("No detailed revenue/funding dataset is loaded.")
+    else:
+        st.dataframe(funding_df, width="stretch", hide_index=True)
+        dataframe_download(
+            funding_df,
+            "korbi_revenue_funding.csv",
+            "Download Revenue & Funding CSV",
+        )
 
 
 # ============================================================
@@ -3888,16 +2134,12 @@ elif page == "CSU Benchmarking":
 
     section_title(
         "CSU Benchmarking",
-        (
-            "Historical CSU Division II benchmarks to help Sonoma State "
-            "build realistic operating budgets for its returning sports."
-        ),
+        "Historical CSU Division II benchmarks to help Sonoma State build realistic operating budgets for its returning sports."
     )
 
     st.info(
-        "Benchmark data is historical EADA-based comparison data. "
-        "KORBI uses it as a planning reference — not as a required "
-        "spending target for the Fall 2027 restart."
+        "Benchmark data is historical EADA-based comparison data. KORBI uses it as a planning reference — not as a "
+        "required spending target for the Fall 2027 restart."
     )
 
     def peer_summary_frame():
@@ -3905,953 +2147,332 @@ elif page == "CSU Benchmarking":
             return pd.DataFrame()
 
         df = peer_comparison_df.copy()
-
-        school_col = first_existing_column(
-            df,
-            [
-                "school_name",
-                "school",
-                "institution",
-                "Institution",
-            ],
-        )
-
-        id_col = first_existing_column(
-            df,
-            [
-                "school_id",
-                "institution_id",
-                "id",
-            ],
-        )
-
-        athlete_col = first_existing_column(
-            df,
-            [
-                "total_athletes",
-                "athletes",
-                "participants",
-            ],
-        )
-
-        expense_col = first_existing_column(
-            df,
-            [
-                "total_expenses",
-                "total_expense",
-                "expenses",
-                "athletics_expenses",
-            ],
-        )
-
-        team_exp_col = first_existing_column(
-            df,
-            [
-                "team_expenses",
-                "team_expense",
-                "allocated_team_expenses",
-            ],
-        )
-
-        unalloc_col = first_existing_column(
-            df,
-            [
-                "unallocated_amount",
-                "unallocated",
-                "not_allocated",
-                "unallocated_expenses",
-            ],
-        )
-
-        share_col = first_existing_column(
-            df,
-            [
-                "unallocated_share",
-                "unallocated_share_pct",
-                "unallocated_percent",
-                "unallocated_pct",
-            ],
-        )
-
-        epa_col = first_existing_column(
-            df,
-            [
-                "expense_per_athlete",
-                "expenses_per_athlete",
-                "cost_per_athlete",
-            ],
-        )
+        school_col = first_existing_column(df, ["school_name", "school", "institution", "Institution"])
+        id_col = first_existing_column(df, ["school_id", "institution_id", "id"])
+        athlete_col = first_existing_column(df, ["total_athletes", "athletes", "participants"])
+        expense_col = first_existing_column(df, ["total_expenses", "total_expense", "expenses", "athletics_expenses"])
+        team_exp_col = first_existing_column(df, ["team_expenses", "team_expense", "allocated_team_expenses"])
+        unalloc_col = first_existing_column(df, ["unallocated_amount", "unallocated", "not_allocated", "unallocated_expenses"])
+        share_col = first_existing_column(df, ["unallocated_share", "unallocated_share_pct", "unallocated_percent", "unallocated_pct"])
+        epa_col = first_existing_column(df, ["expense_per_athlete", "expenses_per_athlete", "cost_per_athlete"])
 
         out = pd.DataFrame()
-
-        if school_col:
-            out["School"] = (
-                df[
-                    school_col
-                ].astype(str)
-            )
-
-        else:
-            out["School"] = [
-                f"Peer {i + 1}"
-                for i in range(
-                    len(df)
-                )
-            ]
-
+        out["School"] = df[school_col].astype(str) if school_col else [f"Peer {i+1}" for i in range(len(df))]
         if id_col:
-            out["School ID"] = (
-                df[
-                    id_col
-                ].astype(str)
-            )
+            out["School ID"] = df[id_col].astype(str)
+        out["Athletes"] = pd.to_numeric(df[athlete_col], errors="coerce") if athlete_col else pd.NA
+        out["Total Expense"] = pd.to_numeric(df[expense_col], errors="coerce") if expense_col else pd.NA
+        out["Team Expense"] = pd.to_numeric(df[team_exp_col], errors="coerce") if team_exp_col else pd.NA
+        out["Unallocated"] = pd.to_numeric(df[unalloc_col], errors="coerce") if unalloc_col else pd.NA
+        out["Unallocated %"] = pd.to_numeric(df[share_col], errors="coerce") if share_col else pd.NA
+        out["Expense / Athlete"] = pd.to_numeric(df[epa_col], errors="coerce") if epa_col else pd.NA
 
-        out["Athletes"] = (
-            pd.to_numeric(
-                df[athlete_col],
-                errors="coerce"
-            )
-            if athlete_col
-            else pd.NA
-        )
+        if out["Expense / Athlete"].isna().all() and not out["Total Expense"].isna().all():
+            denom = pd.to_numeric(out["Athletes"], errors="coerce").replace(0, pd.NA)
+            out["Expense / Athlete"] = out["Total Expense"] / denom
 
-        out["Total Expense"] = (
-            pd.to_numeric(
-                df[expense_col],
-                errors="coerce"
-            )
-            if expense_col
-            else pd.NA
-        )
-
-        out["Team Expense"] = (
-            pd.to_numeric(
-                df[team_exp_col],
-                errors="coerce"
-            )
-            if team_exp_col
-            else pd.NA
-        )
-
-        out["Unallocated"] = (
-            pd.to_numeric(
-                df[unalloc_col],
-                errors="coerce"
-            )
-            if unalloc_col
-            else pd.NA
-        )
-
-        out["Unallocated %"] = (
-            pd.to_numeric(
-                df[share_col],
-                errors="coerce"
-            )
-            if share_col
-            else pd.NA
-        )
-
-        out["Expense / Athlete"] = (
-            pd.to_numeric(
-                df[epa_col],
-                errors="coerce"
-            )
-            if epa_col
-            else pd.NA
-        )
-
-        if (
-            out[
-                "Expense / Athlete"
-            ].isna().all()
-            and not out[
-                "Total Expense"
-            ].isna().all()
-        ):
-            denom = pd.to_numeric(
-                out["Athletes"],
-                errors="coerce"
-            ).replace(
-                0,
-                pd.NA
-            )
-
-            out["Expense / Athlete"] = (
-                out["Total Expense"]
-                / denom
-            )
-
-        if (
-            out[
-                "Unallocated %"
-            ].isna().all()
-            and not out[
-                "Unallocated"
-            ].isna().all()
-        ):
-            denom = pd.to_numeric(
-                out["Total Expense"],
-                errors="coerce"
-            ).replace(
-                0,
-                pd.NA
-            )
-
-            out["Unallocated %"] = (
-                out["Unallocated"]
-                / denom
-                * 100
-            )
+        if out["Unallocated %"].isna().all() and not out["Unallocated"].isna().all():
+            denom = pd.to_numeric(out["Total Expense"], errors="coerce").replace(0, pd.NA)
+            out["Unallocated %"] = out["Unallocated"] / denom * 100
 
         return out
 
     def team_source_frame():
         if not team_benchmark_df.empty:
             return team_benchmark_df.copy()
-
         if not team_summary_df.empty:
             return team_summary_df.copy()
-
         return pd.DataFrame()
 
     peers = peer_summary_frame()
 
     if peers.empty:
-        st.warning(
-            "Peer comparison dataset is not loaded."
-        )
-
+        st.warning("Peer comparison dataset is not loaded.")
     else:
-        is_sonoma = (
-            peers["School"]
-            .astype(str)
-            .str.contains(
-                "Sonoma",
-                case=False,
-                na=False
-            )
-        )
-
+        is_sonoma = peers["School"].astype(str).str.contains("Sonoma", case=False, na=False)
         if "School ID" in peers.columns:
-            is_sonoma = (
-                is_sonoma
-                | peers[
-                    "School ID"
-                ]
-                .astype(str)
-                .str.upper()
-                .eq("SSU")
-            )
+            is_sonoma = is_sonoma | peers["School ID"].astype(str).str.upper().eq("SSU")
 
-        sonoma_rows = peers[
-            is_sonoma
-        ]
-
-        peer_only = peers[
-            ~is_sonoma
-        ].copy()
+        sonoma_rows = peers[is_sonoma]
+        peer_only = peers[~is_sonoma].copy()
 
         if sonoma_rows.empty:
-            st.warning(
-                "KORBI could not identify the Sonoma State row in the peer comparison dataset."
-            )
-
+            st.warning("KORBI could not identify the Sonoma State row in the peer comparison dataset.")
             sonoma = None
-
         else:
-            sonoma = (
-                sonoma_rows.iloc[0]
-            )
+            sonoma = sonoma_rows.iloc[0]
 
-        if (
-            sonoma is not None
-            and not peer_only.empty
-        ):
-            sonoma_exp = safe_float(
-                sonoma.get(
-                    "Total Expense"
-                )
-            )
-
-            peer_avg_exp = pd.to_numeric(
-                peer_only[
-                    "Total Expense"
-                ],
-                errors="coerce"
-            ).mean()
-
-            peer_avg_epa = pd.to_numeric(
-                peer_only[
-                    "Expense / Athlete"
-                ],
-                errors="coerce"
-            ).mean()
+        if sonoma is not None and not peer_only.empty:
+            sonoma_exp = safe_float(sonoma.get("Total Expense"))
+            peer_avg_exp = pd.to_numeric(peer_only["Total Expense"], errors="coerce").mean()
+            peer_avg_epa = pd.to_numeric(peer_only["Expense / Athlete"], errors="coerce").mean()
 
             tmp = peer_only.copy()
-
-            tmp["_distance"] = (
-                pd.to_numeric(
-                    tmp[
-                        "Total Expense"
-                    ],
-                    errors="coerce"
-                )
-                - sonoma_exp
-            ).abs()
-
-            closest = (
-                tmp.sort_values(
-                    "_distance"
-                )
-                .iloc[0]
-            )
+            tmp["_distance"] = (pd.to_numeric(tmp["Total Expense"], errors="coerce") - sonoma_exp).abs()
+            closest = tmp.sort_values("_distance").iloc[0]
 
             c1, c2, c3, c4 = st.columns(4)
-
-            c1.metric(
-                "Sonoma Historical Expense",
-                compact_money(
-                    sonoma_exp
-                ),
-            )
-
-            c2.metric(
-                "CSU Peer Average",
-                compact_money(
-                    peer_avg_exp
-                ),
-            )
-
-            c3.metric(
-                "Sonoma Expense / Athlete",
-                compact_money(
-                    sonoma.get(
-                        "Expense / Athlete"
-                    )
-                ),
-            )
-
-            c4.metric(
-                "Closest Spending Peer",
-                str(
-                    closest.get(
-                        "School",
-                        ""
-                    )
-                ),
-            )
+            c1.metric("Sonoma Historical Expense", compact_money(sonoma_exp))
+            c2.metric("CSU Peer Average", compact_money(peer_avg_exp))
+            c3.metric("Sonoma Expense / Athlete", compact_money(sonoma.get("Expense / Athlete")))
+            c4.metric("Closest Spending Peer", str(closest.get("School", "")))
 
             st.caption(
-                f"Closest total-spend comparator: "
-                f"{closest.get('School', '')} at "
-                f"{money(closest.get('Total Expense'))}. "
-                f"Peer-average expense per athlete is approximately "
-                f"{money(peer_avg_epa)}."
+                f"Closest total-spend comparator: {closest.get('School', '')} at {money(closest.get('Total Expense'))}. "
+                f"Peer-average expense per athlete is approximately {money(peer_avg_epa)}."
             )
 
-        st.markdown(
-            "## Historical Department Comparison"
-        )
+        st.markdown("## Historical Department Comparison")
 
         pretty = peers.copy()
-
-        for col in [
-            "Total Expense",
-            "Team Expense",
-            "Unallocated",
-            "Expense / Athlete",
-        ]:
+        for col in ["Total Expense", "Team Expense", "Unallocated", "Expense / Athlete"]:
             if col in pretty.columns:
-                pretty[col] = pretty[
-                    col
-                ].apply(
-                    lambda x:
-                        compact_money(x)
-                        if pd.notna(x)
-                        else "-"
-                )
-
+                pretty[col] = pretty[col].apply(lambda x: compact_money(x) if pd.notna(x) else "-")
         if "Unallocated %" in pretty.columns:
-            pretty[
-                "Unallocated %"
-            ] = pretty[
-                "Unallocated %"
-            ].apply(
-                lambda x:
-                    f"{safe_float(x):.1f}%"
-                    if pd.notna(x)
-                    else "-"
-            )
-
+            pretty["Unallocated %"] = pretty["Unallocated %"].apply(lambda x: f"{safe_float(x):.1f}%" if pd.notna(x) else "-")
         if "Athletes" in pretty.columns:
-            pretty[
-                "Athletes"
-            ] = pretty[
-                "Athletes"
-            ].apply(
-                lambda x:
-                    f"{int(x):,}"
-                    if pd.notna(x)
-                    else "-"
-            )
+            pretty["Athletes"] = pretty["Athletes"].apply(lambda x: f"{int(x):,}" if pd.notna(x) else "-")
 
         st.markdown(
-            '<div class="korbi-table-wrap">'
-            + pretty.to_html(
-                index=False,
-                classes="korbi-table",
-                border=0,
-                escape=True
-            )
-            + "</div>",
+            '<div class="korbi-table-wrap">' + pretty.to_html(index=False, classes="korbi-table", border=0, escape=True) + '</div>',
             unsafe_allow_html=True,
         )
 
-        st.markdown(
-            "## Choose a Comparator"
-        )
+        st.markdown("## Choose a Comparator")
+        comparator_options = peer_only["School"].astype(str).tolist() if not peer_only.empty else []
 
-        comparator_options = (
-            peer_only[
-                "School"
-            ]
-            .astype(str)
-            .tolist()
-            if not peer_only.empty
-            else []
-        )
-
-        if (
-            comparator_options
-            and sonoma is not None
-        ):
-            default_name = (
-                str(
-                    closest.get(
-                        "School"
-                    )
-                )
-                if "closest" in locals()
-                else comparator_options[0]
-            )
-
-            default_idx = (
-                comparator_options.index(
-                    default_name
-                )
-                if default_name in comparator_options
-                else 0
-            )
-
-            comparator_name = st.selectbox(
-                "Compare Sonoma State with",
-                comparator_options,
-                index=default_idx,
-            )
-
-            comparator = peer_only[
-                peer_only[
-                    "School"
-                ]
-                == comparator_name
-            ].iloc[0]
+        if comparator_options and sonoma is not None:
+            default_name = str(closest.get("School")) if 'closest' in locals() else comparator_options[0]
+            default_idx = comparator_options.index(default_name) if default_name in comparator_options else 0
+            comparator_name = st.selectbox("Compare Sonoma State with", comparator_options, index=default_idx)
+            comparator = peer_only[peer_only["School"] == comparator_name].iloc[0]
 
             a, b, c, d = st.columns(4)
+            a.metric("Sonoma Total Expense", compact_money(sonoma.get("Total Expense")))
+            b.metric(f"{comparator_name} Expense", compact_money(comparator.get("Total Expense")))
+            variance = safe_float(sonoma.get("Total Expense")) - safe_float(comparator.get("Total Expense"))
+            c.metric("Expense Difference", compact_money(abs(variance)), delta="Sonoma higher" if variance > 0 else "Sonoma lower")
+            d.metric("Comparator Athletes", f"{int(safe_float(comparator.get('Athletes'))):,}")
 
-            a.metric(
-                "Sonoma Total Expense",
-                compact_money(
-                    sonoma.get(
-                        "Total Expense"
-                    )
-                ),
-            )
-
-            b.metric(
-                f"{comparator_name} Expense",
-                compact_money(
-                    comparator.get(
-                        "Total Expense"
-                    )
-                ),
-            )
-
-            variance = (
-                safe_float(
-                    sonoma.get(
-                        "Total Expense"
-                    )
-                )
-                - safe_float(
-                    comparator.get(
-                        "Total Expense"
-                    )
-                )
-            )
-
-            c.metric(
-                "Expense Difference",
-                compact_money(
-                    abs(
-                        variance
-                    )
-                ),
-                delta=(
-                    "Sonoma higher"
-                    if variance > 0
-                    else "Sonoma lower"
-                ),
-            )
-
-            d.metric(
-                "Comparator Athletes",
-                f"{int(safe_float(comparator.get('Athletes'))):,}",
-            )
-
-            teams = (
-                team_source_frame()
-            )
-
+            # ------------------------------------------------
+            # SPORT SPONSORSHIP / HISTORICAL TEAM EXPENSE
+            # ------------------------------------------------
+            teams = team_source_frame()
             if teams.empty:
-                st.info(
-                    "Sport-level peer benchmark data is not loaded."
-                )
-
+                st.info("Sport-level peer benchmark data is not loaded.")
             else:
-                school_col = first_existing_column(
-                    teams,
-                    [
-                        "school_name",
-                        "school",
-                        "institution",
-                        "Institution",
-                    ],
-                )
+                school_col = first_existing_column(teams, ["school_name", "school", "institution", "Institution"])
+                school_id_col = first_existing_column(teams, ["school_id", "institution_id"])
+                sport_col = first_existing_column(teams, ["sport_name", "sport", "team_name", "sports"])
+                gender_col = first_existing_column(teams, ["gender", "sex", "men_women", "team_gender"])
+                expense_col = first_existing_column(teams, ["expenses", "expense", "team_expenses", "total_expenses", "operating_expense"])
 
-                school_id_col = first_existing_column(
-                    teams,
-                    [
-                        "school_id",
-                        "institution_id",
-                    ],
-                )
-
-                sport_col = first_existing_column(
-                    teams,
-                    [
-                        "sport_name",
-                        "sport",
-                        "team_name",
-                        "sports",
-                    ],
-                )
-
-                gender_col = first_existing_column(
-                    teams,
-                    [
-                        "gender",
-                        "sex",
-                        "men_women",
-                        "team_gender",
-                    ],
-                )
-
-                expense_col = first_existing_column(
-                    teams,
-                    [
-                        "expenses",
-                        "expense",
-                        "team_expenses",
-                        "total_expenses",
-                        "operating_expense",
-                    ],
-                )
-
-                if (
-                    sport_col
-                    and (
-                        school_col
-                        or school_id_col
-                    )
-                ):
+                if sport_col and (school_col or school_id_col):
                     temp = teams.copy()
-
-                    temp["_school"] = (
-                        temp[
-                            school_col
-                        ].astype(str)
-                        if school_col
-                        else temp[
-                            school_id_col
-                        ].astype(str)
-                    )
-
-                    temp["_sport"] = (
-                        temp[
-                            sport_col
-                        ]
-                        .astype(str)
-                        .str.strip()
-                    )
+                    temp["_school"] = temp[school_col].astype(str) if school_col else temp[school_id_col].astype(str)
+                    temp["_sport"] = temp[sport_col].astype(str).str.strip()
 
                     if gender_col:
-                        gender = (
-                            temp[
-                                gender_col
-                            ]
-                            .astype(str)
-                            .str.upper()
-                            .str.strip()
-                        )
-
-                        prefix = gender.map(
-                            lambda x:
-                                "Men's "
-                                if x.startswith("M")
-                                else (
-                                    "Women's "
-                                    if x.startswith("W")
-                                    else ""
-                                )
-                        )
-
-                        temp["Sport"] = (
-                            prefix
-                            + temp["_sport"]
-                        )
-
+                        gender = temp[gender_col].astype(str).str.upper().str.strip()
+                        prefix = gender.map(lambda x: "Men's " if x.startswith("M") else ("Women's " if x.startswith("W") else ""))
+                        temp["Sport"] = prefix + temp["_sport"]
                     else:
-                        temp["Sport"] = temp[
-                            "_sport"
-                        ]
+                        temp["Sport"] = temp["_sport"]
 
                     if expense_col:
-                        temp[
-                            "Historical Expense"
-                        ] = pd.to_numeric(
-                            temp[
-                                expense_col
-                            ],
-                            errors="coerce"
-                        ).fillna(0)
-
+                        temp["Historical Expense"] = pd.to_numeric(temp[expense_col], errors="coerce").fillna(0)
                     else:
-                        temp[
-                            "Historical Expense"
-                        ] = 0.0
+                        temp["Historical Expense"] = 0.0
 
-                    sonoma_mask = (
-                        temp[
-                            "_school"
-                        ]
-                        .str.contains(
-                            "Sonoma",
-                            case=False,
-                            na=False
-                        )
-                        | temp[
-                            "_school"
-                        ]
-                        .str.upper()
-                        .eq("SSU")
-                    )
+                    sonoma_mask = temp["_school"].str.contains("Sonoma", case=False, na=False) | temp["_school"].str.upper().eq("SSU")
+                    comp_mask = temp["_school"].astype(str).eq(comparator_name)
 
-                    comp_mask = (
-                        temp[
-                            "_school"
-                        ]
-                        .astype(str)
-                        .eq(
-                            comparator_name
-                        )
-                    )
+                    # Some team datasets may use school IDs while the peer file uses full names.
+                    if not comp_mask.any() and "School ID" in peer_only.columns and school_id_col:
+                        comp_id = str(comparator.get("School ID", ""))
+                        comp_mask = temp["_school"].astype(str).str.upper().eq(comp_id.upper())
 
-                    if (
-                        not comp_mask.any()
-                        and "School ID" in peer_only.columns
-                        and school_id_col
-                    ):
-                        comp_id = str(
-                            comparator.get(
-                                "School ID",
-                                ""
-                            )
-                        )
-
-                        comp_mask = (
-                            temp[
-                                "_school"
-                            ]
-                            .astype(str)
-                            .str.upper()
-                            .eq(
-                                comp_id.upper()
-                            )
-                        )
-
-                    st.markdown(
-                        "### Sport Sponsorship Comparison"
-                    )
-
-                    all_schools = (
-                        temp[
-                            "_school"
-                        ]
-                        .dropna()
-                        .astype(str)
-                        .unique()
-                        .tolist()
-                    )
-
-                    sport_names = sorted(
-                        temp[
-                            "Sport"
-                        ]
-                        .dropna()
-                        .astype(str)
-                        .unique()
-                        .tolist()
-                    )
-
+                    st.markdown("### Sport Sponsorship Comparison")
+                    all_schools = temp["_school"].dropna().astype(str).unique().tolist()
+                    sport_names = sorted(temp["Sport"].dropna().astype(str).unique().tolist())
                     matrix_rows = []
-
                     for school in all_schools:
-                        row_data = {
-                            "School": school
-                        }
-
-                        school_sports = set(
-                            temp.loc[
-                                temp[
-                                    "_school"
-                                ]
-                                == school,
-                                "Sport",
-                            ]
-                            .astype(str)
-                        )
-
+                        row_data = {"School": school}
+                        school_sports = set(temp.loc[temp["_school"] == school, "Sport"].astype(str))
                         for sport in sport_names:
-                            row_data[
-                                sport
-                            ] = (
-                                "YES"
-                                if sport in school_sports
-                                else "—"
-                            )
-
-                        matrix_rows.append(
-                            row_data
-                        )
-
-                    matrix = pd.DataFrame(
-                        matrix_rows
-                    )
-
+                            row_data[sport] = "YES" if sport in school_sports else "—"
+                        matrix_rows.append(row_data)
+                    matrix = pd.DataFrame(matrix_rows)
                     if not matrix.empty:
                         st.markdown(
-                            '<div class="korbi-table-wrap">'
-                            + matrix.to_html(
-                                index=False,
-                                classes="korbi-table",
-                                border=0,
-                                escape=True,
-                            )
-                            + "</div>",
+                            '<div class="korbi-table-wrap">' + matrix.to_html(index=False, classes="korbi-table", border=0, escape=True) + '</div>',
                             unsafe_allow_html=True,
                         )
 
-                    st.markdown(
-                        "### Sonoma State vs Comparator — Historical Sport Expense"
-                    )
+                    st.markdown("### Sonoma State vs Comparator — Historical Sport Expense")
+                    sonoma_sport = temp[sonoma_mask].groupby("Sport")["Historical Expense"].sum().rename("Sonoma Historical")
+                    comp_sport = temp[comp_mask].groupby("Sport")["Historical Expense"].sum().rename(f"{comparator_name} Historical")
+                    peer_avg = temp.groupby(["_school", "Sport"])["Historical Expense"].sum().reset_index().groupby("Sport")["Historical Expense"].mean().rename("Peer Average")
 
-                    sonoma_sport = (
-                        temp[
-                            sonoma_mask
-                        ]
-                        .groupby(
-                            "Sport"
-                        )[
-                            "Historical Expense"
-                        ]
-                        .sum()
-                        .rename(
-                            "Sonoma Historical"
-                        )
-                    )
-
-                    comp_sport = (
-                        temp[
-                            comp_mask
-                        ]
-                        .groupby(
-                            "Sport"
-                        )[
-                            "Historical Expense"
-                        ]
-                        .sum()
-                        .rename(
-                            f"{comparator_name} Historical"
-                        )
-                    )
-
-                    peer_avg = (
-                        temp.groupby(
-                            [
-                                "_school",
-                                "Sport",
-                            ]
-                        )[
-                            "Historical Expense"
-                        ]
-                        .sum()
-                        .reset_index()
-                        .groupby(
-                            "Sport"
-                        )[
-                            "Historical Expense"
-                        ]
-                        .mean()
-                        .rename(
-                            "Peer Average"
-                        )
-                    )
-
-                    sport_compare = pd.concat(
-                        [
-                            sonoma_sport,
-                            comp_sport,
-                            peer_avg,
-                        ],
-                        axis=1,
-                    ).fillna(0).reset_index()
-
+                    sport_compare = pd.concat([sonoma_sport, comp_sport, peer_avg], axis=1).fillna(0).reset_index()
                     if not sport_compare.empty:
-                        sport_compare[
-                            "Difference vs Comparator"
-                        ] = (
-                            sport_compare[
-                                "Sonoma Historical"
-                            ]
-                            - sport_compare[
-                                f"{comparator_name} Historical"
-                            ]
+                        sport_compare["Difference vs Comparator"] = sport_compare["Sonoma Historical"] - sport_compare[f"{comparator_name} Historical"]
+                        comp_denom = sport_compare[f"{comparator_name} Historical"].replace(0, pd.NA)
+                        sport_compare["% Difference"] = sport_compare["Difference vs Comparator"] / comp_denom * 100
+
+                        display_compare = sport_compare.copy()
+                        for col in ["Sonoma Historical", f"{comparator_name} Historical", "Peer Average", "Difference vs Comparator"]:
+                            display_compare[col] = display_compare[col].apply(compact_money)
+                        display_compare["% Difference"] = display_compare["% Difference"].apply(
+                            lambda x: f"{safe_float(x):.1f}%" if pd.notna(x) else "-"
                         )
-
-                        comp_denom = sport_compare[
-                            f"{comparator_name} Historical"
-                        ].replace(
-                            0,
-                            pd.NA
-                        )
-
-                        sport_compare[
-                            "% Difference"
-                        ] = (
-                            sport_compare[
-                                "Difference vs Comparator"
-                            ]
-                            / comp_denom
-                            * 100
-                        )
-
-                        display_compare = (
-                            sport_compare.copy()
-                        )
-
-                        for col in [
-                            "Sonoma Historical",
-                            f"{comparator_name} Historical",
-                            "Peer Average",
-                            "Difference vs Comparator",
-                        ]:
-                            display_compare[
-                                col
-                            ] = display_compare[
-                                col
-                            ].apply(
-                                compact_money
-                            )
-
-                        display_compare[
-                            "% Difference"
-                        ] = display_compare[
-                            "% Difference"
-                        ].apply(
-                            lambda x:
-                                f"{safe_float(x):.1f}%"
-                                if pd.notna(x)
-                                else "-"
-                        )
-
                         st.markdown(
-                            '<div class="korbi-table-wrap">'
-                            + display_compare.to_html(
-                                index=False,
-                                classes="korbi-table",
-                                border=0,
-                                escape=True,
-                            )
-                            + "</div>",
+                            '<div class="korbi-table-wrap">' + display_compare.to_html(index=False, classes="korbi-table", border=0, escape=True) + '</div>',
                             unsafe_allow_html=True,
                         )
 
-                        chart = (
-                            sport_compare
-                            .set_index(
-                                "Sport"
-                            )[
-                                [
-                                    "Sonoma Historical",
-                                    f"{comparator_name} Historical",
-                                    "Peer Average",
-                                ]
-                            ]
-                        )
-
-                        st.bar_chart(
-                            chart,
-                            height=360
-                        )
+                        chart = sport_compare.set_index("Sport")[["Sonoma Historical", f"{comparator_name} Historical", "Peer Average"]]
+                        st.bar_chart(chart, height=360)
 
                         if sonoma is not None:
-                            sonoma_unalloc = safe_float(
-                                sonoma.get(
-                                    "Unallocated %"
-                                )
-                            )
-
-                            peer_unalloc = pd.to_numeric(
-                                peer_only[
-                                    "Unallocated %"
-                                ],
-                                errors="coerce"
-                            ).mean()
-
-                            st.markdown(
-                                "### KORBI Benchmark View"
-                            )
-
+                            sonoma_unalloc = safe_float(sonoma.get("Unallocated %"))
+                            peer_unalloc = pd.to_numeric(peer_only["Unallocated %"], errors="coerce").mean()
+                            st.markdown("### KORBI Benchmark View")
                             st.info(
-                                f"Sonoma State's historical unallocated share is "
-                                f"{sonoma_unalloc:.1f}% versus a CSU peer average "
-                                f"of approximately {peer_unalloc:.1f}%. KORBI should "
-                                f"use peer sport-level expenses as a range and planning "
-                                f"reference when rebuilding Fall 2027 budgets — not "
-                                f"simply copy another school's spending level."
+                                f"Sonoma State's historical unallocated share is {sonoma_unalloc:.1f}% versus a CSU peer average of "
+                                f"approximately {peer_unalloc:.1f}%. KORBI should use peer sport-level expenses as a range and planning "
+                                "reference when rebuilding Fall 2027 budgets — not simply copy another school's spending level."
                             )
-
                 else:
-                    st.info(
-                        "The team benchmark dataset is loaded, but KORBI could "
-                        "not identify school and sport fields."
-                    )
+                    st.info("The team benchmark dataset is loaded, but KORBI could not identify school and sport fields.")
 
-        dataframe_download(
-            peers,
-            "korbi_csu_peer_benchmark.csv",
-            "Download Peer Benchmark CSV",
+        dataframe_download(peers, "korbi_csu_peer_benchmark.csv", "Download Peer Benchmark CSV")
+
+
+# ============================================================
+# FORECAST & VARIANCE
+# ============================================================
+
+elif page == "Forecast & Variance":
+
+    section_title(
+        "Forecast & Variance",
+        "Projected year-end position compared with the annual operating plan."
+    )
+
+    if department_df.empty:
+        st.warning("Department forecast dataset is not loaded.")
+    else:
+        view = department_df.copy()
+
+        if "annual_budget" in view.columns and "projected_year_end" in view.columns:
+            view["forecast_variance"] = (
+                pd.to_numeric(view["annual_budget"], errors="coerce").fillna(0)
+                - pd.to_numeric(view["projected_year_end"], errors="coerce").fillna(0)
+            )
+
+            view["forecast_utilization_pct"] = (
+                pd.to_numeric(view["projected_year_end"], errors="coerce").fillna(0)
+                / pd.to_numeric(view["annual_budget"], errors="coerce").replace(0, pd.NA)
+                * 100
+            )
+
+        currency_cols = [
+            c for c in [
+                "annual_budget",
+                "q1_actual",
+                "open_commitments",
+                "future_reserved",
+                "projected_year_end",
+                "uncommitted_reserve",
+                "forecast_variance",
+            ]
+            if c in view.columns
+        ]
+
+        percent_cols = [
+            "forecast_utilization_pct"
+        ] if "forecast_utilization_pct" in view.columns else []
+
+        st.dataframe(
+            accounting_table(
+                view,
+                currency_cols=currency_cols,
+                percent_cols=percent_cols,
+            ),
+            width="stretch",
+            hide_index=True,
         )
+
+        st.info(
+            "Positive variance should be treated as remaining capacity, not automatically as spendable surplus. "
+            "KORBI should continue reserving for known future obligations and uncertainty."
+        )
+
+
+# ============================================================
+# OPEN POS & COMMITMENTS
+# ============================================================
+
+elif page == "Open POs & Commitments":
+
+    section_title(
+        "Open POs & Commitments",
+        "Committed spending not yet fully recognized as posted actual expense."
+    )
+
+    if ledger_df.empty:
+        st.warning("Operational ledger is not loaded.")
+    else:
+        type_col = first_existing_column(ledger_df, ["transaction_type", "type", "status"])
+
+        if type_col:
+            view = ledger_df[
+                ledger_df[type_col].astype(str).str.contains(
+                    "PO|OPEN|COMMIT", case=False, na=False, regex=True
+                )
+            ].copy()
+
+            if view.empty:
+                st.info("No rows matched open PO / commitment indicators.")
+            else:
+                st.dataframe(view, width="stretch", hide_index=True)
+        else:
+            st.dataframe(ledger_df, width="stretch", hide_index=True)
+
+
+# ============================================================
+# PAYROLL & STAFFING
+# ============================================================
+
+elif page == "Payroll & Staffing":
+
+    section_title(
+        "Payroll & Staffing",
+        "Modeled staffing structure and compensation data."
+    )
+
+    if staffing_df.empty:
+        st.warning("Staffing dataset is not loaded.")
+    else:
+        st.dataframe(staffing_df, width="stretch", hide_index=True)
+
+        salary_col = first_existing_column(
+            staffing_df,
+            ["salary", "base_salary", "amount", "cost"]
+        )
+
+        if salary_col:
+            total = pd.to_numeric(
+                staffing_df[salary_col], errors="coerce"
+            ).fillna(0).sum()
+
+            st.metric("Modeled Base Compensation", money(total))
+
+            st.info(
+                "Staffing is a largely fixed cost. Vacancies, benefits, additional hires, or changes to the "
+                "staffing model can materially change year-end operating flexibility."
+            )
 
 
 # ============================================================
@@ -4862,377 +2483,112 @@ elif page == "Decision Log":
 
     section_title(
         "Decision Log",
-        (
-            "Management audit trail with the financial rationale and "
-            "requestor-ready response saved at the time of decision."
-        ),
+        "Management audit trail with the financial rationale and requestor-ready response saved at the time of decision."
     )
 
-    current_decisions = (
-        current_decision_df()
-    )
+    current_decisions = current_decision_df()
 
     if current_decisions.empty:
-        st.info(
-            "No management decisions have been recorded yet. Approve, defer, "
-            "or deny a Purchase Request to populate this page."
-        )
-
+        st.info("No management decisions have been recorded yet. Approve, defer, or deny a Purchase Request to populate this page.")
     else:
         if "manager_decision" in current_decisions.columns:
-            counts = (
-                current_decisions[
-                    "manager_decision"
-                ]
-                .astype(str)
-                .str.upper()
-                .value_counts()
-                .to_dict()
-            )
-
+            counts = current_decisions["manager_decision"].astype(str).str.upper().value_counts().to_dict()
         else:
             counts = {}
 
         d1, d2, d3, d4 = st.columns(4)
-
-        d1.metric(
-            "Approved",
-            counts.get(
-                "APPROVE",
-                0
-            ),
-        )
-
-        d2.metric(
-            "Deferred",
-            counts.get(
-                "DEFER",
-                0
-            ),
-        )
-
-        d3.metric(
-            "Denied",
-            counts.get(
-                "DENY",
-                0
-            ),
-        )
-
-        d4.metric(
-            "Total Decisions",
-            len(
-                current_decisions
-            ),
-        )
+        d1.metric("Approved", counts.get("APPROVE", 0))
+        d2.metric("Deferred", counts.get("DEFER", 0))
+        d3.metric("Denied", counts.get("DENY", 0))
+        d4.metric("Total Decisions", len(current_decisions))
 
         f1, f2 = st.columns(2)
-
         with f1:
-            program_options = [
-                "All Programs"
-            ]
-
+            program_options = ["All Programs"]
             if "program_name" in current_decisions.columns:
-                program_options += sorted(
-                    current_decisions[
-                        "program_name"
-                    ]
-                    .dropna()
-                    .astype(str)
-                    .unique()
-                    .tolist()
-                )
-
-            program_filter = st.selectbox(
-                "Program",
-                program_options,
-                key="decision_program_filter",
-            )
-
+                program_options += sorted(current_decisions["program_name"].dropna().astype(str).unique().tolist())
+            program_filter = st.selectbox("Program", program_options, key="decision_program_filter")
         with f2:
             decision_filter = st.selectbox(
                 "Decision",
-                [
-                    "All Decisions",
-                    "APPROVE",
-                    "DEFER",
-                    "DENY",
-                ],
+                ["All Decisions", "APPROVE", "DEFER", "DENY"],
                 key="decision_type_filter",
             )
 
-        filtered = (
-            current_decisions.copy()
-        )
-
-        if (
-            program_filter != "All Programs"
-            and "program_name" in filtered.columns
-        ):
-            filtered = filtered[
-                filtered[
-                    "program_name"
-                ].astype(str)
-                == program_filter
-            ]
-
-        if (
-            decision_filter != "All Decisions"
-            and "manager_decision" in filtered.columns
-        ):
-            filtered = filtered[
-                filtered[
-                    "manager_decision"
-                ]
-                .astype(str)
-                .str.upper()
-                == decision_filter
-            ]
+        filtered = current_decisions.copy()
+        if program_filter != "All Programs" and "program_name" in filtered.columns:
+            filtered = filtered[filtered["program_name"].astype(str) == program_filter]
+        if decision_filter != "All Decisions" and "manager_decision" in filtered.columns:
+            filtered = filtered[filtered["manager_decision"].astype(str).str.upper() == decision_filter]
 
         summary_cols = [
-            c
-            for c in [
-                "request_id",
-                "requestor_name",
-                "program_name",
-                "description",
-                "amount",
-                "manager_decision",
-                "reviewed_by",
-                "review_date",
-            ]
-            if c in filtered.columns
+            c for c in [
+                "request_id", "requestor_name", "program_name", "description",
+                "amount", "manager_decision", "reviewed_by", "review_date"
+            ] if c in filtered.columns
         ]
 
-        st.markdown(
-            "## Decision History"
-        )
-
-        summary = filtered[
-            summary_cols
-        ].copy()
-
+        st.markdown("## Decision History")
+        summary = filtered[summary_cols].copy()
         if "amount" in summary.columns:
-            summary[
-                "amount"
-            ] = summary[
-                "amount"
-            ].apply(
-                money
-            )
-
+            summary["amount"] = summary["amount"].apply(money)
         st.markdown(
-            '<div class="korbi-table-wrap">'
-            + summary.to_html(
-                index=False,
-                classes="korbi-table",
-                border=0,
-                escape=True,
-            )
-            + "</div>",
+            '<div class="korbi-table-wrap">' + summary.to_html(index=False, classes="korbi-table", border=0, escape=True) + '</div>',
             unsafe_allow_html=True,
         )
 
         if not filtered.empty:
             labels = [
-                (
-                    f"{r.get('request_id', '')} — "
-                    f"{r.get('program_name', '')} — "
-                    f"{r.get('manager_decision', '')} — "
-                    f"{r.get('description', '')}"
-                )
+                f"{r.get('request_id', '')} — {r.get('program_name', '')} — {r.get('manager_decision', '')} — {r.get('description', '')}"
                 for _, r in filtered.iterrows()
             ]
-
-            chosen = st.selectbox(
-                "Open decision",
-                labels
-            )
-
-            record = filtered.iloc[
-                labels.index(
-                    chosen
-                )
-            ].to_dict()
-
-            decision_value = str(
-                record.get(
-                    "manager_decision",
-                    ""
-                )
-            ).upper()
+            chosen = st.selectbox("Open decision", labels)
+            record = filtered.iloc[labels.index(chosen)].to_dict()
+            decision_value = str(record.get("manager_decision", "")).upper()
 
             badge_class = {
                 "APPROVE": "decision-approve",
                 "DEFER": "decision-defer",
                 "DENY": "decision-deny",
-            }.get(
-                decision_value,
-                "decision-defer"
-            )
+            }.get(decision_value, "decision-defer")
 
             st.markdown(
-                f"""
-                <span class="decision-badge {badge_class}">
-                    {decision_value}
-                </span>
-                """,
+                f'''<span class="decision-badge {badge_class}">{decision_value}</span>''',
                 unsafe_allow_html=True,
             )
-
-            st.markdown(
-                f"### {record.get('program_name', '')} — "
-                f"{record.get('description', '')}"
-            )
+            st.markdown(f"### {record.get('program_name', '')} — {record.get('description', '')}")
 
             i1, i2, i3, i4 = st.columns(4)
+            i1.metric("Request", money(record.get("amount")))
+            i2.metric("Requestor", str(record.get("requestor_name", "")) or "Not provided")
+            i3.metric("Reviewer", str(record.get("reviewed_by", "")))
+            i4.metric("Decision Date", str(record.get("review_date", "")))
 
-            i1.metric(
-                "Request",
-                money(
-                    record.get(
-                        "amount"
-                    )
-                ),
-            )
-
-            i2.metric(
-                "Requestor",
-                (
-                    str(
-                        record.get(
-                            "requestor_name",
-                            ""
-                        )
-                    )
-                    or "Not provided"
-                ),
-            )
-
-            i3.metric(
-                "Reviewer",
-                str(
-                    record.get(
-                        "reviewed_by",
-                        ""
-                    )
-                ),
-            )
-
-            i4.metric(
-                "Decision Date",
-                str(
-                    record.get(
-                        "review_date",
-                        ""
-                    )
-                ),
-            )
-
-            left, right = st.columns(
-                2,
-                gap="large"
-            )
-
+            left, right = st.columns(2, gap="large")
             with left:
-                st.markdown(
-                    "### KORBI Decision Rationale"
-                )
+                st.markdown("### KORBI Decision Rationale")
+                rationale = str(record.get("decision_rationale", "")).strip()
+                if not rationale or rationale.lower() == "nan":
+                    rationale = str(record.get("budget_impact_summary", ""))
+                st.info(rationale)
 
-                rationale = str(
-                    record.get(
-                        "decision_rationale",
-                        ""
-                    )
-                ).strip()
-
-                if (
-                    not rationale
-                    or rationale.lower() == "nan"
-                ):
-                    rationale = str(
-                        record.get(
-                            "budget_impact_summary",
-                            ""
-                        )
-                    )
-
-                st.info(
-                    rationale
-                )
-
-                st.markdown(
-                    "### Financial Position at Decision"
-                )
-
-                st.write(
-                    f"**Before:** "
-                    f"{pct(record.get('baseline_percent'))} utilized | "
-                    f"{money(record.get('baseline_remaining'))} remaining"
-                )
-
-                st.write(
-                    f"**After request:** "
-                    f"{pct(record.get('percent_with_request'))} utilized | "
-                    f"{money(record.get('remaining_with_request'))} remaining"
-                )
-
-                record_notes = str(
-                    record.get(
-                        "manager_notes",
-                        ""
-                    )
-                ).strip()
-
-                if (
-                    record_notes
-                    and record_notes.lower() != "nan"
-                ):
-                    st.write(
-                        f"**Manager notes:** "
-                        f"{record_notes}"
-                    )
+                st.markdown("### Financial Position at Decision")
+                st.write(f"**Before:** {pct(record.get('baseline_percent'))} utilized | {money(record.get('baseline_remaining'))} remaining")
+                st.write(f"**After request:** {pct(record.get('percent_with_request'))} utilized | {money(record.get('remaining_with_request'))} remaining")
+                if str(record.get("manager_notes", "")).strip() and str(record.get("manager_notes", "")).lower() != "nan":
+                    st.write(f"**Manager notes:** {record.get('manager_notes')}")
 
             with right:
-                st.markdown(
-                    "### Email-Ready Response"
-                )
-
-                email_text = str(
-                    record.get(
-                        "requestor_email_response",
-                        ""
-                    )
-                ).strip()
-
-                if (
-                    not email_text
-                    or email_text.lower() == "nan"
-                ):
-                    email_text = (
-                        "This decision predates the V7.5 email-response field. "
-                        "Re-save the request decision to generate an email-ready response."
-                    )
-
-                st.caption(
-                    "Use the copy control in the code box, then paste the "
-                    "response into your email."
-                )
-
-                st.code(
-                    email_text,
-                    language=None
-                )
-
+                st.markdown("### Email-Ready Response")
+                email_text = str(record.get("requestor_email_response", "")).strip()
+                if not email_text or email_text.lower() == "nan":
+                    email_text = "This decision predates the V7.5 email-response field. Re-save the request decision to generate an email-ready response."
+                st.caption("Use the copy control in the code box, then paste the response into your email.")
+                st.code(email_text, language=None)
                 st.download_button(
                     "Download Response as TXT",
-                    data=email_text.encode(
-                        "utf-8"
-                    ),
-                    file_name=(
-                        f"{record.get('request_id', 'korbi')}_response.txt"
-                    ),
+                    data=email_text.encode("utf-8"),
+                    file_name=f"{record.get('request_id', 'korbi')}_response.txt",
                     mime="text/plain",
                     width="stretch",
                 )
@@ -5242,3 +2598,34 @@ elif page == "Decision Log":
             "korbi_decision_log.csv",
             "Download Decision Log CSV",
         )
+
+
+# ============================================================
+# SYSTEM DATA
+# ============================================================
+
+elif page == "System Data":
+
+    section_title(
+        "System Data",
+        "Dataset status for the current KORBI simulation."
+    )
+
+    status_rows = []
+    for key, path in FILES.items():
+        status_rows.append({
+            "Dataset": key,
+            "Loaded": path.exists(),
+            "File": path.name,
+            "Path": str(path),
+        })
+
+    st.dataframe(
+        pd.DataFrame(status_rows),
+        width="stretch",
+        hide_index=True,
+    )
+
+    st.caption(
+        f"Project folder: {PROJECT_FOLDER}"
+    )
