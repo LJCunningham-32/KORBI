@@ -394,7 +394,50 @@ st.markdown(
     .hero-inner {
         position: relative;
         z-index: 2;
-        max-width: 1050px;
+        width: 100%;
+    }
+
+    .hero-grid {
+        display: grid;
+        grid-template-columns: minmax(0, 1.55fr) minmax(290px, .7fr);
+        gap: 2.2rem;
+        align-items: center;
+    }
+
+    .hero-copy {
+        min-width: 0;
+    }
+
+    .hero-logo {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 240px;
+        position: relative;
+    }
+
+    .hero-logo::before {
+        content: "";
+        position: absolute;
+        width: 115%;
+        height: 115%;
+        border-radius: 50%;
+        background: radial-gradient(circle, rgba(171,202,233,.18) 0%, rgba(171,202,233,.06) 42%, transparent 70%);
+        filter: blur(2px);
+    }
+
+    .hero-logo img {
+        position: relative;
+        z-index: 2;
+        display: block;
+        width: 100%;
+        max-width: 440px;
+        max-height: 285px;
+        object-fit: contain;
+        opacity: .78;
+        mix-blend-mode: screen;
+        filter: saturate(.92) contrast(1.08) drop-shadow(0 12px 24px rgba(0,0,0,.18));
+        border-radius: 14px;
     }
 
     .hero-kicker {
@@ -856,6 +899,9 @@ st.markdown(
         .capability-grid {grid-template-columns:1fr;}
         .hero {padding:2.8rem 2rem;}
         .hero-title {letter-spacing:-.08rem;}
+        .hero-grid {grid-template-columns:1fr;}
+        .hero-logo {min-height:160px;}
+        .hero-logo img {max-width:360px;max-height:220px;opacity:.72;}
     }
     </style>
     """,
@@ -2843,16 +2889,23 @@ if page == "Home":
 
     st.markdown(
         textwrap.dedent(
-            """
+            f"""
             <div class="hero">
                 <div class="hero-inner">
-                    <div class="hero-kicker">V7.7.2 Athletics Premium • Simulation Environment • Fall 2027 Restart Scenario</div>
-                    <div class="hero-title">KORBI</div>
-                    <div class="hero-sub">One operating picture for every program, every request, and every dollar.</div>
-                    <div class="hero-body">
-                        KORBI empowers coaches with financial context, aligns day-to-day decisions with department objectives,
-                        standardizes operating procedures, and makes the year-round impact of budget changes clear before
-                        decisions are made.
+                    <div class="hero-grid">
+                        <div class="hero-copy">
+                            <div class="hero-kicker">V7.7.3 Athletics Premium • Simulation Environment • Fall 2027 Restart Scenario</div>
+                            <div class="hero-title">KORBI</div>
+                            <div class="hero-sub">One operating picture for every program, every request, and every dollar.</div>
+                            <div class="hero-body">
+                                KORBI empowers coaches with financial context, aligns day-to-day decisions with department objectives,
+                                standardizes operating procedures, and makes the year-round impact of budget changes clear before
+                                decisions are made.
+                            </div>
+                        </div>
+                        <div class="hero-logo">
+                            <img src="{_SEAWOLVES_WATERMARK}" alt="Sonoma State Seawolves">
+                        </div>
                     </div>
                 </div>
             </div>
@@ -2941,11 +2994,6 @@ if page == "Home":
         )
 
     with right:
-        st.markdown(
-            f'<div class="seawolves-brand-panel"><img src="{_SEAWOLVES_WATERMARK}" alt="Sonoma State Seawolves"></div>',
-            unsafe_allow_html=True,
-        )
-
         st.markdown(
             textwrap.dedent(
                 """
