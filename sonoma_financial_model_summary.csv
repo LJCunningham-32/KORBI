@@ -1,0 +1,17 @@
+metric,value,unit,status,notes
+Proposed Annual Athletics Budget,6060723,USD,TASK_FORCE_PROJECTION,White Paper proposed reinstated athletics budget.
+General / Shared Budget,1875059,USD,TASK_FORCE_PROJECTION,Shared athletics administration and support costs.
+Sport-Specific Budget,4185665,USD,TASK_FORCE_PROJECTION,Sum of individual sport TOTAL EXPENSES.
+General Share of Budget,30.94,PERCENT,CALCULATED,General budget divided by proposed total budget.
+Total Compensation,3648181,USD,TASK_FORCE_PROJECTION,Salary plus benefits.
+Compensation Share,60.19,PERCENT,CALCULATED,Total compensation divided by proposed budget.
+Scholarships,895295,USD,TASK_FORCE_PROJECTION,Scholarship expense across all funds.
+Scholarship Share,14.77,PERCENT,CALCULATED,Scholarships divided by proposed budget.
+Operating Expenses,1517248,USD,TASK_FORCE_PROJECTION,Operating expenses excluding scholarships.
+Operating Expense Share,25.03,PERCENT,CALCULATED,Operating expenses divided by proposed budget.
+Historical FY24/25 Funding,6324383,USD,HISTORICAL,Historical funding sources reported by the White Paper.
+Historical Funding vs Proposed Budget,263660,USD,COMPARISON_ONLY,Historical FY24/25 funding minus proposed reinstated budget. Different financial periods/models.
+Administrative FTE,10.5,FTE,TASK_FORCE_PROJECTION,Administrative/support staffing structure.
+Minimum Administrative Base Salaries,891632,USD,TASK_FORCE_PROJECTION,Does not include benefits or External Affairs commission.
+Maximum Administrative Base Salaries,921632,USD,TASK_FORCE_PROJECTION,Does not include benefits or External Affairs commission.
+One-Time Rebuild Funding,8000000,USD,ONE_TIME,Separate from annual operating budget.

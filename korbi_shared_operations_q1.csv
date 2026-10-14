@@ -1,0 +1,7 @@
+shared_category,annual_budget,q1_actual,open_commitments,future_reserved,projected_year_end,uncommitted_reserve,description,data_status
+DEPARTMENT_EQUIPMENT,24610,6891,2953,9844,19688,4922,"Shared athletics equipment, technology, and department supplies",SIMULATED PLANNING ALLOCATION
+ATHLETIC_TRAINING_AND_MEDICAL,49035,12259,4904,24518,41681,7354,"Athletic training supplies, medical operations, and student-athlete support",SIMULATED PLANNING ALLOCATION
+COMPLIANCE_AND_ADMINISTRATION,39228,8630,3923,19614,32167,7061,"Compliance, memberships, administrative systems, and department operations",SIMULATED PLANNING ALLOCATION
+FACILITIES_AND_EVENT_SUPPORT,58842,14710,7061,28244,50015,8827,"Shared facilities, event support, game management, rentals, and operational services",SIMULATED PLANNING ALLOCATION
+TECHNOLOGY_AND_SERVICES,29421,8826,2942,13239,25007,4414,"Software, subscriptions, communications, and shared technology",SIMULATED PLANNING ALLOCATION
+GENERAL_SHARED_OPERATIONS,19614,0,0,0,0,19614,Remaining shared athletics operating reserve,SIMULATED PLANNING ALLOCATION

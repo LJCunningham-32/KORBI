@@ -1,0 +1,14 @@
+school_id,school_name,survey_year,classification,male_athletes,female_athletes,total_athletes,athletics_revenue,athletics_expenses,net_reported_result,operating_expenses,athletic_aid,recruiting_expenses,revenue_per_athlete,expense_per_athlete
+CPH,California State Polytechnic University-Humboldt,2024,NCAA Division II without football,143,167,310,8738228,8552085,186143,2163815,1488838,163023,28187.83,27587.37
+CPP,California State Polytechnic University-Pomona,2024,NCAA Division II without football,140,126,266,8954221,8034826,919395,1148921,1500571,24367,33662.48,30206.11
+CHICO,California State University-Chico,2024,NCAA Division II without football,171,141,312,7315105,7315105,0,1242270,802483,21641,23445.85,23445.85
+CSUDH,California State University-Dominguez Hills,2024,NCAA Division II without football,110,111,221,7255121,7255121,0,1336915,903495,19949,32828.6,32828.6
+CSUEB,California State University-East Bay,2024,NCAA Division II without football,123,131,254,13346372,12566054,780318,2119965,1416819,79906,52544.77,49472.65
+CSULA,California State University-Los Angeles,2024,NCAA Division II without football,133,129,262,8450669,8450669,0,1102727,1401247,19608,32254.46,32254.46
+CSUMB,California State University-Monterey Bay,2024,NCAA Division II without football,138,151,289,7138235,6928371,209864,1740278,932670,39891,24699.78,23973.6
+CSUSB,California State University-San Bernardino,2024,NCAA Division II without football,95,127,222,12287129,12287128,1,2308899,1361723,36927,55347.43,55347.42
+CSUSM,California State University-San Marcos,2024,NCAA Division II without football,142,160,302,8698150,8698150,0,1384597,864256,32773,28801.82,28801.82
+STAN,California State University-Stanislaus,2024,NCAA Division II without football,135,136,271,8315423,8215796,99627,1422320,943273,23114,30684.22,30316.59
+SFSU,San Francisco State University,2024,NCAA Division II without football,137,123,260,6692996,6692996,0,1015563,711845,34225,25742.29,25742.29
+SSU,Sonoma State University,2024,NCAA Division II without football,103,124,227,8863311,8863311,0,1074501,992695,19865,39045.42,39045.42
+GVSU,Grand Valley State University,2024,NCAA Division II with football,405,276,681,22242665,21573246,669419,3323434,5741273,145428,32661.77,31678.78

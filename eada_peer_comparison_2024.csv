@@ -1,0 +1,14 @@
+unallocated_rank,school_id,school_name,survey_year,total_athletes,total_expenses,team_expenses,unallocated_expenses,team_percent,unallocated_percent,expense_per_athlete,team_expense_per_athlete,unallocated_per_athlete
+1,CSUEB,California State University-East Bay,2024,254,12566054,6387684,6178370,50.83,49.17,49472.65,25148.36,24324.29
+2,CSUDH,California State University-Dominguez Hills,2024,221,7255121,4139532,3115589,57.06,42.94,32828.6,18730.91,14097.69
+3,CSUSM,California State University-San Marcos,2024,302,8698150,5003932,3694218,57.53,42.47,28801.82,16569.31,12232.51
+4,SSU,Sonoma State University,2024,227,8863311,5371480,3491831,60.6,39.4,39045.42,23662.91,15382.52
+5,SFSU,San Francisco State University,2024,260,6692996,4443564,2249432,66.39,33.61,25742.29,17090.63,8651.66
+6,CSULA,California State University-Los Angeles,2024,262,8450669,5641606,2809063,66.76,33.24,32254.46,21532.85,10721.61
+7,STAN,California State University-Stanislaus,2024,271,8215796,5486516,2729280,66.78,33.22,30316.59,20245.45,10071.14
+8,CHICO,California State University-Chico,2024,312,7315105,5092526,2222579,69.62,30.38,23445.85,16322.2,7123.65
+9,CPP,California State Polytechnic University-Pomona,2024,266,8034826,5617760,2417066,69.92,30.08,30206.11,21119.4,9086.71
+10,CSUSB,California State University-San Bernardino,2024,222,12287128,8875577,3411551,72.23,27.77,55347.42,39980.08,15367.35
+11,GVSU,Grand Valley State University,2024,681,21573246,15861796,5711450,73.53,26.47,31678.78,23291.92,8386.86
+12,CPH,California State Polytechnic University-Humboldt,2024,310,8552085,6383721,2168364,74.65,25.35,27587.37,20592.65,6994.72
+13,CSUMB,California State University-Monterey Bay,2024,289,6928371,5215459,1712912,75.28,24.72,23973.6,18046.57,5927.03

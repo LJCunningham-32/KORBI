@@ -1,0 +1,7 @@
+budget_category,annual_budget,q1_actual,open_commitments,future_reserved,projected_year_end,uncommitted_reserve,source_status,simulation_reason
+ATHLETIC_STUDENT_AID,1045300,0,522650,522650,1045300,0,OFFICIAL BUDGET / SIMULATED ACTIVITY,Fall-term aid represented as committed rather than discretionary purchasing.
+COACHING_COMPENSATION,2720800,680200,0,2040600,2720800,0,OFFICIAL BUDGET / SIMULATED ACTIVITY,Q1 payroll posted; remaining annual coach compensation is a known obligation.
+SUPPORT_ADMIN_COMPENSATION,1338400,334600,0,1003800,1338400,0,OFFICIAL BUDGET / SIMULATED ACTIVITY,Q1 payroll posted; remaining support and administrative compensation is a known obligation.
+TEAM_TRAVEL,682600,122868,81912,409560,614340,68260,OFFICIAL BUDGET / SIMULATED ACTIVITY,Fall travel underway while most winter and spring travel remains ahead.
+EQUIPMENT_UNIFORMS_SUPPLIES,246100,73830,36915,98440,209185,36915,OFFICIAL BUDGET / SIMULATED ACTIVITY,Equipment and uniform purchasing is front-loaded before and early in seasons.
+OTHER_OPERATING,653800,143836,65380,326900,536116,117684,OFFICIAL BUDGET / SIMULATED ACTIVITY,"Administration, game operations, software, facilities, memberships, services, training, and other expenses."

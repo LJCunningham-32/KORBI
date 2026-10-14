@@ -1,0 +1,14 @@
+school_id,school_name,survey_year,men_team_expenses,women_team_expenses,coed_team_expenses,not_allocated_expenses,grand_total_expenses,calculated_total,difference,unallocated_percent,reconciliation_status
+CPH,California State Polytechnic University-Humboldt,2024,2353838,4029883,0,2168364,8552085,8552085,0,25.35,MATCH
+CPP,California State Polytechnic University-Pomona,2024,2879227,2738533,0,2417066,8034826,8034826,0,30.08,MATCH
+CHICO,California State University-Chico,2024,2657668,2434858,0,2222579,7315105,7315105,0,30.38,MATCH
+CSUDH,California State University-Dominguez Hills,2024,1984372,2155160,0,3115589,7255121,7255121,0,42.94,MATCH
+CSUEB,California State University-East Bay,2024,2731581,3656103,0,6178370,12566054,12566054,0,49.17,MATCH
+CSULA,California State University-Los Angeles,2024,2529436,3112170,0,2809063,8450669,8450669,0,33.24,MATCH
+CSUMB,California State University-Monterey Bay,2024,2321700,2893759,0,1712912,6928371,6928371,0,24.72,MATCH
+CSUSB,California State University-San Bernardino,2024,3881316,4994261,0,3411551,12287128,12287128,0,27.77,MATCH
+CSUSM,California State University-San Marcos,2024,2291747,2712185,0,3694218,8698150,8698150,0,42.47,MATCH
+STAN,California State University-Stanislaus,2024,2469665,3016851,0,2729280,8215796,8215796,0,33.22,MATCH
+SFSU,San Francisco State University,2024,2262147,2181417,0,2249432,6692996,6692996,0,33.61,MATCH
+SSU,Sonoma State University,2024,2122021,3249459,0,3491831,8863311,8863311,0,39.4,MATCH
+GVSU,Grand Valley State University,2024,8321194,7540602,0,5711450,21573246,21573246,0,26.47,MATCH

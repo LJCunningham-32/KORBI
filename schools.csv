@@ -1,0 +1,15 @@
+school_id,school_name,state,group,status,division,conference,athletics_url
+CPP,Cal Poly Pomona,California,CSU Current,Active,DII,CCAA,https://broncoathletics.com/
+CPH,Cal Poly Humboldt,California,CSU Current,Active,DII,CCAA,https://humboldtathletics.com/
+CSUDH,Cal State Dominguez Hills,California,CSU Current,Active,DII,CCAA,https://gotoros.com/
+CSUEB,Cal State East Bay,California,CSU Current,Active,DII,CCAA,https://eastbaypioneers.com/
+CSULA,Cal State LA,California,CSU Current,Active,DII,CCAA,https://lagoldeneagles.com/
+CSUMB,Cal State Monterey Bay,California,CSU Current,Active,DII,CCAA,https://otterathletics.com/
+CSUSB,Cal State San Bernardino,California,CSU Current,Active,DII,CCAA,https://csusbathletics.com/
+CSUSM,Cal State San Marcos,California,CSU Current,Active,DII,CCAA,https://csusmcougars.com/
+CHICO,Chico State,California,CSU Current,Active,DII,CCAA,https://chicowildcats.com/
+SFSU,San Francisco State,California,CSU Current,Active,DII,CCAA,https://sfstategators.com/
+STAN,Stanislaus State,California,CSU Current,Active,DII,CCAA,https://warriorathletics.com/
+SSU,Sonoma State University,California,CSU Rebuild,Rebuilding,DII,CCAA,https://sonomaseawolves.com/
+GVSU,Grand Valley State University,Michigan,National Benchmark,Active,DII,GLIAC,https://gvsulakers.com/
+WTAMU,West Texas A&M University,Texas,National Benchmark,Active,DII,LSC,https://gobuffsgo.com/

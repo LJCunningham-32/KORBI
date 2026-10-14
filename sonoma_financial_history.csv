@@ -1,0 +1,17 @@
+fiscal_year,category,amount,source_id,authority_level,verification_status,accounting_basis,notes
+2023-24,Athletics Campus-Based Fee Revenue,2138643,SSU_FALL_2023_BUDGET_FORUM,PRIMARY,VERIFIED,Campus Budget,Intercollegiate Athletics campus-based fee revenue reported in Sonoma State Fall 2023 budget planning materials.
+2024-25,Operating Fund Allocation,2813619,SSU_ATHLETICS_WHITE_PAPER_2026,PRIMARY,VERIFIED,Athletics Funding Source,Operating fund allocation reported in Sonoma State Athletics White Paper.
+2024-25,IRA Fee Allocation - Annual,2125149,SSU_ATHLETICS_WHITE_PAPER_2026,PRIMARY,VERIFIED,Athletics Funding Source,Annual IRA allocation at 62.25%.
+2024-25,IRA Fee Allocation - One-Time,213864,SSU_ATHLETICS_WHITE_PAPER_2026,PRIMARY,VERIFIED,Athletics Funding Source,One-time IRA allocation.
+2024-25,Fundraising and Scholarship - Operating Fund,659550,SSU_ATHLETICS_WHITE_PAPER_2026,PRIMARY,VERIFIED,Athletics Funding Source,Fundraising and scholarship funding reported within operating fund.
+2024-25,Fundraising and Scholarship - Non-Operating Fund,108857,SSU_ATHLETICS_WHITE_PAPER_2026,PRIMARY,VERIFIED,Athletics Funding Source,Fundraising and scholarship funding outside operating fund.
+2024-25,Other Financial Sources,403344,SSU_ATHLETICS_WHITE_PAPER_2026,PRIMARY,VERIFIED,Athletics Funding Source,Includes ticket sales and other financial sources.
+2024-25,Total Athletics Funding Sources,6324383,SSU_ATHLETICS_WHITE_PAPER_2026,PRIMARY,VERIFIED,Athletics Funding Source,Reported total of all FY24-25 athletics funding sources.
+2024 EADA,EADA Total Athletics Expenses,8863311,EADA_2024,PRIMARY,VERIFIED,EADA,Do not directly compare to funding-source total without reconciling accounting definitions and reporting periods.
+2024 EADA,EADA Team Expenses,5371480,EADA_2024,PRIMARY,VERIFIED,EADA,Men's + women's + coed team-specific expenses.
+2024 EADA,EADA Unallocated Expenses,3491831,EADA_2024,PRIMARY,VERIFIED,EADA,Expenses not allocated by sex/sport. 39.40% of Sonoma's EADA total.
+2024 EADA,EADA Operating Expenses,1074501,EADA_2024,PRIMARY,VERIFIED,EADA,Grand total operating expenses.
+2024 EADA,EADA Athletic Aid,992695,EADA_2024,PRIMARY,VERIFIED,EADA,Athletic student aid.
+2024 EADA,EADA Recruiting Expenses,19865,EADA_2024,PRIMARY,VERIFIED,EADA,Recruiting expenses.
+2025-26,Projected Savings - Discontinuation of NCAA Athletics,3700000,SSU_BUDGET_COMMITTEE_2025,PRIMARY,VERIFIED,University Budget Reduction Plan,Projected base-budget savings associated with discontinuing NCAA athletics. This is not equivalent to total historical athletics spending.
+2025-26 to 2027-28,One-Time State Athletics Funding,8000000,SSU_COMMITMENT,PRIMARY,VERIFIED,One-Time State Appropriation,One-time funding designated to support NCAA Division II athletics over three years. Do not treat as an $8M annual operating budget.

@@ -1,0 +1,108 @@
+category,field_name,description,preferred_source,data_type
+IDENTITY,school_id,Unique short identifier for school,Manual,text
+IDENTITY,school_name,Official university name,IPEDS,text
+IDENTITY,state,State where university is located,IPEDS,text
+IDENTITY,city,City where university is located,IPEDS,text
+IDENTITY,division,NCAA division,NCAA,text
+IDENTITY,conference,Athletic conference,NCAA,text
+IDENTITY,public_private,Institution control type,IPEDS,text
+ENROLLMENT,total_enrollment,Total university enrollment,IPEDS,integer
+ENROLLMENT,undergraduate_enrollment,Undergraduate enrollment,IPEDS,integer
+ENROLLMENT,graduate_enrollment,Graduate enrollment,IPEDS,integer
+ENROLLMENT,full_time_students,Full-time enrollment,IPEDS,integer
+ENROLLMENT,part_time_students,Part-time enrollment,IPEDS,integer
+ENROLLMENT,first_year_students,Incoming first-year students,IPEDS,integer
+ENROLLMENT,transfer_students,Incoming transfer students,IPEDS,integer
+ENROLLMENT,acceptance_rate,Percentage of applicants admitted,IPEDS,percent
+ENROLLMENT,yield_rate,Percentage of admitted students enrolling,IPEDS,percent
+ENROLLMENT,retention_rate,Student retention rate,IPEDS,percent
+ENROLLMENT,graduation_rate,Student graduation rate,IPEDS,percent
+DEMOGRAPHICS,first_generation_pct,Percentage first-generation students,IPEDS/University,percent
+DEMOGRAPHICS,pell_recipient_pct,Percentage receiving Pell grants,IPEDS/Scorecard,percent
+DEMOGRAPHICS,in_state_pct,Percentage of students from state,IPEDS/University,percent
+DEMOGRAPHICS,out_of_state_pct,Percentage from outside state,IPEDS/University,percent
+DEMOGRAPHICS,international_pct,Percentage international students,IPEDS/University,percent
+DEMOGRAPHICS,commuter_pct,Percentage commuter students,University,percent
+DEMOGRAPHICS,residential_pct,Percentage residential students,University,percent
+DEMOGRAPHICS,female_pct,Percentage female students,IPEDS,percent
+DEMOGRAPHICS,male_pct,Percentage male students,IPEDS,percent
+DEMOGRAPHICS,race_ethnicity_breakdown,Race and ethnicity distribution,IPEDS,text
+DEMOGRAPHICS,median_family_income,Student household income indicator,Scorecard,currency
+GEOGRAPHY,students_within_30_min_pct,Students originating within approximately 30 minute drive,University/Calculated,percent
+GEOGRAPHY,students_30_60_min_pct,Students originating 30 to 60 minutes away,University/Calculated,percent
+GEOGRAPHY,students_60_120_min_pct,Students originating 60 to 120 minutes away,University/Calculated,percent
+GEOGRAPHY,students_elsewhere_in_state_pct,Students elsewhere within state,University/Calculated,percent
+GEOGRAPHY,out_of_state_students_pct,Students originating outside state,IPEDS/University,percent
+GEOGRAPHY,local_population_30_min,Population within approximate 30 minute market,Census/Calculated,integer
+GEOGRAPHY,local_age_15_19,Population age 15 to 19 in local market,Census,integer
+GEOGRAPHY,local_age_20_24,Population age 20 to 24 in local market,Census,integer
+GEOGRAPHY,local_median_household_income,Median household income in local market,Census,currency
+GEOGRAPHY,local_poverty_rate,Poverty rate in local market,Census,percent
+GEOGRAPHY,local_bachelors_or_higher_pct,Adults with bachelors degree or higher,Census,percent
+GEOGRAPHY,local_high_school_graduates,Estimated annual high school graduates,State/Census,integer
+GEOGRAPHY,local_college_going_rate,Percentage of graduates entering college,State/Research,percent
+ATHLETICS,number_of_sports,Number of varsity sports,EADA,integer
+ATHLETICS,student_athletes,Total student-athletes,EADA,integer
+ATHLETICS,student_athletes_pct_enrollment,Student-athletes as percentage of enrollment,Calculated,percent
+ATHLETICS,male_student_athletes,Male student-athletes,EADA,integer
+ATHLETICS,female_student_athletes,Female student-athletes,EADA,integer
+ATHLETICS,athletics_staff_count,Athletics department staff,University,integer
+ATHLETICS,head_coaches,Number of head coaches,EADA,integer
+ATHLETICS,assistant_coaches,Number of assistant coaches,EADA,integer
+FINANCIAL,athletics_revenue,Total reported athletics revenue,EADA,currency
+FINANCIAL,athletics_expenses,Total reported athletics expenses,EADA,currency
+FINANCIAL,net_operating_result,Revenue minus expenses,Calculated,currency
+FINANCIAL,institutional_support,University funds supporting athletics,EADA/University,currency
+FINANCIAL,institutional_dependency_pct,Institutional support divided by athletics expenses,Calculated,percent
+FINANCIAL,student_fee_revenue,Student fees allocated to athletics,EADA/University,currency
+FINANCIAL,ticket_revenue,Revenue from ticket sales,EADA/University,currency
+FINANCIAL,athletic_aid,Athletic scholarships and aid,EADA,currency
+FINANCIAL,coaching_salaries,Coaching salary expenses,EADA,currency
+FINANCIAL,recruiting_expenses,Recruiting expenses,EADA,currency
+FINANCIAL,travel_expenses,Athletics travel expenses,EADA/University,currency
+FINANCIAL,game_day_expenses,Home event operating expenses,University,currency
+FINANCIAL,facilities_expenses,Athletics facility expenses,University,currency
+FINANCIAL,revenue_per_athlete,Athletics revenue per student-athlete,Calculated,currency
+FINANCIAL,expense_per_athlete,Athletics expense per student-athlete,Calculated,currency
+FUNDRAISING,annual_athletics_donations,Annual donations specifically supporting athletics,Foundation/University,currency
+FUNDRAISING,athletics_donor_count,Unique athletics donors,Foundation/University,integer
+FUNDRAISING,average_gift,Average athletics donation,Calculated,currency
+FUNDRAISING,largest_reported_gift,Largest publicly reported athletics gift,Foundation/University,currency
+FUNDRAISING,booster_organization,Athletics booster or fundraising organization,University,text
+FUNDRAISING,athletics_endowment,Athletics-related endowment value,Foundation/University,currency
+COMMERCIAL,sponsorship_revenue,Revenue generated from sponsorships,University/Partner,currency
+COMMERCIAL,rights_partner,Multimedia or commercial rights operator,University/Partner,text
+COMMERCIAL,rights_model,In-house or outsourced commercial rights operation,University,text
+COMMERCIAL,apparel_partner,Official apparel provider,University,text
+COMMERCIAL,apparel_deal_value,Reported value of apparel agreement,University,currency
+COMMERCIAL,naming_rights_revenue,Revenue from facility naming rights,University,currency
+COMMERCIAL,major_sponsors,Major athletics corporate partners,University,text
+FAN_ENGAGEMENT,total_athletics_attendance,Total annual athletics attendance,University/NCAA,integer
+FAN_ENGAGEMENT,average_home_attendance,Average attendance per home event,University/NCAA,decimal
+FAN_ENGAGEMENT,total_home_events,Number of home athletics events,University,integer
+FAN_ENGAGEMENT,tickets_sold,Annual athletics tickets sold,University,integer
+FAN_ENGAGEMENT,student_attendance,Student attendance at athletics events,University,integer
+FAN_ENGAGEMENT,community_attendance,Non-student community attendance,University,integer
+FAN_ENGAGEMENT,social_media_following,Combined athletics social following,University,integer
+PERFORMANCE,directors_cup_finish,National Directors Cup ranking,Learfield Directors Cup,integer
+PERFORMANCE,directors_cup_points,Directors Cup points,Learfield Directors Cup,decimal
+PERFORMANCE,conference_championships,Conference championships during reporting period,Conference/University,integer
+PERFORMANCE,ncaa_championships,NCAA team championships,University/NCAA,integer
+PERFORMANCE,ncaa_postseason_appearances,NCAA postseason appearances,NCAA/University,integer
+STUDENT_ATHLETE,student_athlete_retention,Student-athlete retention rate,University/NCAA,percent
+STUDENT_ATHLETE,student_body_retention,Overall student retention for comparison,IPEDS,percent
+STUDENT_ATHLETE,student_athlete_graduation,Student-athlete graduation rate,NCAA/University,percent
+STUDENT_ATHLETE,student_body_graduation,Overall student graduation for comparison,IPEDS,percent
+STUDENT_ATHLETE,student_athlete_gpa,Average student-athlete GPA,University,decimal
+STUDENT_ATHLETE,student_athlete_local_pct,Student-athletes recruited from local market,University/Calculated,percent
+STUDENT_ATHLETE,student_athlete_out_of_state_pct,Student-athletes from outside state,University/Calculated,percent
+NIL_RECRUITING,nil_collective,NIL collective or organized NIL program,University/Web,text
+NIL_RECRUITING,nil_resources,Institutional NIL resources and services,University,text
+NIL_RECRUITING,transfer_in_athletes,Incoming transfer student-athletes,University,integer
+NIL_RECRUITING,first_year_athletes,Incoming first-year student-athletes,University,integer
+DATA_QUALITY,reporting_year,Year represented by data,Source,integer
+DATA_QUALITY,source_url,Exact source used for value,Source,url
+DATA_QUALITY,date_collected,Date data was collected,Automatic,date
+DATA_QUALITY,source_tier,Government university partner secondary or calculated,Automatic,text
+DATA_QUALITY,data_status,Reported calculated unavailable or estimated,Automatic,text
+DATA_QUALITY,notes,Important qualifications or context,Manual,text

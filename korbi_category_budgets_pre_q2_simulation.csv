@@ -1,0 +1,12 @@
+program_code,program_name,expense_category,category_budget,budget_status,source,notes
+MBB,Men's Basketball,GENERAL_OPERATING,149318,VERIFIED,Sonoma Athletics White Paper 2026,Source-reported Operating Expenses
+WBB,Women's Basketball,GENERAL_OPERATING,131987,VERIFIED,Sonoma Athletics White Paper 2026,Source-reported Operating Expenses
+MGO,Men's Golf,GENERAL_OPERATING,126797,VERIFIED,Sonoma Athletics White Paper 2026,Source-reported Operating Expenses
+WGO,Women's Golf,GENERAL_OPERATING,119751,VERIFIED,Sonoma Athletics White Paper 2026,Source-reported Operating Expenses
+MSO,Men's Soccer,GENERAL_OPERATING,113069,VERIFIED,Sonoma Athletics White Paper 2026,Source-reported Operating Expenses
+WSO,Women's Soccer,GENERAL_OPERATING,120347,VERIFIED,Sonoma Athletics White Paper 2026,Source-reported Operating Expenses
+MTF,Men's Track and Field,GENERAL_OPERATING,95316,VERIFIED,Sonoma Athletics White Paper 2026,Source-reported Operating Expenses
+WTF,Women's Track and Field,GENERAL_OPERATING,95316,VERIFIED,Sonoma Athletics White Paper 2026,Source-reported Operating Expenses
+MCC,Men's Cross Country,GENERAL_OPERATING,52331,VERIFIED,Sonoma Athletics White Paper 2026,Source-reported Operating Expenses
+WCC,Women's Cross Country,GENERAL_OPERATING,52331,VERIFIED,Sonoma Athletics White Paper 2026,Source-reported Operating Expenses
+WVB,Women's Volleyball,GENERAL_OPERATING,125068,VERIFIED,Sonoma Athletics White Paper 2026,Source-reported Operating Expenses

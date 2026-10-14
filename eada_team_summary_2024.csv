@@ -1,0 +1,158 @@
+school_id,school_name,survey_year,sport,team,participants,revenue,operating_expenses,total_expenses,expense_per_athlete
+CPH,California State Polytechnic University-Humboldt,2024,Basketball,Men,15,549092,160709,651947,43463.13
+CPH,California State Polytechnic University-Humboldt,2024,Basketball,Women,15,532602,153501,636578,42438.53
+CPH,California State Polytechnic University-Humboldt,2024,Rowing,Women,32,887569,257955,811744,25367.0
+CPH,California State Polytechnic University-Humboldt,2024,Soccer,Men,34,538355,153449,554979,16322.91
+CPH,California State Polytechnic University-Humboldt,2024,Soccer,Women,32,523484,176552,586052,18314.12
+CPH,California State Polytechnic University-Humboldt,2024,Softball,Women,23,580634,252741,637818,27731.22
+CPH,California State Polytechnic University-Humboldt,2024,Track and Field Outdoor,Men,60,347854,292900,543860,9064.33
+CPH,California State Polytechnic University-Humboldt,2024,Track and Field Outdoor,Women,29,347854,82238,193668,6678.21
+CPH,California State Polytechnic University-Humboldt,2024,Track and Field X Country,Men,23,365622,100259,269473,11716.22
+CPH,California State Polytechnic University-Humboldt,2024,Track and Field X Country,Women,16,157578,69377,181858,11366.12
+CPH,California State Polytechnic University-Humboldt,2024,Volleyball,Women,20,657644,222005,708228,35411.4
+CPH,California State Polytechnic University-Humboldt,2024,Wrestling,Men,27,554316,165864,333579,12354.78
+CPH,California State Polytechnic University-Humboldt,2024,Other Sports,Women,11,345958,76265,273937,24903.36
+CPP,California State Polytechnic University-Pomona,2024,Baseball,Men,35,832024,219613,809967,23141.91
+CPP,California State Polytechnic University-Pomona,2024,Basketball,Men,17,828974,121107,785728,46219.29
+CPP,California State Polytechnic University-Pomona,2024,Basketball,Women,14,701607,96834,675587,48256.21
+CPP,California State Polytechnic University-Pomona,2024,All Track Combined,Men,72,556386,125630,511042,7097.81
+CPP,California State Polytechnic University-Pomona,2024,All Track Combined,Women,131,631578,172474,622418,4751.28
+CPP,California State Polytechnic University-Pomona,2024,Soccer,Men,34,808678,123734,772490,22720.29
+CPP,California State Polytechnic University-Pomona,2024,Soccer,Women,35,784428,160689,725677,20733.63
+CPP,California State Polytechnic University-Pomona,2024,Volleyball,Women,21,876002,128840,714851,34040.52
+CHICO,California State University-Chico,2024,Baseball,Men,44,644103,200102,709906,16134.23
+CHICO,California State University-Chico,2024,Basketball,Men,15,696885,192305,677071,45138.07
+CHICO,California State University-Chico,2024,Basketball,Women,12,627101,170811,594799,49566.58
+CHICO,California State University-Chico,2024,Golf,Men,12,224859,59595,241057,20088.08
+CHICO,California State University-Chico,2024,Golf,Women,10,240290,50382,196732,19673.2
+CHICO,California State University-Chico,2024,Soccer,Men,40,709512,93158,538534,13463.35
+CHICO,California State University-Chico,2024,Soccer,Women,30,373301,87736,400045,13334.83
+CHICO,California State University-Chico,2024,Softball,Women,23,397866,89175,440451,19150.04
+CHICO,California State University-Chico,2024,Track and Field Outdoor,Men,45,309800,109482,319914,7109.2
+CHICO,California State University-Chico,2024,Track and Field Outdoor,Women,35,248183,51004,262582,7502.34
+CHICO,California State University-Chico,2024,Track and Field X Country,Men,28,212165,30450,171186,6113.79
+CHICO,California State University-Chico,2024,Track and Field X Country,Women,26,240688,28108,169124,6504.77
+CHICO,California State University-Chico,2024,Volleyball,Women,19,327257,79962,371125,19532.89
+CSUDH,California State University-Dominguez Hills,2024,Baseball,Men,42,525186,225328,525186,12504.43
+CSUDH,California State University-Dominguez Hills,2024,Basketball,Men,16,719988,288183,719988,44999.25
+CSUDH,California State University-Dominguez Hills,2024,Basketball,Women,17,617007,257367,617007,36294.53
+CSUDH,California State University-Dominguez Hills,2024,Golf,Men,12,202644,81187,202644,16887.0
+CSUDH,California State University-Dominguez Hills,2024,Soccer,Men,40,536554,173269,536554,13413.85
+CSUDH,California State University-Dominguez Hills,2024,Soccer,Women,36,409423,80979,409423,11372.86
+CSUDH,California State University-Dominguez Hills,2024,Softball,Women,25,470840,128504,470840,18833.6
+CSUDH,California State University-Dominguez Hills,2024,Track and Field Indoor,Women,14,140073,21213,140073,10005.21
+CSUDH,California State University-Dominguez Hills,2024,Track and Field Outdoor,Women,14,140073,21213,140073,10005.21
+CSUDH,California State University-Dominguez Hills,2024,Volleyball,Women,23,377744,59672,377744,16423.65
+CSUEB,California State University-East Bay,2024,Baseball,Men,38,554022,251288,554022,14579.53
+CSUEB,California State University-East Bay,2024,Basketball,Men,17,945333,225740,945333,55607.82
+CSUEB,California State University-East Bay,2024,Basketball,Women,13,785229,149768,785229,60402.23
+CSUEB,California State University-East Bay,2024,All Track Combined,Men,37,179653,118407,179653,4855.49
+CSUEB,California State University-East Bay,2024,All Track Combined,Women,36,309138,118407,309138,8587.17
+CSUEB,California State University-East Bay,2024,Golf,Men,9,429182,184168,429182,47686.89
+CSUEB,California State University-East Bay,2024,Golf,Women,8,400659,175031,400659,50082.38
+CSUEB,California State University-East Bay,2024,Soccer,Men,32,623391,298325,623391,19480.97
+CSUEB,California State University-East Bay,2024,Soccer,Women,28,526825,156324,526825,18815.18
+CSUEB,California State University-East Bay,2024,Softball,Women,24,585158,167024,585158,24381.58
+CSUEB,California State University-East Bay,2024,Swimming,Women,20,452374,170477,452374,22618.7
+CSUEB,California State University-East Bay,2024,Volleyball,Women,17,596720,105006,596720,35101.18
+CSULA,California State University-Los Angeles,2024,Baseball,Men,44,618943,173773,618943,14066.89
+CSULA,California State University-Los Angeles,2024,Basketball,Men,16,788516,160548,788516,49282.25
+CSULA,California State University-Los Angeles,2024,Basketball,Women,16,785781,128098,785781,49111.31
+CSULA,California State University-Los Angeles,2024,Beach Volleyball,Women,21,30544,1523,30544,1454.48
+CSULA,California State University-Los Angeles,2024,Golf,Women,8,322938,72821,322938,40367.25
+CSULA,California State University-Los Angeles,2024,Soccer,Men,36,701985,126338,701985,19499.58
+CSULA,California State University-Los Angeles,2024,Soccer,Women,37,468912,70931,468912,12673.3
+CSULA,California State University-Los Angeles,2024,Tennis,Women,8,409644,20099,409644,51205.5
+CSULA,California State University-Los Angeles,2024,Track and Field Indoor,Men,38,139997,28369,139997,3684.13
+CSULA,California State University-Los Angeles,2024,Track and Field Indoor,Women,33,138116,34209,138116,4185.33
+CSULA,California State University-Los Angeles,2024,Track and Field Outdoor,Men,38,139998,28369,139998,3684.16
+CSULA,California State University-Los Angeles,2024,Track and Field Outdoor,Women,38,138117,34209,138117,3634.66
+CSULA,California State University-Los Angeles,2024,Track and Field X Country,Men,13,139997,28369,139997,10769.0
+CSULA,California State University-Los Angeles,2024,Track and Field X Country,Women,12,138116,34209,138116,11509.67
+CSULA,California State University-Los Angeles,2024,Volleyball,Women,22,680002,160862,680002,30909.18
+CSUMB,California State University-Monterey Bay,2024,Baseball,Men,64,695378,300630,694727,10855.11
+CSUMB,California State University-Monterey Bay,2024,Basketball,Men,16,602570,155209,601090,37568.12
+CSUMB,California State University-Monterey Bay,2024,Basketball,Women,15,513155,129409,512711,34180.73
+CSUMB,California State University-Monterey Bay,2024,All Track Combined,Men,27,227738,98876,227110,8411.48
+CSUMB,California State University-Monterey Bay,2024,All Track Combined,Women,34,281988,134030,281255,8272.21
+CSUMB,California State University-Monterey Bay,2024,Golf,Men,11,360276,119114,360102,32736.55
+CSUMB,California State University-Monterey Bay,2024,Golf,Women,6,261761,69254,261750,43625.0
+CSUMB,California State University-Monterey Bay,2024,Soccer,Men,30,439663,145319,438671,14622.37
+CSUMB,California State University-Monterey Bay,2024,Soccer,Women,34,436040,144736,435726,12815.47
+CSUMB,California State University-Monterey Bay,2024,Softball,Women,36,617198,220419,616797,17133.25
+CSUMB,California State University-Monterey Bay,2024,Volleyball,Women,18,453154,115236,452604,25144.67
+CSUMB,California State University-Monterey Bay,2024,Water Polo,Women,25,333438,108046,332916,13316.64
+CSUSB,California State University-San Bernardino,2024,Baseball,Men,36,1008533,280218,980574,27238.17
+CSUSB,California State University-San Bernardino,2024,Basketball,Men,16,2128321,319234,1402680,87667.5
+CSUSB,California State University-San Bernardino,2024,Basketball,Women,14,967851,203395,955510,68250.71
+CSUSB,California State University-San Bernardino,2024,Golf,Men,9,865401,200736,771728,85747.56
+CSUSB,California State University-San Bernardino,2024,Soccer,Men,34,730759,197409,726334,21362.76
+CSUSB,California State University-San Bernardino,2024,Soccer,Women,35,728274,220990,728064,20801.83
+CSUSB,California State University-San Bernardino,2024,Softball,Women,20,963250,294239,960505,48025.25
+CSUSB,California State University-San Bernardino,2024,Track and Field Outdoor,Women,41,710335,240647,707653,17259.83
+CSUSB,California State University-San Bernardino,2024,Track and Field X Country,Women,17,475549,122004,467836,27519.76
+CSUSB,California State University-San Bernardino,2024,Volleyball,Women,17,1192057,230027,1174693,69099.59
+CSUSM,California State University-San Marcos,2024,Baseball,Men,39,479585,126437,479586,12297.08
+CSUSM,California State University-San Marcos,2024,Basketball,Men,16,553559,82762,553559,34597.44
+CSUSM,California State University-San Marcos,2024,Basketball,Women,18,528967,95720,528967,29387.06
+CSUSM,California State University-San Marcos,2024,All Track Combined,Men,64,462743,137056,462742,7230.34
+CSUSM,California State University-San Marcos,2024,All Track Combined,Women,136,442292,123881,442292,3252.15
+CSUSM,California State University-San Marcos,2024,Golf,Men,10,310706,124879,310706,31070.6
+CSUSM,California State University-San Marcos,2024,Golf,Women,10,329559,145433,329559,32955.9
+CSUSM,California State University-San Marcos,2024,Soccer,Men,29,485154,115610,485154,16729.45
+CSUSM,California State University-San Marcos,2024,Soccer,Women,32,455846,116164,455846,14245.19
+CSUSM,California State University-San Marcos,2024,Softball,Women,26,528895,224901,528895,20342.12
+CSUSM,California State University-San Marcos,2024,Volleyball,Women,18,426626,91754,426626,23701.44
+STAN,California State University-Stanislaus,2024,Baseball,Men,34,501051,171059,501051,14736.79
+STAN,California State University-Stanislaus,2024,Basketball,Men,17,666421,126198,666421,39201.24
+STAN,California State University-Stanislaus,2024,Basketball,Women,11,500146,117285,500146,45467.82
+STAN,California State University-Stanislaus,2024,All Track Combined,Men,53,403804,107906,403804,7618.94
+STAN,California State University-Stanislaus,2024,All Track Combined,Women,66,500951,107906,500951,7590.17
+STAN,California State University-Stanislaus,2024,Golf,Men,11,351741,94295,351741,31976.45
+STAN,California State University-Stanislaus,2024,Soccer,Men,32,546648,158101,546648,17082.75
+STAN,California State University-Stanislaus,2024,Soccer,Women,37,702914,199258,702914,18997.68
+STAN,California State University-Stanislaus,2024,Softball,Women,17,434322,113598,434322,25548.35
+STAN,California State University-Stanislaus,2024,Tennis,Women,9,255094,51823,255094,28343.78
+STAN,California State University-Stanislaus,2024,Volleyball,Women,23,623424,174891,623424,27105.39
+SFSU,San Francisco State University,2024,Baseball,Men,41,582981,214747,582981,14219.05
+SFSU,San Francisco State University,2024,Basketball,Men,16,495436,99244,495436,30964.75
+SFSU,San Francisco State University,2024,Basketball,Women,13,424288,70288,424288,32637.54
+SFSU,San Francisco State University,2024,Soccer,Men,31,387819,48680,387819,12510.29
+SFSU,San Francisco State University,2024,Soccer,Women,32,375787,56219,375787,11743.34
+SFSU,San Francisco State University,2024,Softball,Women,24,463226,130685,463226,19301.08
+SFSU,San Francisco State University,2024,Track and Field Outdoor,Men,17,22275,21335,22275,1310.29
+SFSU,San Francisco State University,2024,Track and Field Outdoor,Women,34,273714,71358,273714,8050.41
+SFSU,San Francisco State University,2024,Track and Field X Country,Men,17,320970,27268,320970,18880.59
+SFSU,San Francisco State University,2024,Track and Field X Country,Women,10,105948,20327,105948,10594.8
+SFSU,San Francisco State University,2024,Volleyball,Women,20,538454,175723,538454,26922.7
+SFSU,San Francisco State University,2024,Wrestling,Men,32,452666,79689,452666,14145.81
+SSU,Sonoma State University,2024,Baseball,Men,46,602607,129114,602607,13100.15
+SSU,Sonoma State University,2024,Basketball,Men,15,683216,130432,683216,45547.73
+SSU,Sonoma State University,2024,Basketball,Women,15,581491,111146,581491,38766.07
+SSU,Sonoma State University,2024,Golf,Men,12,325190,79468,325190,27099.17
+SSU,Sonoma State University,2024,Golf,Women,6,408143,52679,408143,68023.83
+SSU,Sonoma State University,2024,Soccer,Men,30,511008,94487,511008,17033.6
+SSU,Sonoma State University,2024,Soccer,Women,31,529230,98844,529230,17071.94
+SSU,Sonoma State University,2024,Softball,Women,20,647730,154917,647730,32386.5
+SSU,Sonoma State University,2024,Track and Field Indoor,Women,31,117142,39440,117142,3778.77
+SSU,Sonoma State University,2024,Track and Field Outdoor,Women,29,117141,39439,117141,4039.34
+SSU,Sonoma State University,2024,Track and Field X Country,Women,9,248899,41594,248899,27655.44
+SSU,Sonoma State University,2024,Volleyball,Women,22,599683,102941,599683,27258.32
+GVSU,Grand Valley State University,2024,Baseball,Men,42,779259,212288,767690,18278.33
+GVSU,Grand Valley State University,2024,Basketball,Men,17,1010408,153216,994914,58524.35
+GVSU,Grand Valley State University,2024,Basketball,Women,21,1352853,270016,1329126,63291.71
+GVSU,Grand Valley State University,2024,All Track Combined,Men,271,1549444,454067,1518238,5602.35
+GVSU,Grand Valley State University,2024,All Track Combined,Women,180,1176811,302712,1156007,6422.26
+GVSU,Grand Valley State University,2024,Football,Men,141,3850676,525654,3309949,23474.82
+GVSU,Grand Valley State University,2024,Golf,Men,10,378744,67181,375513,37551.3
+GVSU,Grand Valley State University,2024,Golf,Women,9,539633,98034,539632,59959.11
+GVSU,Grand Valley State University,2024,Lacrosse,Women,31,754175,193303,754175,24328.23
+GVSU,Grand Valley State University,2024,Soccer,Women,30,1324484,264770,1223283,40776.1
+GVSU,Grand Valley State University,2024,Softball,Women,21,596025,115788,582689,27747.1
+GVSU,Grand Valley State University,2024,Swimming and Diving,Men,35,493382,106291,493382,14096.63
+GVSU,Grand Valley State University,2024,Swimming and Diving,Women,35,510799,106291,510799,14594.26
+GVSU,Grand Valley State University,2024,Tennis,Men,9,323046,58054,321663,35740.33
+GVSU,Grand Valley State University,2024,Tennis,Women,10,340264,65465,338703,33870.3
+GVSU,Grand Valley State University,2024,Volleyball,Women,18,766612,130021,693246,38513.67
+GVSU,Grand Valley State University,2024,Wrestling,Men,41,550253,99364,539845,13166.95
+GVSU,Grand Valley State University,2024,Wrestling,Women,22,428674,100919,412942,18770.09

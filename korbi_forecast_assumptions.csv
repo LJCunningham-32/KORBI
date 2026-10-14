@@ -1,0 +1,5 @@
+program_code,program_name,expense_category,expected_remaining_spend,forecast_status,notes
+WSO,Women's Soccer,GENERAL_OPERATING,18000,TEST_ASSUMPTION,Simulated remaining season spending for KORBI testing
+MBB,Men's Basketball,GENERAL_OPERATING,15000,TEST_ASSUMPTION,Simulated remaining season spending for KORBI testing
+WVB,Women's Volleyball,GENERAL_OPERATING,10000,TEST_ASSUMPTION,Simulated remaining season spending for KORBI testing
+MGO,Men's Golf,GENERAL_OPERATING,8000,TEST_ASSUMPTION,Simulated remaining season spending for KORBI testing
