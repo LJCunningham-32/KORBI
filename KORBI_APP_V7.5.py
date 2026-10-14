@@ -1649,7 +1649,7 @@ elif page == "Executive Dashboard":
     else:
         st.caption("Actual Posted + Approved / Committed + Remaining Forecast = Projected Year-End.")
 
-    if support["variance"] >= 0:
+if support["variance"] >= 0:
     st.markdown(
         f"""
         <div style="
