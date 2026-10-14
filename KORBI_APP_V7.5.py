@@ -1951,7 +1951,7 @@ elif page == "Purchase Requests":
     selection_mode="single",
 )
 
-    if mode == "Awaiting Review":
+if mode == "Awaiting Review":
     view_df = request_master[
         request_master[
             "request_status"
