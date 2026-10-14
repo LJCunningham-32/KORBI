@@ -271,12 +271,14 @@ st.markdown(
         font-size: 1.05rem;
     }
 
-    .value-card p {
-        margin: 0;
-        color: var(--ssu-muted) !important;
-        line-height: 1.55;
-        font-size: .9rem;
-    }
+  .value-card p {
+    margin: 0;
+    color: #263746 !important;
+    line-height: 1.55;
+    font-size: .9rem;
+    font-weight: 500;
+    opacity: 1 !important;
+}
 
     .landing-panel {
         background: #FFFFFF;
