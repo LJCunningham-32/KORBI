@@ -724,9 +724,9 @@ def coach_impact(row):
         f"in remaining flexibility. "
         f"KORBI does not assume what the program may need later; it shows "
         f"the trade-off so the coach can decide whether this expense is worth "
-        f"reducing capacity for future travel, equipment, or o
-
-
+        f"reducing capacity for future travel, equipment, or other unplanned requirements."
+    )
+    
 def risk_summary(row):
     after_pct = safe_float(row.get("percent_with_request"))
     remaining = safe_float(row.get("remaining_with_request"))
