@@ -127,7 +127,13 @@ st.markdown(
     }
 
     .stApp { background: var(--ssu-bg); }
-    .block-container { max-width: 1500px; padding-top: 1rem; padding-bottom: 2rem; }
+    .block-container {
+        max-width: 1500px !important;
+        padding-top: 4.5rem !important;
+        padding-bottom: 2rem !important;
+        padding-left: 1rem !important;
+        padding-right: 1rem !important;
+    }
 
     [data-testid="stSidebar"] {
         background: linear-gradient(180deg, #003B78 0%, #004C97 58%, #17365D 100%);
@@ -575,6 +581,15 @@ st.markdown(
     .support-copy {
         color:#DDEBFA !important;
         -webkit-text-fill-color:#DDEBFA !important;
+    }
+
+    /* Email-ready response boxes: wrap long lines */
+    [data-testid="stCodeBlock"] pre,
+    [data-testid="stCodeBlock"] code {
+        white-space: pre-wrap !important;
+        overflow-wrap: anywhere !important;
+        word-break: break-word !important;
+        max-width: 100% !important;
     }
 
     </style>
