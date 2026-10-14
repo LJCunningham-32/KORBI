@@ -593,26 +593,36 @@ st.markdown(
         opacity:1 !important;
     }
 
-    /* Segmented controls: white/navy inactive, Sonoma blue active */
+    /* Segmented controls match the Home page action buttons */
+    [data-testid="stSegmentedControl"] {
+        gap:.55rem !important;
+    }
     [data-testid="stSegmentedControl"] button {
-        background:#FFFFFF !important;
-        border-color:#BFD1E3 !important;
-        color:#17365D !important;
-        -webkit-text-fill-color:#17365D !important;
+        background:#00539B !important;
+        border:1px solid #00539B !important;
+        border-radius:8px !important;
+        color:#FFFFFF !important;
+        -webkit-text-fill-color:#FFFFFF !important;
         font-weight:750 !important;
+        min-height:2.5rem !important;
+        padding:.45rem 1rem !important;
+        box-shadow:none !important;
     }
     [data-testid="stSegmentedControl"] button * {
-        color:#17365D !important;
-        -webkit-text-fill-color:#17365D !important;
+        color:#FFFFFF !important;
+        -webkit-text-fill-color:#FFFFFF !important;
         opacity:1 !important;
         font-weight:750 !important;
+    }
+    [data-testid="stSegmentedControl"] button:hover {
+        background:#004C97 !important;
+        border-color:#004C97 !important;
     }
     [data-testid="stSegmentedControl"] button[aria-pressed="true"],
     [data-testid="stSegmentedControl"] button[data-selected="true"] {
         background:#00539B !important;
-        border-color:#00539B !important;
-        color:#FFFFFF !important;
-        -webkit-text-fill-color:#FFFFFF !important;
+        border:2px solid #17365D !important;
+        box-shadow:0 0 0 2px #ABCAE9 inset !important;
     }
     [data-testid="stSegmentedControl"] button[aria-pressed="true"] *,
     [data-testid="stSegmentedControl"] button[data-selected="true"] * {
@@ -636,6 +646,20 @@ st.markdown(
     .neutral-note * {
         color:#263746 !important;
         -webkit-text-fill-color:#263746 !important;
+    }
+
+    .benchmark-note {
+        color:#3E5265 !important;
+        -webkit-text-fill-color:#3E5265 !important;
+        font-size:.9rem;
+        line-height:1.5;
+        font-weight:600;
+        margin:.35rem 0 1rem;
+    }
+    .benchmark-note strong {
+        color:#17365D !important;
+        -webkit-text-fill-color:#17365D !important;
+        font-weight:800;
     }
 
     .hero-kicker,
@@ -1524,6 +1548,32 @@ def _department_source_totals():
     return result
 
 
+def shared_department_cost_breakdown(shared_budget):
+    """Simulated shared athletics cost allocation. Categories reconcile exactly to shared budget."""
+    categories = [
+        ("Athletics Administration & Department Staff", 0.30),
+        ("Facilities / Game Operations", 0.18),
+        ("Sports Medicine / Athletic Training", 0.12),
+        ("Strength & Conditioning", 0.08),
+        ("Compliance / Academic Support", 0.08),
+        ("Communications / Marketing", 0.06),
+        ("Technology / Software", 0.05),
+        ("Department Travel / Vehicles", 0.04),
+        ("Insurance / Memberships / NCAA / CCAA", 0.04),
+        ("Shared Equipment / Supplies / Contingency", 0.05),
+    ]
+    rows = []
+    running = 0.0
+    for idx, (category, weight) in enumerate(categories):
+        if idx == len(categories) - 1:
+            amount = safe_float(shared_budget) - running
+        else:
+            amount = safe_float(shared_budget) * weight
+            running += amount
+        rows.append({"Shared Cost Category": category, "Annual Budget": amount})
+    return pd.DataFrame(rows)
+
+
 def program_budget_reconciliation():
     programs = []
     if not triage_df.empty and "program_name" in triage_df.columns:
@@ -1810,6 +1860,47 @@ def _scaled_distribution(target_total, source_by_month, allowed_months, weights)
     }
 
 
+def _sport_monthly_plan_weights(program_name=None):
+    """
+    Simulated FY seasonality profile used to time annual operating budgets by sport.
+    The weights always total 100%, so changing timing never changes the annual budget.
+    """
+    # Jul, Aug, Sep, Oct, Nov, Dec, Jan, Feb, Mar, Apr, May, Jun
+    generic = [0.06, 0.08, 0.09, 0.09, 0.08, 0.06, 0.08, 0.10, 0.10, 0.09, 0.08, 0.09]
+    if not program_name or str(program_name).strip().lower() in {"entire athletics", "athletics"}:
+        return generic
+
+    name = str(program_name).lower()
+
+    # Fall championship sports: preseason/startup in Jul-Aug, competition Sep-Nov.
+    if "cross country" in name or "xc" in name:
+        return [0.08, 0.16, 0.20, 0.20, 0.14, 0.04, 0.03, 0.03, 0.03, 0.03, 0.03, 0.03]
+    if "soccer" in name:
+        return [0.08, 0.17, 0.20, 0.19, 0.13, 0.04, 0.03, 0.03, 0.03, 0.03, 0.04, 0.03]
+    if "volleyball" in name:
+        return [0.07, 0.16, 0.20, 0.20, 0.14, 0.04, 0.03, 0.03, 0.03, 0.03, 0.04, 0.03]
+
+    # Basketball ramps in Oct and carries substantial travel/game costs Nov-Mar.
+    if "basketball" in name:
+        return [0.03, 0.04, 0.06, 0.10, 0.14, 0.13, 0.14, 0.14, 0.11, 0.04, 0.04, 0.03]
+
+    # Spring championship sports: preseason ramp in Jan, peak travel/competition Feb-May.
+    if "baseball" in name:
+        return [0.03, 0.03, 0.04, 0.04, 0.04, 0.04, 0.10, 0.15, 0.16, 0.16, 0.14, 0.07]
+    if "softball" in name:
+        return [0.03, 0.03, 0.04, 0.04, 0.04, 0.04, 0.10, 0.15, 0.16, 0.16, 0.14, 0.07]
+
+    # Golf has meaningful fall and spring competitive periods.
+    if "golf" in name:
+        return [0.04, 0.07, 0.12, 0.12, 0.08, 0.04, 0.06, 0.10, 0.12, 0.11, 0.09, 0.05]
+
+    # Track & field is concentrated in the indoor/outdoor spring cycle.
+    if "track" in name:
+        return [0.03, 0.03, 0.04, 0.04, 0.05, 0.06, 0.10, 0.13, 0.15, 0.16, 0.14, 0.07]
+
+    return generic
+
+
 def monthly_financial_outlook(program_name=None):
     """
     Connected FY 2027-28 simulation as of Oct. 1, 2027.
@@ -1832,9 +1923,9 @@ def monthly_financial_outlook(program_name=None):
         0,
     )
 
-    # Simulated monthly plan profile for a collegiate athletics fiscal year.
-    # The weights total exactly 100%, so every monthly plan reconciles to the annual budget.
-    plan_weight_values = [0.06, 0.08, 0.09, 0.09, 0.08, 0.06, 0.08, 0.10, 0.10, 0.09, 0.08, 0.09]
+    # Sport-specific seasonality: annual totals stay fixed while monthly timing follows
+    # the program's competitive calendar. Entire Athletics uses a blended department profile.
+    plan_weight_values = _sport_monthly_plan_weights(program_name)
     plan_weights = {m: w for m, w in zip(months, plan_weight_values)}
     monthly_plan = {m: annual * plan_weights[m] for m in months}
 
@@ -1865,11 +1956,19 @@ def monthly_financial_outlook(program_name=None):
     # Department-wide this produces: Jul $356,400; Aug $470,750; Sep $528,184
     # when Q1 actuals total $1,355,334. Sport views use the same Q1 proportions,
     # so every page remains tied to one connected financial model.
-    q1_actual_profile = {
-        pd.Timestamp("2027-07-01"): 356400 / 1355334,
-        pd.Timestamp("2027-08-01"): 470750 / 1355334,
-        pd.Timestamp("2027-09-01"): 528184 / 1355334,
-    }
+    if not program_name or str(program_name).strip().lower() in {"entire athletics", "athletics"}:
+        q1_actual_profile = {
+            pd.Timestamp("2027-07-01"): 356400 / 1355334,
+            pd.Timestamp("2027-08-01"): 470750 / 1355334,
+            pd.Timestamp("2027-09-01"): 528184 / 1355334,
+        }
+    else:
+        q1_weight_total = sum(plan_weights.get(m, 0.0) for m in q1_months)
+        if q1_weight_total > 0:
+            q1_actual_profile = {m: plan_weights.get(m, 0.0) / q1_weight_total for m in q1_months}
+        else:
+            q1_actual_profile = {m: 1 / len(q1_months) for m in q1_months}
+
     actual_by_month = {
         month: actual_total * q1_actual_profile.get(month, 0.0)
         for month in q1_months
@@ -1993,10 +2092,6 @@ if page != "Home":
         </div>
         """,
         unsafe_allow_html=True,
-    )
-    st.info(
-        "V7.5 simulation environment — financial position as of October 1, 2027. "
-        "Simulated activity is not Sonoma State actual financial data."
     )
 
 
@@ -2248,6 +2343,19 @@ elif page == "Executive Dashboard":
         "The reconciliation difference should remain $0."
     )
 
+    with st.expander("Shared / Department Cost Detail"):
+        shared_detail = shared_department_cost_breakdown(recon["shared_budget"])
+        st.caption(
+            "Simulated allocation of department-wide costs that are not assigned directly to one sport. "
+            "These categories reconcile to the Shared / Department Costs total above."
+        )
+        st.dataframe(
+            accounting_table(shared_detail, currency_cols=["Annual Budget"]),
+            width="stretch",
+            hide_index=True,
+        )
+        st.metric("Shared Cost Total", money(shared_detail["Annual Budget"].sum()))
+
     current_requests = request_status_table()
     decisions_now = current_decision_df()
 
@@ -2410,7 +2518,11 @@ elif page == "Monthly Financials":
         if timing_notes:
             st.markdown("### KORBI Timing Watch")
             for note in timing_notes[:3]:
-                st.write(f"• {note}")
+                st.markdown(
+                    f'<div style="color:#263746;font-weight:600;line-height:1.5;margin:.35rem 0;">'
+                    f'• {html.escape(note)}</div>',
+                    unsafe_allow_html=True,
+                )
 
         dataframe_download(
             monthly_outlook,
@@ -2956,9 +3068,13 @@ elif page == "CSU Benchmarking":
             c3.metric("Sonoma Expense / Athlete", compact_money(sonoma.get("Expense / Athlete")))
             c4.metric("Closest Spending Peer", str(closest.get("School", "")))
 
-            st.caption(
-                f"Closest total-spend comparator: {closest.get('School', '')} at {money(closest.get('Total Expense'))}. "
-                f"Peer-average expense per athlete is approximately {money(peer_avg_epa)}."
+            st.markdown(
+                f'<div class="benchmark-note">Closest total-spend comparator: '
+                f'<strong>{html.escape(str(closest.get("School", "")))}</strong> at '
+                f'<strong>{html.escape(money(closest.get("Total Expense")))}</strong>. '
+                f'Peer-average expense per athlete: approximately '
+                f'<strong>{html.escape(money(peer_avg_epa))}</strong>.</div>',
+                unsafe_allow_html=True,
             )
 
         st.markdown("## Historical Department Comparison")
