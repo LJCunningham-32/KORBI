@@ -1,5 +1,6 @@
 
 import csv
+import html
 import textwrap
 from pathlib import Path
 from datetime import datetime
@@ -583,13 +584,24 @@ st.markdown(
         -webkit-text-fill-color:#DDEBFA !important;
     }
 
-    /* Email-ready response boxes: wrap long lines */
-    [data-testid="stCodeBlock"] pre,
-    [data-testid="stCodeBlock"] code {
+    /* Email-ready response boxes: vertical wrapping, never horizontal scroll */
+    .email-response-box {
+        width: 100% !important;
+        box-sizing: border-box !important;
+        background: #171A21 !important;
+        color: #FFFFFF !important;
+        -webkit-text-fill-color: #FFFFFF !important;
+        border: 1px solid #2B3440 !important;
+        border-radius: 8px !important;
+        padding: 1rem 1.1rem !important;
+        margin: .35rem 0 .8rem 0 !important;
+        font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace !important;
+        font-size: .9rem !important;
+        line-height: 1.6 !important;
         white-space: pre-wrap !important;
         overflow-wrap: anywhere !important;
         word-break: break-word !important;
-        max-width: 100% !important;
+        overflow-x: hidden !important;
     }
 
     </style>
@@ -601,6 +613,13 @@ st.markdown(
 # ============================================================
 # BASIC HELPERS
 # ============================================================
+
+def wrapped_email_box(text):
+    safe_text = html.escape(str(text))
+    st.markdown(
+        f'<div class="email-response-box">{safe_text}</div>',
+        unsafe_allow_html=True,
+    )
 
 def safe_float(value):
     try:
@@ -2301,10 +2320,10 @@ elif page == "Purchase Requests":
 
     st.markdown("### Email-Ready Response to Requestor")
     st.caption(
-        "The copy control in the code box can be used to copy this response directly into an email. "
+        "The response wraps vertically so the full message can be read without horizontal scrolling. "
         "KORBI saves this wording with the decision so the historical explanation does not change later."
     )
-    st.code(email_preview, language=None)
+    wrapped_email_box(email_preview)
 
     if st.button("Save Management Decision", type="primary"):
         record = save_decision(
@@ -2831,8 +2850,8 @@ elif page == "Decision Log":
                 email_text = str(record.get("requestor_email_response", "")).strip()
                 if not email_text or email_text.lower() == "nan":
                     email_text = "This decision predates the V7.5 email-response field. Re-save the request decision to generate an email-ready response."
-                st.caption("Use the copy control in the code box, then paste the response into your email.")
-                st.code(email_text, language=None)
+                st.caption("The full response is shown below and wraps vertically for easy reading.")
+                wrapped_email_box(email_text)
                 st.download_button(
                     "Download Response as TXT",
                     data=email_text.encode("utf-8"),
