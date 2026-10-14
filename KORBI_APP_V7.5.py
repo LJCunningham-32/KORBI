@@ -1650,13 +1650,45 @@ elif page == "Executive Dashboard":
         st.caption("Actual Posted + Approved / Committed + Remaining Forecast = Projected Year-End.")
 
     if support["variance"] >= 0:
-        st.success(
-            f"KORBI currently projects Athletics to finish {money(support['variance'])} favorable to the annual plan."
-        )
-    else:
-        st.error(
-            f"KORBI currently projects Athletics to finish {money(abs(support['variance']))} over the annual plan."
-        )
+    st.markdown(
+        f"""
+        <div style="
+            background:#DDF3E7;
+            color:#18794E;
+            border:1px solid #B7E2CB;
+            border-left:4px solid #18794E;
+            border-radius:8px;
+            padding:14px 16px;
+            margin:14px 0 22px 0;
+            font-size:15px;
+            font-weight:700;
+        ">
+            KORBI currently projects Athletics to finish
+            {money(support['variance'])} favorable to the annual plan.
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
+else:
+    st.markdown(
+        f"""
+        <div style="
+            background:#FCE8E6;
+            color:#B42318;
+            border:1px solid #F5C2BE;
+            border-left:4px solid #B42318;
+            border-radius:8px;
+            padding:14px 16px;
+            margin:14px 0 22px 0;
+            font-size:15px;
+            font-weight:700;
+        ">
+            KORBI currently projects Athletics to finish
+            {money(abs(support['variance']))} over the annual plan.
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
 
     current_requests = request_status_table()
     decisions_now = current_decision_df()
