@@ -870,22 +870,37 @@ _SEAWOLVES_WATERMARK = "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDA
 st.markdown(
     """
     <style>
-    [data-testid="stMain"] {
-        background-image:
-            linear-gradient(rgba(238,244,250,.91), rgba(238,244,250,.91)),
-            url("__SEAWOLVES_WATERMARK__");
-        background-repeat: no-repeat, no-repeat;
-        background-size: cover, min(58vw, 900px) auto;
-        background-position: center, right 3.5rem top 7rem;
-        background-attachment: fixed, fixed;
+    /* Seawolves branding is displayed as a dedicated Home-page panel,
+       never underneath working content or financial text. */
+    .seawolves-brand-panel {
+        background: linear-gradient(135deg, #E7F0F8 0%, #D3E3F1 100%);
+        border: 1px solid #C4D8E9;
+        border-top: 4px solid #00539B;
+        border-radius: 16px;
+        padding: 1rem;
+        margin: 0 0 1rem 0;
+        min-height: 260px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+        box-shadow: 0 8px 24px rgba(16,44,73,.08);
     }
-
-    [data-testid="stMain"] > div {
-        position: relative;
-        z-index: 1;
+    .seawolves-brand-panel img {
+        display: block;
+        width: 100%;
+        height: auto;
+        max-height: 330px;
+        object-fit: contain;
+        border-radius: 11px;
+    }
+    @media (max-width: 900px) {
+        .seawolves-brand-panel {
+            min-height: 200px;
+        }
     }
     </style>
-    """.replace("__SEAWOLVES_WATERMARK__", _SEAWOLVES_WATERMARK),
+    """,
     unsafe_allow_html=True,
 )
 
@@ -2831,7 +2846,7 @@ if page == "Home":
             """
             <div class="hero">
                 <div class="hero-inner">
-                    <div class="hero-kicker">V7.6 Athletics Premium • Simulation Environment • Fall 2027 Restart Scenario</div>
+                    <div class="hero-kicker">V7.7.2 Athletics Premium • Simulation Environment • Fall 2027 Restart Scenario</div>
                     <div class="hero-title">KORBI</div>
                     <div class="hero-sub">One operating picture for every program, every request, and every dollar.</div>
                     <div class="hero-body">
@@ -2926,6 +2941,11 @@ if page == "Home":
         )
 
     with right:
+        st.markdown(
+            f'<div class="seawolves-brand-panel"><img src="{_SEAWOLVES_WATERMARK}" alt="Sonoma State Seawolves"></div>',
+            unsafe_allow_html=True,
+        )
+
         st.markdown(
             textwrap.dedent(
                 """
