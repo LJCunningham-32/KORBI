@@ -1986,12 +1986,30 @@ def monthly_financial_outlook(program_name=None):
         commitment_weights,
     )
 
-    forecast_by_month = _scaled_distribution(
-        remaining_forecast_total,
-        future_source,
-        future_months,
-        plan_weights,
+    # Forecast rule for months that have not happened yet:
+    # Monthly Plan = Committed + Remaining Forecast.
+    # This keeps future months fully planned unless there is a specific reason to
+    # project an overage/underrun. The current month absorbs any remaining annual
+    # forecast needed to keep the monthly model tied to the same year-end projection.
+    forecast_by_month = {m: 0.0 for m in future_months}
+
+    future_only_months = [m for m in future_months if m > simulation_month]
+    for month in future_only_months:
+        plan = monthly_plan.get(month, 0.0)
+        committed = committed_by_month.get(month, 0.0)
+        forecast_by_month[month] = max(plan - committed, 0.0)
+
+    future_forecast_required = sum(
+        forecast_by_month.get(m, 0.0) for m in future_only_months
     )
+
+    current_month_remainder = max(
+        remaining_forecast_total - future_forecast_required,
+        0.0,
+    )
+
+    if simulation_month in forecast_by_month:
+        forecast_by_month[simulation_month] = current_month_remainder
 
     rows = []
     for month in months:
@@ -2744,16 +2762,39 @@ elif page == "Purchase Requests":
     # Always derive current status from the saved decision layer.
     request_master = request_status_table()
 
-    mode = st.segmented_control(
-        "Show",
-        options=[
-            "Awaiting Review",
-            "All Requests",
-            "Reviewed",
-        ],
-        default="Awaiting Review",
-        selection_mode="single",
-    )
+    # Use the same primary-button treatment as the Home page instead of Streamlit's
+    # dark segmented control so navigation styling stays consistent across KORBI.
+    if "purchase_request_mode" not in st.session_state:
+        st.session_state["purchase_request_mode"] = "Awaiting Review"
+
+    pr1, pr2, pr3 = st.columns(3)
+
+    if pr1.button(
+        "Awaiting Review",
+        key="purchase_mode_awaiting",
+        type="primary",
+        use_container_width=True,
+    ):
+        st.session_state["purchase_request_mode"] = "Awaiting Review"
+
+    if pr2.button(
+        "All Requests",
+        key="purchase_mode_all",
+        type="primary",
+        use_container_width=True,
+    ):
+        st.session_state["purchase_request_mode"] = "All Requests"
+
+    if pr3.button(
+        "Reviewed",
+        key="purchase_mode_reviewed",
+        type="primary",
+        use_container_width=True,
+    ):
+        st.session_state["purchase_request_mode"] = "Reviewed"
+
+    mode = st.session_state["purchase_request_mode"]
+    st.caption(f"Showing: {mode}")
 
     if mode == "Awaiting Review":
         view_df = request_master[
