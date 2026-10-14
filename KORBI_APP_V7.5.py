@@ -1783,19 +1783,40 @@ elif page == "Monthly Financials":
 
     sport_options = ["Entire Athletics"]
 
-    if not triage_df.empty and "program_name" in triage_df.columns:
+    if (
+        not triage_df.empty
+        and "program_name" in triage_df.columns
+    ):
         sport_options += sorted(
-            triage_df["program_name"].dropna().astype(str).unique().tolist()
+            triage_df[
+                "program_name"
+            ]
+            .dropna()
+            .astype(str)
+            .unique()
+            .tolist()
         )
 
-    scope = st.selectbox("View", sport_options)
+    scope = st.selectbox(
+        "View",
+        sport_options
+    )
 
-    monthly_outlook = monthly_financial_outlook(scope)
+    monthly_outlook = monthly_financial_outlook(
+        scope
+    )
 
     if monthly_outlook.empty:
-        st.info("No monthly transaction or forecast data is currently available.")
+
+        st.info(
+            "No monthly transaction or forecast data is currently available."
+        )
+
     else:
-        st.markdown("### FY 2027-28 Monthly Execution & Forecast")
+
+        st.markdown(
+            "### FY 2027-28 Monthly Execution & Forecast"
+        )
 
         st.dataframe(
             accounting_table(
@@ -1812,18 +1833,43 @@ elif page == "Monthly Financials":
         )
 
         executed_total = monthly_outlook.loc[
-            monthly_outlook["Status"] == "EXECUTED", "Actual"
+            monthly_outlook["Status"] == "EXECUTED",
+            "Actual"
         ].sum()
 
-        current_and_future_commitments = monthly_outlook["Committed"].sum()
-        future_total = monthly_outlook["Remaining Forecast"].sum()
-        outlook_total = monthly_outlook["Monthly Outlook"].sum()
+        current_and_future_commitments = (
+            monthly_outlook["Committed"].sum()
+        )
+
+        future_total = (
+            monthly_outlook["Remaining Forecast"].sum()
+        )
+
+        outlook_total = (
+            monthly_outlook["Monthly Outlook"].sum()
+        )
 
         m1, m2, m3, m4 = st.columns(4)
-        m1.metric("Executed Actuals", money(executed_total))
-        m2.metric("Open / Committed", money(current_and_future_commitments))
-        m3.metric("Future Forecast", money(future_total))
-        m4.metric("Modeled FY Outlook", money(outlook_total))
+
+        m1.metric(
+            "Executed Actuals",
+            money(executed_total)
+        )
+
+        m2.metric(
+            "Open / Committed",
+            money(current_and_future_commitments)
+        )
+
+        m3.metric(
+            "Future Forecast",
+            money(future_total)
+        )
+
+        m4.metric(
+            "Modeled FY Outlook",
+            money(outlook_total)
+        )
 
         st.info(
             "As each month closes, KORBI replaces forecast assumptions with actual posted activity. "
@@ -1837,8 +1883,15 @@ elif page == "Monthly Financials":
         )
 
     if not financial_history_df.empty:
-        with st.expander("Prior-Year / Historical Financial Data"):
-            st.dataframe(financial_history_df, width="stretch", hide_index=True)
+
+        with st.expander(
+            "Prior-Year / Historical Financial Data"
+        ):
+            st.dataframe(
+                financial_history_df,
+                width="stretch",
+                hide_index=True
+            )
 
 
 # ============================================================
