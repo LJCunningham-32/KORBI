@@ -443,10 +443,41 @@ st.markdown(
     .korbi-table .yes {color:#2E7D32 !important;font-weight:800;}
     .korbi-table .no {color:#9AA8B6 !important;}
 
-    @media (max-width: 900px) {
-        .program-grid {grid-template-columns:1fr;}
-    }
-    </style>
+   @media (max-width: 900px) {
+    .program-grid {grid-template-columns:1fr;}
+}
+
+/* FINAL LANDING CARD TEXT OVERRIDE */
+.value-card,
+.value-card * {
+    color: #263746 !important;
+    -webkit-text-fill-color: #263746 !important;
+    opacity: 1 !important;
+}
+
+.value-card h3,
+.value-card h3 * {
+    color: #17365D !important;
+    -webkit-text-fill-color: #17365D !important;
+    font-weight: 700 !important;
+}
+
+.value-card .num,
+.value-card .num * {
+    color: #00539B !important;
+    -webkit-text-fill-color: #00539B !important;
+    font-weight: 900 !important;
+}
+
+.value-card p,
+.value-card p * {
+    color: #263746 !important;
+    -webkit-text-fill-color: #263746 !important;
+    font-weight: 600 !important;
+    opacity: 1 !important;
+}
+
+</style>
     """,
     unsafe_allow_html=True,
 )
